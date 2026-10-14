@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bebêtenkitê Atacado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=IBM+Plex+Mono:wght@400;600&family=Nunito+Sans:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!--APP-->
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><b>Bebêtenkitê</b><span>Portal do Atacado</span></div>
+    <button class="cart-btn" id="openCart" type="button" aria-label="Abrir carrinho">
+      Carrinho <span class="count" id="cartCount">0</span> <span class="sum" id="cartSum">R$ 0,00</span>
+    </button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="intro">
+    <h1>Monte seu pedido pela grade, com o estoque de hoje</h1>
+    <p>Os saldos vêm direto do nosso sistema. Preencha as quantidades por cor e tamanho, revise o carrinho e envie: o pedido chega para a <span id="sellerName">Gleice</span>, que confirma frete e pagamento com você.</p>
+    <div class="rules" id="rules"></div>
+  </section>
+
+  <div class="filters">
+    <input class="search" id="search" type="search" placeholder="Buscar por nome ou referência" aria-label="Buscar produtos">
+    <div class="chips" id="groups" role="group" aria-label="Linhas"></div>
+    <div class="stamp" id="stamp">Carregando estoque…</div>
+  </div>
+
+  <section class="list" id="list" aria-live="polite"></section>
+</main>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-label="Carrinho" role="dialog" aria-modal="true">
+  <header>
+    <h2 id="drawerTitle">Seu pedido</h2>
+    <div class="steps" aria-label="Etapas">
+      <span data-step="cart">Itens</span>·<span data-step="buyer">Dados</span>·<span data-step="done">Enviado</span>
+    </div>
+    <button class="x" id="closeCart" type="button" aria-label="Fechar">×</button>
+  </header>
+  <div class="body" id="drawerBody"></div>
+  <footer id="drawerFoot"></footer>
+</aside>
+<div class="toast" id="toast" hidden></div>
+<!--/APP-->
+<script src="app.js"></script>
+</body>
+</html>

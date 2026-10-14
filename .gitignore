@@ -1,0 +1,12 @@
+# segredos: credenciais do TOTVS ficam só no .env local e nas variáveis do Render
+.env
+*.env
+!.env.example
+
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# snapshot do catálogo (estoque e preços reais)
+backend/cache/

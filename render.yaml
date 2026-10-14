@@ -1,0 +1,62 @@
+# Blueprint do Render: New > Blueprint > escolher este repositório.
+# Os valores com sync: false são pedidos no painel na criação (não ficam no Git).
+services:
+  - type: web
+    name: atacado-poc
+    runtime: python
+    rootDir: backend
+    plan: starter            # o disco persistente exige plano pago; no free o snapshot some a cada reinício
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/config
+    disk:
+      name: catalog-cache
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: CATALOG_SNAPSHOT_PATH
+        value: /var/data/catalog.json
+      - key: TOTVS_BASE_URL
+        value: https://apitotvsmoda.bhan.com.br
+      - key: TOTVS_CLIENT_ID
+        sync: false
+      - key: TOTVS_CLIENT_SECRET
+        sync: false
+      - key: TOTVS_USERNAME
+        sync: false
+      - key: TOTVS_PASSWORD
+        sync: false
+      - key: TOTVS_BRANCH_CODE
+        value: "1"
+      - key: TOTVS_STOCK_CODES
+        value: "1"
+      - key: TOTVS_PRICE_CODE_ATACADO
+        value: "3"
+      - key: TOTVS_SUBTRACT_SALES_ORDERS
+        value: "true"
+      - key: TOTVS_CONCURRENCY
+        value: "4"
+      - key: CATALOG_SYNC_SECONDS
+        value: "60"
+      - key: CATALOG_FULL_REFRESH_HOURS
+        value: "6"
+      - key: MIN_ORDER_VALUE
+        value: "500"
+      - key: MIN_QTY_PER_REF
+        value: "6"
+      - key: GLEICE_NAME
+        value: Gleice
+      - key: GLEICE_WHATSAPP
+        sync: false
+      - key: EVOLUTION_URL
+        sync: false
+      - key: EVOLUTION_INSTANCE
+        sync: false
+      - key: EVOLUTION_API_KEY
+        sync: false
+      - key: N8N_WEBHOOK_URL
+        sync: false
+      - key: ALLOWED_ORIGINS
+        value: "*"

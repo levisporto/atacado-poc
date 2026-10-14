@@ -1,0 +1,718 @@
+<title>Bebêtenkitê Atacado</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=IBM+Plex+Mono:wght@400;600&family=Nunito+Sans:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: header fino + barra de filtros; lista de referências, cada uma com a grade cor × tamanho;
+   carrinho em gaveta lateral (folha inferior no celular) com etapas carrinho → dados → enviado. */
+:root {
+  --bg: #f5f6f9;
+  --surface: #ffffff;
+  --ink: #1c2242;
+  --muted: #646a85;
+  --line: #e2e4ec;
+  --accent: #2b7f72;
+  --accent-ink: #ffffff;
+  --accent-soft: #e2f1ee;
+  --blush: #f7e3e6;
+  --warn: #a5560f;
+  --warn-soft: #fbeedd;
+  --danger: #b3263e;
+  --danger-soft: #fbe5e9;
+  --shadow: 0 10px 30px rgba(28, 34, 66, .12);
+  --f-display: "Baloo 2", "Trebuchet MS", system-ui, sans-serif;
+  --f-body: "Nunito Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12152a; --surface: #1b1f38; --ink: #e8eaf5; --muted: #a2a7c2; --line: #2d3254;
+    --accent: #5cc2b0; --accent-ink: #0d1f1c; --accent-soft: #1d3a36; --blush: #3a2430;
+    --warn: #f0b072; --warn-soft: #3a2c1c; --danger: #f2869a; --danger-soft: #3d1f28;
+    --shadow: 0 10px 30px rgba(0, 0, 0, .45); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12152a; --surface: #1b1f38; --ink: #e8eaf5; --muted: #a2a7c2; --line: #2d3254;
+  --accent: #5cc2b0; --accent-ink: #0d1f1c; --accent-soft: #1d3a36; --blush: #3a2430;
+  --warn: #f0b072; --warn-soft: #3a2c1c; --danger: #f2869a; --danger-soft: #3d1f28;
+  --shadow: 0 10px 30px rgba(0, 0, 0, .45); color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { background: var(--bg); color: var(--ink); }
+body { font-family: var(--f-body); font-size: 15px; line-height: 1.5; margin: 0; }
+button, input, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+
+.wrap {
+  max-width: 1120px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* ---------- header ---------- */
+.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);
+}
+.top .wrap { display: flex; align-items: center; gap: 16px; padding-block: 12px; }
+.brand { display: flex; flex-direction: column; line-height: 1.1; margin-right: auto; min-width: 0; }
+.brand b { font-family: var(--f-display); font-size: 1.45rem; font-weight: 700; letter-spacing: -.01em; }
+.brand span { font-size: .72rem; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); }
+.cart-btn {
+  display: flex; align-items: center; gap: 10px; border: 0; border-radius: 999px;
+  background: var(--accent); color: var(--accent-ink); padding: 8px 16px; font-weight: 700;
+}
+.cart-btn .count { background: var(--accent-ink); color: var(--accent); border-radius: 999px; padding: 0 8px; font-size: .85rem; }
+.cart-btn .sum { font-family: var(--f-mono); font-size: .9rem; }
+
+/* ---------- intro / filtros ---------- */
+.intro { display: grid; gap: 6px; padding-block: 28px 8px; }
+.intro h1 { font-family: var(--f-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); line-height: 1.1; margin: 0; text-wrap: balance; }
+.intro p { margin: 0; color: var(--muted); max-width: 64ch; }
+.rules { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.pill { font-size: .8rem; padding: 3px 10px; border-radius: 999px; background: var(--blush); }
+.pill.demo { background: var(--warn-soft); color: var(--warn); font-weight: 700; }
+
+.filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding-block: 16px; }
+.search {
+  flex: 1 1 260px; min-width: 0; padding: 10px 14px; border-radius: var(--r);
+  border: 1px solid var(--line); background: var(--surface);
+}
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  border: 1px solid var(--line); background: var(--surface); border-radius: 999px;
+  padding: 6px 14px; font-size: .88rem;
+}
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.stamp { font-size: .78rem; color: var(--muted); width: 100%; }
+.stamp button { border: 0; background: none; color: var(--accent); text-decoration: underline; padding: 0 4px; }
+
+/* ---------- referências ---------- */
+.list { display: grid; gap: 16px; padding-block: 8px 80px; }
+.ref {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+  display: grid; grid-template-columns: 180px 1fr; overflow: hidden;
+}
+.ref-art {
+  position: relative; min-height: 160px; display: flex; align-items: flex-end; padding: 12px;
+  background: var(--blush);
+}
+.ref-art .swatches { display: flex; gap: 6px; flex-wrap: wrap; }
+.sw { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--surface); box-shadow: 0 0 0 1px var(--line); }
+.ref-art .initial {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font-family: var(--f-display); font-size: 4.2rem; font-weight: 700; color: var(--ink); opacity: .12;
+}
+.ref-body { padding: 16px 18px; display: grid; gap: 12px; min-width: 0; }
+.ref-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+.ref-head h2 { font-family: var(--f-display); font-size: 1.25rem; margin: 0; line-height: 1.2; }
+.ref-head .code { font-size: .8rem; color: var(--muted); }
+.ref-head .price { margin-left: auto; font-family: var(--f-mono); font-weight: 600; }
+.ref-head .price small { font-family: var(--f-body); color: var(--muted); font-weight: 400; }
+.ref-meta { font-size: .82rem; color: var(--muted); display: flex; gap: 12px; flex-wrap: wrap; }
+.ref-meta .ok { color: var(--accent); font-weight: 700; }
+.ref-meta .low { color: var(--warn); font-weight: 700; }
+
+.grid-wrap { overflow-x: auto; }
+table.grade { border-collapse: separate; border-spacing: 0; width: 100%; min-width: max-content; }
+.grade th, .grade td { padding: 6px 4px; text-align: center; }
+.grade thead th {
+  font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted);
+  font-weight: 700; border-bottom: 1px solid var(--line);
+}
+.grade th.color { text-align: left; padding-right: 12px; white-space: nowrap; font-weight: 600; font-size: .9rem; }
+.grade th.color .sw { width: 14px; height: 14px; display: inline-block; vertical-align: -2px; margin-right: 6px; border-width: 1px; }
+.grade tbody tr + tr td, .grade tbody tr + tr th { border-top: 1px dashed var(--line); }
+.cell { display: grid; gap: 2px; justify-items: center; }
+.qty {
+  width: 54px; padding: 6px 4px; text-align: center; border-radius: 8px; border: 1px solid var(--line);
+  background: var(--bg); font-family: var(--f-mono); font-variant-numeric: tabular-nums;
+}
+.qty.has { border-color: var(--accent); background: var(--accent-soft); font-weight: 700; }
+.qty.over { border-color: var(--danger); background: var(--danger-soft); }
+.avail { font-size: .7rem; color: var(--muted); font-family: var(--f-mono); }
+.na { color: var(--line); font-size: .9rem; }
+.grade td.act { padding-left: 10px; }
+.mini {
+  border: 1px solid var(--line); background: transparent; border-radius: 8px; padding: 5px 10px;
+  font-size: .78rem; white-space: nowrap;
+}
+.mini:hover { border-color: var(--accent); color: var(--accent); }
+.ref-foot { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; font-size: .85rem; }
+.ref-foot .sub { margin-left: auto; font-family: var(--f-mono); font-weight: 600; }
+.warnline { color: var(--warn); }
+.empty { text-align: center; color: var(--muted); padding: 48px 0; }
+
+/* ---------- gaveta do carrinho ---------- */
+.scrim { position: fixed; inset: 0; background: rgba(10, 12, 25, .45); z-index: 40; }
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 50; width: min(440px, 100%);
+  background: var(--surface); box-shadow: var(--shadow); display: flex; flex-direction: column;
+  padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+.drawer header { display: flex; align-items: center; gap: 10px; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+.drawer header h2 { font-family: var(--f-display); margin: 0; font-size: 1.3rem; margin-right: auto; }
+.steps { display: flex; gap: 6px; font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.steps span[aria-current="step"] { color: var(--accent); font-weight: 700; }
+.x { border: 0; background: none; font-size: 1.5rem; line-height: 1; padding: 4px 8px; color: var(--muted); }
+.drawer .body { flex: 1; overflow-y: auto; padding: 16px 20px; display: grid; align-content: start; gap: 14px; }
+.drawer footer { border-top: 1px solid var(--line); padding: 14px 20px; display: grid; gap: 10px; }
+
+.line { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.line b { font-size: .95rem; }
+.line .g { font-size: .82rem; color: var(--muted); font-family: var(--f-mono); grid-column: 1; }
+.line .v { font-family: var(--f-mono); font-weight: 600; grid-row: 1; grid-column: 2; }
+.line .rm { grid-column: 2; justify-self: end; border: 0; background: none; color: var(--danger); font-size: .78rem; padding: 0; }
+.totals { display: grid; gap: 4px; }
+.totals div { display: flex; justify-content: space-between; }
+.totals .big { font-size: 1.2rem; font-weight: 800; }
+.totals .big span:last-child { font-family: var(--f-mono); }
+.meter { height: 6px; border-radius: 999px; background: var(--line); overflow: hidden; }
+.meter i { display: block; height: 100%; background: var(--accent); }
+.note { font-size: .82rem; color: var(--muted); }
+.problems { background: var(--danger-soft); color: var(--danger); border-radius: var(--r); padding: 10px 14px; font-size: .86rem; }
+.problems ul { margin: 4px 0 0; padding-left: 18px; }
+
+.primary {
+  border: 0; border-radius: var(--r); background: var(--accent); color: var(--accent-ink);
+  padding: 13px 16px; font-weight: 800; font-size: 1rem; width: 100%;
+}
+.primary[disabled] { opacity: .45; cursor: not-allowed; }
+.ghost { border: 1px solid var(--line); background: transparent; border-radius: var(--r); padding: 11px 16px; width: 100%; }
+
+form.buyer { display: grid; gap: 12px; }
+.field { display: grid; gap: 4px; }
+.field label { font-size: .8rem; font-weight: 700; }
+.field input, .field textarea {
+  padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg);
+}
+.field textarea { min-height: 72px; resize: vertical; }
+.field .err { font-size: .76rem; color: var(--danger); min-height: 0; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.done { text-align: center; display: grid; gap: 10px; justify-items: center; }
+.done .tick { width: 56px; height: 56px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-size: 1.8rem; font-weight: 800; }
+.done h3 { font-family: var(--f-display); margin: 0; font-size: 1.4rem; }
+pre.msg {
+  white-space: pre-wrap; text-align: left; font-family: var(--f-mono); font-size: .76rem; width: 100%;
+  background: var(--bg); border: 1px solid var(--line); border-radius: var(--r); padding: 12px; margin: 0;
+  max-height: 260px; overflow: auto;
+}
+a.wa {
+  display: block; text-align: center; text-decoration: none; border-radius: var(--r);
+  background: var(--accent); color: var(--accent-ink); padding: 13px 16px; font-weight: 800; width: 100%;
+}
+.toast {
+  position: fixed; left: 50%; transform: translateX(-50%);
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px)); z-index: 60;
+  background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 999px; font-size: .9rem;
+}
+
+@media (max-width: 720px) {
+  .ref { grid-template-columns: 1fr; }
+  .ref-art { min-height: 84px; }
+  .ref-art .initial { font-size: 3rem; justify-content: end; padding-right: 16px; place-items: center end; }
+  .cart-btn .sum { display: none; }
+  .drawer { top: auto; width: 100%; max-height: 92%; border-radius: 16px 16px 0 0; padding-left: env(safe-area-inset-left, 0px); }
+  .row2 { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .drawer { animation: slide .22s ease-out; }
+  @keyframes slide { from { transform: translateX(24px); opacity: .6; } }
+}
+
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><b>Bebêtenkitê</b><span>Portal do Atacado</span></div>
+    <button class="cart-btn" id="openCart" type="button" aria-label="Abrir carrinho">
+      Carrinho <span class="count" id="cartCount">0</span> <span class="sum" id="cartSum">R$ 0,00</span>
+    </button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="intro">
+    <h1>Monte seu pedido pela grade, com o estoque de hoje</h1>
+    <p>Os saldos vêm direto do nosso sistema. Preencha as quantidades por cor e tamanho, revise o carrinho e envie: o pedido chega para a <span id="sellerName">Gleice</span>, que confirma frete e pagamento com você.</p>
+    <div class="rules" id="rules"></div>
+  </section>
+
+  <div class="filters">
+    <input class="search" id="search" type="search" placeholder="Buscar por nome ou referência" aria-label="Buscar produtos">
+    <div class="chips" id="groups" role="group" aria-label="Linhas"></div>
+    <div class="stamp" id="stamp">Carregando estoque…</div>
+  </div>
+
+  <section class="list" id="list" aria-live="polite"></section>
+</main>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-label="Carrinho" role="dialog" aria-modal="true">
+  <header>
+    <h2 id="drawerTitle">Seu pedido</h2>
+    <div class="steps" aria-label="Etapas">
+      <span data-step="cart">Itens</span>·<span data-step="buyer">Dados</span>·<span data-step="done">Enviado</span>
+    </div>
+    <button class="x" id="closeCart" type="button" aria-label="Fechar">×</button>
+  </header>
+  <div class="body" id="drawerBody"></div>
+  <footer id="drawerFoot"></footer>
+</aside>
+<div class="toast" id="toast" hidden></div>
+
+<script>window.ATACADO_DEMO = {"config": {"mock": true, "minOrderValue": 500.0, "minQtyPerRef": 6, "sellerName": "Gleice", "sellerPhone": "5585999999999"}, "updatedAt": "2026-10-14T16:26:52.709477-03:00", "products": [{"reference": "10421", "name": "Body Manga Curta Canelado", "group": "Bebê", "colors": [{"color": "Off White", "skus": [{"productCode": 100001, "size": "RN", "available": 60, "price": 24.9}, {"productCode": 100004, "size": "G", "available": 8, "price": 24.9}]}, {"color": "Rosa Bebê", "skus": [{"productCode": 100005, "size": "RN", "available": 5, "price": 24.9}, {"productCode": 100006, "size": "P", "available": 5, "price": 24.9}, {"productCode": 100007, "size": "M", "available": 3, "price": 24.9}]}, {"color": "Azul Névoa", "skus": [{"productCode": 100009, "size": "RN", "available": 60, "price": 24.9}, {"productCode": 100010, "size": "P", "available": 36, "price": 24.9}, {"productCode": 100012, "size": "G", "available": 48, "price": 24.9}]}], "sizes": ["RN", "P", "M", "G"], "minPrice": 24.9, "maxPrice": 24.9, "totalAvailable": 225}, {"reference": "10422", "name": "Body Manga Longa Suedine", "group": "Bebê", "colors": [{"color": "Mescla", "skus": [{"productCode": 100013, "size": "RN", "available": 18, "price": 29.9}]}, {"color": "Verde Sálvia", "skus": [{"productCode": 100017, "size": "RN", "available": 5, "price": 29.9}, {"productCode": 100018, "size": "P", "available": 5, "price": 29.9}, {"productCode": 100019, "size": "M", "available": 36, "price": 29.9}, {"productCode": 100020, "size": "G", "available": 48, "price": 29.9}]}, {"color": "Off White", "skus": [{"productCode": 100022, "size": "P", "available": 36, "price": 29.9}, {"productCode": 100023, "size": "M", "available": 5, "price": 29.9}, {"productCode": 100024, "size": "G", "available": 60, "price": 29.9}]}], "sizes": ["RN", "P", "M", "G"], "minPrice": 29.9, "maxPrice": 29.9, "totalAvailable": 213}, {"reference": "10470", "name": "Kit 3 Culotes Suedine", "group": "Bebê", "colors": [{"color": "Neutros", "skus": [{"productCode": 100033, "size": "P", "available": 18, "price": 39.9}, {"productCode": 100034, "size": "M", "available": 12, "price": 39.9}, {"productCode": 100035, "size": "G", "available": 8, "price": 39.9}]}, {"color": "Coloridos", "skus": [{"productCode": 100036, "size": "P", "available": 3, "price": 39.9}, {"productCode": 100037, "size": "M", "available": 5, "price": 39.9}, {"productCode": 100038, "size": "G", "available": 12, "price": 39.9}]}], "sizes": ["P", "M", "G"], "minPrice": 39.9, "maxPrice": 39.9, "totalAvailable": 58}, {"reference": "10455", "name": "Macacão Plush com Pezinho", "group": "Bebê", "colors": [{"color": "Bege", "skus": [{"productCode": 100025, "size": "RN", "available": 36, "price": 54.9}, {"productCode": 100026, "size": "P", "available": 18, "price": 54.9}, {"productCode": 100027, "size": "M", "available": 5, "price": 54.9}, {"productCode": 100028, "size": "G", "available": 24, "price": 54.9}]}, {"color": "Rosa Bebê", "skus": [{"productCode": 100029, "size": "RN", "available": 48, "price": 54.9}, {"productCode": 100030, "size": "P", "available": 8, "price": 54.9}, {"productCode": 100032, "size": "G", "available": 3, "price": 54.9}]}], "sizes": ["RN", "P", "M", "G"], "minPrice": 54.9, "maxPrice": 54.9, "totalAvailable": 142}, {"reference": "20171", "name": "Bermuda Moletom", "group": "Infantil", "colors": [{"color": "Marinho", "skus": [{"productCode": 100093, "size": "2", "available": 5, "price": 36.9}, {"productCode": 100094, "size": "4", "available": 60, "price": 36.9}, {"productCode": 100095, "size": "6", "available": 12, "price": 36.9}, {"productCode": 100097, "size": "10", "available": 5, "price": 36.9}]}, {"color": "Mescla", "skus": [{"productCode": 100099, "size": "4", "available": 12, "price": 36.9}, {"productCode": 100100, "size": "6", "available": 18, "price": 36.9}, {"productCode": 100101, "size": "8", "available": 8, "price": 36.9}]}, {"color": "Preto", "skus": [{"productCode": 100103, "size": "2", "available": 5, "price": 36.9}, {"productCode": 100104, "size": "4", "available": 48, "price": 36.9}, {"productCode": 100105, "size": "6", "available": 12, "price": 36.9}, {"productCode": 100106, "size": "8", "available": 5, "price": 36.9}, {"productCode": 100107, "size": "10", "available": 60, "price": 36.9}]}], "sizes": ["2", "4", "6", "8", "10"], "minPrice": 36.9, "maxPrice": 36.9, "totalAvailable": 250}, {"reference": "20166", "name": "Camiseta Estampada Dino", "group": "Infantil", "colors": [{"color": "Verde", "skus": [{"productCode": 100083, "size": "2", "available": 60, "price": 32.9}, {"productCode": 100084, "size": "4", "available": 3, "price": 32.9}, {"productCode": 100085, "size": "6", "available": 36, "price": 32.9}, {"productCode": 100086, "size": "8", "available": 5, "price": 32.9}, {"productCode": 100087, "size": "10", "available": 3, "price": 32.9}]}, {"color": "Cinza Mescla", "skus": [{"productCode": 100088, "size": "2", "available": 24, "price": 32.9}, {"productCode": 100089, "size": "4", "available": 18, "price": 32.9}, {"productCode": 100090, "size": "6", "available": 8, "price": 32.9}, {"productCode": 100091, "size": "8", "available": 60, "price": 32.9}, {"productCode": 100092, "size": "10", "available": 36, "price": 32.9}]}], "sizes": ["2", "4", "6", "8", "10"], "minPrice": 32.9, "maxPrice": 32.9, "totalAvailable": 253}, {"reference": "20110", "name": "Conjunto Moletinho Urso", "group": "Infantil", "colors": [{"color": "Caramelo", "skus": [{"productCode": 100041, "size": "3", "available": 18, "price": 69.9}]}, {"color": "Marinho", "skus": [{"productCode": 100043, "size": "1", "available": 12, "price": 69.9}, {"productCode": 100044, "size": "2", "available": 12, "price": 69.9}, {"productCode": 100045, "size": "3", "available": 48, "price": 69.9}, {"productCode": 100046, "size": "4", "available": 8, "price": 69.9}]}], "sizes": ["1", "2", "3", "4"], "minPrice": 69.9, "maxPrice": 69.9, "totalAvailable": 98}, {"reference": "20118", "name": "Conjunto Verão Linho", "group": "Infantil", "colors": [{"color": "Areia", "skus": [{"productCode": 100048, "size": "2", "available": 24, "price": 74.9}, {"productCode": 100049, "size": "3", "available": 36, "price": 74.9}, {"productCode": 100051, "size": "6", "available": 18, "price": 74.9}]}, {"color": "Terracota", "skus": [{"productCode": 100053, "size": "2", "available": 36, "price": 74.9}, {"productCode": 100054, "size": "3", "available": 8, "price": 74.9}, {"productCode": 100055, "size": "4", "available": 60, "price": 74.9}, {"productCode": 100056, "size": "6", "available": 48, "price": 74.9}]}], "sizes": ["2", "3", "4", "6"], "minPrice": 74.9, "maxPrice": 74.9, "totalAvailable": 230}, {"reference": "20152", "name": "Jardineira Sarja", "group": "Infantil", "colors": [{"color": "Jeans Claro", "skus": [{"productCode": 100075, "size": "1", "available": 12, "price": 84.9}, {"productCode": 100076, "size": "2", "available": 5, "price": 84.9}, {"productCode": 100077, "size": "3", "available": 60, "price": 84.9}, {"productCode": 100078, "size": "4", "available": 8, "price": 84.9}]}, {"color": "Caqui", "skus": [{"productCode": 100079, "size": "1", "available": 60, "price": 84.9}, {"productCode": 100080, "size": "2", "available": 60, "price": 84.9}, {"productCode": 100082, "size": "4", "available": 48, "price": 84.9}]}], "sizes": ["1", "2", "3", "4"], "minPrice": 84.9, "maxPrice": 84.9, "totalAvailable": 253}, {"reference": "20190", "name": "Pijama Malha Estrelinhas", "group": "Infantil", "colors": [{"color": "Azul", "skus": [{"productCode": 100108, "size": "1", "available": 24, "price": 49.9}, {"productCode": 100109, "size": "2", "available": 18, "price": 49.9}, {"productCode": 100110, "size": "4", "available": 60, "price": 49.9}, {"productCode": 100111, "size": "6", "available": 24, "price": 49.9}, {"productCode": 100112, "size": "8", "available": 3, "price": 49.9}]}, {"color": "Rosa", "skus": [{"productCode": 100113, "size": "1", "available": 8, "price": 49.9}, {"productCode": 100114, "size": "2", "available": 3, "price": 49.9}, {"productCode": 100115, "size": "4", "available": 5, "price": 49.9}, {"productCode": 100116, "size": "6", "available": 36, "price": 49.9}, {"productCode": 100117, "size": "8", "available": 36, "price": 49.9}]}], "sizes": ["1", "2", "4", "6", "8"], "minPrice": 49.9, "maxPrice": 49.9, "totalAvailable": 217}, {"reference": "20140", "name": "Vestido Lese Babado", "group": "Infantil", "colors": [{"color": "Branco", "skus": [{"productCode": 100057, "size": "1", "available": 12, "price": 79.9}, {"productCode": 100058, "size": "2", "available": 48, "price": 79.9}, {"productCode": 100059, "size": "3", "available": 5, "price": 79.9}, {"productCode": 100062, "size": "8", "available": 60, "price": 79.9}]}, {"color": "Lavanda", "skus": [{"productCode": 100063, "size": "1", "available": 5, "price": 79.9}, {"productCode": 100064, "size": "2", "available": 8, "price": 79.9}, {"productCode": 100066, "size": "4", "available": 5, "price": 79.9}, {"productCode": 100068, "size": "8", "available": 18, "price": 79.9}]}, {"color": "Amarelo Manteiga", "skus": [{"productCode": 100069, "size": "1", "available": 8, "price": 79.9}, {"productCode": 100070, "size": "2", "available": 24, "price": 79.9}, {"productCode": 100071, "size": "3", "available": 60, "price": 79.9}, {"productCode": 100072, "size": "4", "available": 12, "price": 79.9}, {"productCode": 100073, "size": "6", "available": 3, "price": 79.9}, {"productCode": 100074, "size": "8", "available": 12, "price": 79.9}]}], "sizes": ["1", "2", "3", "4", "6", "8"], "minPrice": 79.9, "maxPrice": 79.9, "totalAvailable": 280}, {"reference": "30031", "name": "Kit Touca + Luva + Meia", "group": "Maternidade", "colors": [{"color": "Branco", "skus": [{"productCode": 100123, "size": "RN", "available": 12, "price": 27.9}, {"productCode": 100124, "size": "P", "available": 5, "price": 27.9}]}, {"color": "Azul", "skus": [{"productCode": 100125, "size": "RN", "available": 3, "price": 27.9}, {"productCode": 100126, "size": "P", "available": 36, "price": 27.9}]}, {"color": "Rosa", "skus": [{"productCode": 100127, "size": "RN", "available": 24, "price": 27.9}]}], "sizes": ["RN", "P"], "minPrice": 27.9, "maxPrice": 27.9, "totalAvailable": 80}, {"reference": "30020", "name": "Manta Soft Bordada", "group": "Maternidade", "colors": [{"color": "Cinza", "skus": [{"productCode": 100120, "size": "U", "available": 18, "price": 64.9}]}, {"color": "Bege", "skus": [{"productCode": 100121, "size": "U", "available": 48, "price": 64.9}]}, {"color": "Rosa", "skus": [{"productCode": 100122, "size": "U", "available": 18, "price": 64.9}]}], "sizes": ["U"], "minPrice": 64.9, "maxPrice": 64.9, "totalAvailable": 84}, {"reference": "30012", "name": "Saída de Maternidade Tricô", "group": "Maternidade", "colors": [{"color": "Off White", "skus": [{"productCode": 100118, "size": "RN", "available": 8, "price": 119.9}]}, {"color": "Cru", "skus": [{"productCode": 100119, "size": "RN", "available": 48, "price": 119.9}]}], "sizes": ["RN"], "minPrice": 119.9, "maxPrice": 119.9, "totalAvailable": 56}]};</script>
+<script>
+/* Bebêtenkitê Atacado — front-end (vanilla JS).
+ * Modo API: conversa com o backend FastAPI (/api/config, /api/catalogo, /api/pedido).
+ * Modo demo: se window.ATACADO_DEMO existir, usa os dados embutidos e monta o pedido no navegador.
+ */
+(() => {
+  "use strict";
+  const DEMO = window.ATACADO_DEMO || null;
+  const API = window.ATACADO_API_BASE || "";
+  const $ = (s, el = document) => el.querySelector(s);
+
+  const S = {
+    config: { minOrderValue: 500, minQtyPerRef: 6, sellerName: "Gleice", mock: true },
+    products: [], index: new Map(), updatedAt: null,
+    cart: new Map(), group: "Todos", q: "", step: "cart",
+    buyer: { name: "", company: "", document: "", phone: "", city: "", notes: "" },
+    problems: [], result: null, sending: false,
+  };
+
+  // ---------- util ----------
+  const brl = v => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const digits = s => String(s || "").replace(/\D/g, "");
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* sem storage: segue sem lembrar */ } },
+  };
+  function toast(msg) {
+    const t = $("#toast"); t.textContent = msg; t.hidden = false;
+    clearTimeout(toast._t); toast._t = setTimeout(() => (t.hidden = true), 2600);
+  }
+
+  // Chaves sem acento e em minúsculas. O nome da cor no TOTVS vem com código e ruído
+  // ("Vermelho 44990", "Listra Azul Marinho / Branco"), então procuramos as palavras de cor
+  // dentro do nome, preferindo a expressão mais longa ("azul marinho" antes de "azul").
+  const COLOR_HEX = {
+    "branco": "#ffffff", "off white": "#f3efe6", "off": "#f3efe6", "marfim": "#f5f0e1", "cru": "#ece3cf",
+    "bege": "#d9c3a5", "areia": "#d8c7a6", "nude": "#e3bfa6", "caqui": "#b9a77c", "capuccino": "#a07856",
+    "caramelo": "#b97a45", "terracota": "#c0694a", "marrom": "#7a5232", "marron": "#7a5232",
+    "marrom escuro": "#4e3420", "marron escuro": "#4e3420", "bordo": "#7a1f33", "vinho": "#6e1f2e",
+    "vermelho": "#d93a3a", "framboesa": "#c2335f", "pink": "#f0479a", "rosa": "#ee9fb0",
+    "rosa claro": "#f6c9d3", "rosa bebe": "#f4c6cf", "rosa pink": "#f0479a", "rosa malva": "#c98a9b",
+    "rosa fiesta": "#ef5a8a", "rosa neon": "#ff5fa2", "salmao": "#f4a38a", "pessego": "#f8c4a0",
+    "laranja": "#f28c38", "amarelo": "#f5d33f", "amarelo manteiga": "#f4e2a1", "neon": "#c6f432",
+    "verde": "#4fa36a", "verde claro": "#a8d5a2", "verde escuro": "#2f5e3e", "verde endro": "#8a9a5b",
+    "verde salvia": "#a9bfa2", "maca verde": "#8cc63f", "turquesa": "#2bb3b1", "azul turquesa": "#2bb3b1",
+    "azul": "#3f7fd0", "azul claro": "#9cc7ec", "azul nevoa": "#b9cfe0", "jeans claro": "#8fb0d3",
+    "azul escuro": "#23407a", "dark blue": "#23407a", "azul marinho": "#1f2f57", "marinho": "#1f2f57",
+    "lilas": "#c4a8e0", "lavanda": "#c7b6e3", "roxo": "#7b4fa6", "cinza": "#9a9ca3", "mescla": "#b6b8be",
+    "cinza mescla": "#a9abb2", "preto": "#262626", "unica": "#cccccc",
+  };
+  const NEUTRAL = "#d9d3c7";
+  // estampas, "diversas", "colorido" e nomes sem cor reconhecível
+  const MULTI = "conic-gradient(#f28c38, #f5d33f, #4fa36a, #3f7fd0, #c4a8e0, #ee9fb0, #f28c38)";
+  const colorCache = new Map();
+  function colorsIn(name) {
+    if (colorCache.has(name)) return colorCache.get(name);
+    const words = name.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
+      .replace(/[^a-z ]+/g, " ").split(/\s+/).filter(Boolean);
+    const found = [];
+    for (let i = 0; i < words.length && found.length < 2; i++) {
+      for (let n = 3; n >= 1; n--) {
+        const hex = COLOR_HEX[words.slice(i, i + n).join(" ")];
+        if (hex && i + n <= words.length) {
+          if (!found.includes(hex)) found.push(hex);
+          i += n - 1;
+          break;
+        }
+      }
+    }
+    colorCache.set(name, found);
+    return found;
+  }
+  // fundo da bolinha: 1 cor, meio a meio se o nome tiver 2 (listras, "Vermelho Branco"), ou arco-íris
+  function swatchBg(name) {
+    const [a, b] = colorsIn(name);
+    return !a ? MULTI : b ? `linear-gradient(135deg, ${a} 50%, ${b} 50%)` : a;
+  }
+  const tintFor = name => (colorsIn(name)[0] || NEUTRAL) + "33";
+
+  // ---------- dados ----------
+  const api = {
+    async config() {
+      if (DEMO) return DEMO.config;
+      const r = await fetch(`${API}/api/config`); return r.json();
+    },
+    async catalog(refresh = false) {
+      if (DEMO) return { products: DEMO.products, updatedAt: DEMO.updatedAt, mock: true };
+      const r = await fetch(`${API}/api/catalogo${refresh ? "?refresh=true" : ""}`);
+      if (!r.ok) throw new Error((await r.json()).detail || "Falha ao carregar o estoque");
+      return r.json();
+    },
+    async order(payload) {
+      if (DEMO) return demoOrder(payload);
+      const r = await fetch(`${API}/api/pedido`, {
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload),
+      });
+      const data = await r.json();
+      if (r.status === 409) return { problems: data.detail.problems };
+      if (r.status === 422) return { problems: data.detail.map(d => `${d.loc.slice(-1)[0]}: ${d.msg}`) };
+      if (!r.ok) throw new Error(typeof data.detail === "string" ? data.detail : "Falha ao enviar o pedido");
+      return data;
+    },
+  };
+
+  function indexProducts(products) {
+    S.index.clear();
+    for (const p of products) for (const c of p.colors) for (const s of c.skus) {
+      S.index.set(s.productCode, { ...s, reference: p.reference, name: p.name, color: c.color });
+    }
+  }
+
+  // ---------- regras (espelho do backend, só para feedback imediato) ----------
+  function cartLines() {
+    const lines = [];
+    for (const [code, qty] of S.cart) {
+      const sku = S.index.get(code);
+      if (sku && qty > 0) lines.push({ ...sku, quantity: qty, subtotal: qty * sku.price });
+    }
+    return lines;
+  }
+  function cartProblems(lines) {
+    const out = [];
+    const perRef = new Map();
+    for (const l of lines) {
+      if (l.quantity > l.available) out.push(`${l.name} ${l.color} ${l.size}: pediu ${l.quantity}, disponível ${l.available}.`);
+      perRef.set(l.reference, (perRef.get(l.reference) || { q: 0, name: l.name })); perRef.get(l.reference).q += l.quantity;
+    }
+    for (const [ref, v] of perRef) if (v.q < S.config.minQtyPerRef)
+      out.push(`${v.name} (ref. ${ref}): mínimo de ${S.config.minQtyPerRef} peças por referência.`);
+    const total = lines.reduce((a, l) => a + l.subtotal, 0);
+    if (lines.length && total < S.config.minOrderValue)
+      out.push(`Pedido mínimo de ${brl(S.config.minOrderValue)} (faltam ${brl(S.config.minOrderValue - total)}).`);
+    return out;
+  }
+
+  // ---------- render: catálogo ----------
+  function renderRules() {
+    $("#sellerName").textContent = S.config.sellerName;
+    $("#rules").innerHTML =
+      (S.config.mock || DEMO ? `<span class="pill demo">Demonstração: estoque fictício</span>` : "");
+  }
+  function renderGroups() {
+    const groups = ["Todos", ...new Set(S.products.map(p => p.group).filter(Boolean))];
+    $("#groups").innerHTML = groups.map(g =>
+      `<button type="button" class="chip" aria-pressed="${g === S.group}" data-group="${esc(g)}">${esc(g)}</button>`).join("");
+  }
+  function renderStamp() {
+    if (!S.updatedAt) return;
+    const d = new Date(S.updatedAt);
+    $("#stamp").innerHTML = `Estoque consultado às ${d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}` +
+      ` · ${S.products.length} referências` + (DEMO ? "" : ` <button type="button" id="refresh">atualizar</button>`);
+  }
+
+  function visibleProducts() {
+    const q = S.q.trim().toLowerCase();
+    return S.products.filter(p =>
+      (S.group === "Todos" || p.group === S.group) &&
+      (!q || p.name.toLowerCase().includes(q) || p.reference.toLowerCase().includes(q)));
+  }
+
+  function refCard(p) {
+    const priceTxt = p.minPrice === p.maxPrice ? brl(p.minPrice) : `${brl(p.minPrice)} – ${brl(p.maxPrice)}`;
+    const head = p.sizes.map(s => `<th scope="col">${esc(s)}</th>`).join("");
+    const rows = p.colors.map(c => {
+      const bySize = new Map(c.skus.map(s => [s.size, s]));
+      const cells = p.sizes.map(size => {
+        const s = bySize.get(size);
+        if (!s) return `<td><span class="na" title="Sem estoque">—</span></td>`;
+        const q = S.cart.get(s.productCode) || "";
+        const cls = q ? (q > s.available ? "qty over" : "qty has") : "qty";
+        return `<td><div class="cell">
+          <input class="${cls}" id="q-${s.productCode}" type="number" inputmode="numeric" min="0" max="${s.available}"
+            step="1" value="${q}" data-code="${s.productCode}" aria-label="${esc(p.name)} ${esc(c.color)} tamanho ${esc(size)}">
+          <span class="avail">${s.available} disp.</span></div></td>`;
+      }).join("");
+      return `<tr><th scope="row" class="color"><span class="sw" style="background:${swatchBg(c.color)}"></span>${esc(c.color)}</th>${cells}
+        <td class="act"><button type="button" class="mini" data-grade="${esc(p.reference)}|${esc(c.color)}" title="Soma 1 peça em cada tamanho disponível">+1 grade</button></td></tr>`;
+    }).join("");
+    const stockCls = p.totalAvailable < 40 ? "low" : "ok";
+    return `<article class="ref" data-ref="${esc(p.reference)}">
+      <div class="ref-art" style="background:${tintFor(p.colors[0].color)}">
+        <span class="initial" aria-hidden="true">${esc(p.name[0])}</span>
+        <div class="swatches">${p.colors.map(c => `<span class="sw" title="${esc(c.color)}" style="background:${swatchBg(c.color)}"></span>`).join("")}</div>
+      </div>
+      <div class="ref-body">
+        <div class="ref-head">
+          <h2>${esc(p.name)}</h2><span class="code mono">ref. ${esc(p.reference)}</span>
+          <span class="price">${priceTxt} <small>/ peça</small></span>
+        </div>
+        <div class="ref-meta"><span>${esc(p.group || "")}</span>
+          <span class="${stockCls}">${p.totalAvailable} peças em estoque</span>
+          <span>${p.colors.length} ${p.colors.length > 1 ? "cores" : "cor"} · ${p.sizes.join(" ")}</span></div>
+        <div class="grid-wrap"><table class="grade"><thead><tr><th></th>${head}<th></th></tr></thead><tbody>${rows}</tbody></table></div>
+        <div class="ref-foot" id="foot-${esc(p.reference)}"></div>
+      </div></article>`;
+  }
+
+  function renderRefFoot(ref) {
+    const el = document.getElementById(`foot-${ref}`); if (!el) return;
+    const lines = cartLines().filter(l => l.reference === ref);
+    const q = lines.reduce((a, l) => a + l.quantity, 0);
+    if (!q) { el.innerHTML = ""; return; }
+    const sub = lines.reduce((a, l) => a + l.subtotal, 0);
+    const warn = q < S.config.minQtyPerRef ? `<span class="warnline">Faltam ${S.config.minQtyPerRef - q} peças para o mínimo da referência</span>` : "";
+    el.innerHTML = `<span><b>${q}</b> peças no carrinho</span>${warn}<span class="sub">${brl(sub)}</span>`;
+  }
+
+  function renderList() {
+    const items = visibleProducts();
+    $("#list").innerHTML = items.length ? items.map(refCard).join("")
+      : `<div class="empty">Nenhuma referência encontrada para essa busca.</div>`;
+    items.forEach(p => renderRefFoot(p.reference));
+  }
+
+  function renderHeader() {
+    const lines = cartLines();
+    $("#cartCount").textContent = lines.reduce((a, l) => a + l.quantity, 0);
+    $("#cartSum").textContent = brl(lines.reduce((a, l) => a + l.subtotal, 0));
+  }
+
+  // ---------- render: gaveta ----------
+  function groupLines(lines) {
+    const m = new Map();
+    for (const l of lines) {
+      const k = `${l.reference}|${l.color}`;
+      if (!m.has(k)) m.set(k, { reference: l.reference, name: l.name, color: l.color, items: [] });
+      m.get(k).items.push(l);
+    }
+    return [...m.values()];
+  }
+
+  function renderDrawer() {
+    document.querySelectorAll(".steps span").forEach(s =>
+      s.toggleAttribute("aria-current", false) || (s.dataset.step === S.step && s.setAttribute("aria-current", "step")));
+    const body = $("#drawerBody"), foot = $("#drawerFoot");
+    const lines = cartLines();
+    const total = lines.reduce((a, l) => a + l.subtotal, 0);
+    const pieces = lines.reduce((a, l) => a + l.quantity, 0);
+    const probs = cartProblems(lines);
+
+    if (S.step === "cart") {
+      $("#drawerTitle").textContent = "Seu pedido";
+      if (!lines.length) {
+        body.innerHTML = `<p class="note">O carrinho está vazio. Preencha as quantidades na grade de cada referência.</p>`;
+        foot.innerHTML = `<button class="ghost" type="button" data-close>Voltar ao catálogo</button>`;
+        return;
+      }
+      body.innerHTML = groupLines(lines).map(g => {
+        const sub = g.items.reduce((a, l) => a + l.subtotal, 0);
+        const grade = g.items.map(i => `${i.size}×${i.quantity}`).join(" · ");
+        return `<div class="line"><b>${esc(g.name)} · ${esc(g.color)}</b><span class="v">${brl(sub)}</span>
+          <span class="g">ref. ${esc(g.reference)} — ${esc(grade)}</span>
+          <button class="rm" type="button" data-remove="${esc(g.reference)}|${esc(g.color)}">remover</button></div>`;
+      }).join("") + (probs.length ? `<div class="problems"><b>Antes de continuar:</b><ul>${probs.map(p => `<li>${esc(p)}</li>`).join("")}</ul></div>` : "");
+      const pct = Math.min(100, (total / S.config.minOrderValue) * 100);
+      foot.innerHTML = `<div class="totals"><div><span>${pieces} peças</span><span class="mono">${lines.length} SKUs</span></div>
+        <div class="big"><span>Total</span><span>${brl(total)}</span></div></div>
+        <div class="meter" aria-label="Progresso até o pedido mínimo"><i style="width:${pct}%"></i></div>
+        <button class="primary" type="button" id="toBuyer" ${probs.length ? "disabled" : ""}>Continuar para seus dados</button>`;
+      return;
+    }
+
+    if (S.step === "buyer") {
+      $("#drawerTitle").textContent = "Seus dados";
+      const b = S.buyer;
+      const f = (id, label, attrs = "") => `<div class="field"><label for="b-${id}">${label}</label>
+        <input id="b-${id}" name="${id}" value="${esc(b[id])}" ${attrs}><span class="err" id="e-${id}"></span></div>`;
+      body.innerHTML = `<form class="buyer" id="buyerForm" novalidate>
+        ${f("name", "Seu nome", 'autocomplete="name" required')}
+        ${f("company", "Loja / razão social", 'autocomplete="organization" required')}
+        <div class="row2">${f("document", "CNPJ ou CPF", 'inputmode="numeric" required')}
+        ${f("phone", "WhatsApp com DDD", 'inputmode="tel" autocomplete="tel" required')}</div>
+        ${f("city", "Cidade / UF", 'autocomplete="address-level2" required')}
+        <div class="field"><label for="b-notes">Observações (opcional)</label>
+          <textarea id="b-notes" name="notes" placeholder="Prazo, transportadora preferida, forma de pagamento…">${esc(b.notes)}</textarea></div>
+        ${S.problems.length ? `<div class="problems"><b>O estoque mudou:</b><ul>${S.problems.map(p => `<li>${esc(p)}</li>`).join("")}</ul></div>` : ""}
+      </form>`;
+      foot.innerHTML = `<div class="totals"><div class="big"><span>${pieces} peças</span><span>${brl(total)}</span></div></div>
+        <button class="primary" type="submit" form="buyerForm" id="send" ${S.sending ? "disabled" : ""}>${S.sending ? "Conferindo estoque…" : `Enviar pedido para ${esc(S.config.sellerName)}`}</button>
+        <button class="ghost" type="button" id="backCart">Voltar aos itens</button>`;
+      return;
+    }
+
+    // done
+    const r = S.result;
+    $("#drawerTitle").textContent = "Pedido pronto";
+    body.innerHTML = `<div class="done"><div class="tick" aria-hidden="true">✓</div>
+      <h3>${r.sent ? `Pedido enviado para ${esc(S.config.sellerName)}` : "Falta só um toque"}</h3>
+      <p class="note"><span class="mono">${esc(r.orderId)}</span> · ${brl(r.total)}</p>
+      <p class="note">${r.sent
+        ? `${esc(S.config.sellerName)} recebeu o pedido no WhatsApp e vai falar com você para confirmar frete e pagamento.`
+        : `Abra o WhatsApp pelo botão abaixo e envie a mensagem que já vai preenchida para ${esc(S.config.sellerName)}. Se o botão não abrir, copie o texto e mande para <b class="mono">${esc(r.sellerPhone || "")}</b>.`}</p>
+      <pre class="msg" id="msg">${esc(r.message)}</pre></div>`;
+    foot.innerHTML = (r.whatsappUrl ? `<a class="wa" href="${esc(r.whatsappUrl)}" target="_blank" rel="noopener">Abrir WhatsApp com o pedido</a>` : "") +
+      `<button class="ghost" type="button" id="copyMsg">Copiar mensagem</button>
+       <button class="ghost" type="button" id="newOrder">Fazer outro pedido</button>`;
+  }
+
+  // ---------- demo: monta o pedido no navegador ----------
+  function buildMessage(orderId, b, lines) {
+    const total = lines.reduce((a, l) => a + l.subtotal, 0);
+    const pieces = lines.reduce((a, l) => a + l.quantity, 0);
+    const doc = b.document.length === 14
+      ? b.document.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5")
+      : b.document.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+    const now = new Date().toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+    const out = [`🛒 *NOVO PEDIDO ATACADO — ${orderId}*`, `_${now}_`, "",
+      `*Cliente:* ${b.name}`, `*Empresa:* ${b.company}`, `*CNPJ/CPF:* ${doc}`, `*WhatsApp:* ${b.phone}`, `*Cidade:* ${b.city}`, "", "*Itens*"];
+    const byRef = new Map();
+    for (const l of [...lines].sort((a, c) => (a.name + a.color).localeCompare(c.name + c.color))) {
+      const k = `${l.name} (ref. ${l.reference})`;
+      if (!byRef.has(k)) byRef.set(k, new Map());
+      const bc = byRef.get(k); if (!bc.has(l.color)) bc.set(l.color, []); bc.get(l.color).push(l);
+    }
+    for (const [title, colors] of byRef) {
+      out.push(`▪️ *${title}*`);
+      for (const [color, ls] of colors)
+        out.push(`   ${color}: ${ls.map(i => `${i.size}×${i.quantity}`).join(" · ")} — ${brl(ls.reduce((a, i) => a + i.subtotal, 0))}`);
+    }
+    out.push("", `*Total:* ${pieces} peças — *${brl(total)}*`);
+    if (b.notes.trim()) out.push("", `*Obs.:* ${b.notes.trim()}`);
+    out.push("", "_Preços e saldos conferidos no TOTVS no momento do envio._");
+    return out.join("\n");
+  }
+  async function demoOrder(payload) {
+    const lines = cartLines(); const probs = cartProblems(lines);
+    if (probs.length) return { problems: probs };
+    const d = new Date();
+    const id = `ATC-${String(d.getFullYear()).slice(2)}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}-${Math.random().toString(16).slice(2, 6).toUpperCase()}`;
+    const message = buildMessage(id, payload.buyer, lines);
+    return { orderId: id, total: lines.reduce((a, l) => a + l.subtotal, 0), message, sent: false, channel: "wa.me",
+      whatsappUrl: `https://wa.me/${DEMO.config.sellerPhone}?text=${encodeURIComponent(message)}` };
+  }
+
+  // ---------- ações ----------
+  function setQty(code, qty) {
+    qty = Math.max(0, Math.floor(Number(qty) || 0));
+    if (qty) S.cart.set(code, qty); else S.cart.delete(code);
+    store.set("atc-cart", [...S.cart]);
+    const input = document.getElementById(`q-${code}`), sku = S.index.get(code);
+    if (input && sku) {
+      if (document.activeElement !== input) input.value = qty || "";
+      input.className = qty ? (qty > sku.available ? "qty over" : "qty has") : "qty";
+    }
+    if (sku) renderRefFoot(sku.reference);
+    renderHeader();
+  }
+  function openDrawer(step = "cart") { S.step = step; $("#drawer").hidden = false; $("#scrim").hidden = false; renderDrawer(); }
+  function closeDrawer() { $("#drawer").hidden = true; $("#scrim").hidden = true; if (S.step === "done") { S.step = "cart"; } }
+
+  function validateBuyer(form) {
+    const b = Object.fromEntries(new FormData(form)); const errs = {};
+    if ((b.name || "").trim().length < 2) errs.name = "Informe seu nome.";
+    if ((b.company || "").trim().length < 2) errs.company = "Informe o nome da loja.";
+    if (![11, 14].includes(digits(b.document).length)) errs.document = "CNPJ com 14 dígitos ou CPF com 11.";
+    if (digits(b.phone).length < 10) errs.phone = "WhatsApp com DDD.";
+    if ((b.city || "").trim().length < 2) errs.city = "Informe a cidade.";
+    for (const k of ["name", "company", "document", "phone", "city"]) { const e = $(`#e-${k}`); if (e) e.textContent = errs[k] || ""; }
+    return { b, ok: !Object.keys(errs).length };
+  }
+
+  async function submitOrder(form) {
+    const { b, ok } = validateBuyer(form);
+    S.buyer = { ...S.buyer, ...b }; store.set("atc-buyer", S.buyer);
+    if (!ok || S.sending) return;
+    S.sending = true; S.problems = []; renderDrawer();
+    try {
+      const payload = {
+        buyer: { ...S.buyer, document: digits(S.buyer.document), phone: digits(S.buyer.phone) },
+        items: [...S.cart].map(([productCode, quantity]) => ({ productCode, quantity })),
+      };
+      const res = await api.order(payload);
+      if (res.problems) { S.problems = res.problems; await reloadCatalog(true); }
+      else {
+        S.result = { ...res, sellerPhone: DEMO ? DEMO.config.sellerPhone : "" };
+        S.cart.clear(); store.set("atc-cart", []); renderList(); renderHeader(); S.step = "done";
+      }
+    } catch (e) { toast(e.message || "Não foi possível enviar. Tente de novo."); }
+    finally { S.sending = false; renderDrawer(); }
+  }
+
+  async function reloadCatalog(refresh = false) {
+    const data = await api.catalog(refresh);
+    // mais estoque primeiro; empate por nome
+    S.products = [...data.products].sort((a, b) =>
+      b.totalAvailable - a.totalAvailable || a.name.localeCompare(b.name, "pt-BR"));
+    S.updatedAt = data.updatedAt; indexProducts(S.products);
+    for (const code of [...S.cart.keys()]) if (!S.index.has(code)) S.cart.delete(code);
+    renderGroups(); renderStamp(); renderList(); renderHeader();
+  }
+
+  // ---------- eventos ----------
+  document.addEventListener("input", e => {
+    if (e.target.matches(".qty")) setQty(Number(e.target.dataset.code), e.target.value);
+    if (e.target.id === "search") { S.q = e.target.value; renderList(); }
+  });
+  document.addEventListener("click", e => {
+    const t = e.target.closest("button, [data-close]"); if (!t) return;
+    if (t.dataset.group) { S.group = t.dataset.group; renderGroups(); renderList(); }
+    else if (t.dataset.grade) {
+      const [ref, color] = t.dataset.grade.split("|");
+      const p = S.products.find(x => x.reference === ref); const c = p.colors.find(x => x.color === color);
+      let capped = false;
+      for (const s of c.skus) { const cur = S.cart.get(s.productCode) || 0; if (cur < s.available) setQty(s.productCode, cur + 1); else capped = true; }
+      if (capped) toast("Alguns tamanhos já estão no limite do estoque.");
+    }
+    else if (t.id === "openCart") openDrawer("cart");
+    else if (t.id === "closeCart" || t.hasAttribute("data-close")) closeDrawer();
+    else if (t.id === "toBuyer") { S.problems = []; openDrawer("buyer"); }
+    else if (t.id === "backCart") openDrawer("cart");
+    else if (t.id === "refresh") reloadCatalog(true).then(() => toast("Estoque atualizado"));
+    else if (t.dataset.remove) {
+      const [ref, color] = t.dataset.remove.split("|");
+      for (const l of cartLines()) if (l.reference === ref && l.color === color) setQty(l.productCode, 0);
+      renderDrawer();
+    }
+    else if (t.id === "copyMsg") {
+      const text = S.result?.message || "";
+      navigator.clipboard?.writeText(text).then(() => toast("Mensagem copiada"), () => {
+        const r = document.createRange(); r.selectNodeContents($("#msg"));
+        const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); toast("Texto selecionado: copie com Ctrl+C");
+      });
+    }
+    else if (t.id === "newOrder") { closeDrawer(); S.result = null; }
+  });
+  $("#scrim").addEventListener("click", closeDrawer);
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("#drawer").hidden) closeDrawer(); });
+  document.addEventListener("submit", e => { if (e.target.id === "buyerForm") { e.preventDefault(); submitOrder(e.target); } });
+
+  // ---------- início ----------
+  (async () => {
+    S.cart = new Map(store.get("atc-cart", []));
+    S.buyer = { ...S.buyer, ...store.get("atc-buyer", {}) };
+    try {
+      S.config = { ...S.config, ...(await api.config()) };
+      renderRules();
+      await reloadCatalog();
+    } catch (e) {
+      $("#stamp").textContent = "";
+      $("#list").innerHTML = `<div class="empty">Não foi possível carregar o estoque agora. ${esc(e.message || "")}<br>Recarregue a página em alguns minutos.</div>`;
+    }
+  })();
+})();
+
+</script>
