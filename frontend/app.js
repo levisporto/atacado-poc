@@ -245,7 +245,7 @@
       <span class="card-body">
         <span class="card-name">${esc(p.name)}</span>
         <span class="card-price">${priceOf(p)} <small>/ peça</small></span>
-        <span class="card-meta"><span class="dots">${p.colors.slice(0, 5).map(c => `<span class="sw" title="${esc(c.color)}" style="background:${swatchBg(c.color)}"></span>`).join("")}</span>
+        <span class="card-meta"><span class="dots">${p.colors.slice(0, 5).map(c => `<span class="sw" title="${esc(c.color)}" style="background:${swatchBg(c.color)}"></span>`).join("")}${p.colors.length > 5 ? `<span class="more">+${p.colors.length - 5}</span>` : ""}</span>
           <span class="${p.totalAvailable < 40 ? "low" : ""}">${p.totalAvailable} em estoque</span></span>
       </span></a>`;
   }
@@ -311,7 +311,7 @@
     const p = productBy(S.ref);
     $("#colors").innerHTML = p.colors.map(c => {
       const q = sum(c.skus, s => S.draft.get(s.productCode) || 0);
-      return `<button type="button" aria-pressed="${c.color === S.color}" data-color="${esc(c.color)}" aria-label="${esc(c.color)}${q ? `, ${q} peças` : ""}">
+      return `<button type="button" aria-pressed="${c.color === S.color}" data-color="${esc(c.color)}" title="${esc(c.color)}" aria-label="${esc(c.color)}${q ? `, ${q} peças` : ""}">
         <span class="dot" style="background:${swatchBg(c.color)}">${q ? `<span class="count">${q}</span>` : ""}</span>
         <span class="lbl">${esc(c.color)}</span></button>`;
     }).join("");
