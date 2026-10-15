@@ -3,52 +3,99 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f4eee5">
 <title>Bebêtenkitê Atacado</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=IBM+Plex+Mono:wght@400;600&family=Nunito+Sans:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Baloo+2:wght@600;700&display=swap">
 <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body data-view="home">
 <!--APP-->
-<header class="top">
-  <div class="wrap">
-    <div class="brand"><b>Bebêtenkitê</b><span>Portal do Atacado</span></div>
-    <button class="cart-btn" id="openCart" type="button" aria-label="Abrir carrinho">
-      Carrinho <span class="count" id="cartCount">0</span> <span class="sum" id="cartSum">R$ 0,00</span>
-    </button>
-  </div>
-</header>
-
-<main class="wrap">
-  <section class="intro">
-    <h1>Monte seu pedido pela grade, com o estoque de hoje</h1>
-    <p>Os saldos vêm direto do nosso sistema. Preencha as quantidades por cor e tamanho, revise o carrinho e envie: o pedido chega para a <span id="sellerName">Gleice</span>, que confirma frete e pagamento com você.</p>
-    <div class="rules" id="rules"></div>
-  </section>
-
-  <div class="filters">
-    <input class="search" id="search" type="search" placeholder="Buscar por nome ou referência" aria-label="Buscar produtos">
-    <div class="chips" id="groups" role="group" aria-label="Linhas"></div>
-    <div class="stamp" id="stamp">Carregando estoque…</div>
-  </div>
-
-  <section class="list" id="list" aria-live="polite"></section>
-</main>
-
-<div class="scrim" id="scrim" hidden></div>
-<aside class="drawer" id="drawer" hidden aria-label="Carrinho" role="dialog" aria-modal="true">
-  <header>
-    <h2 id="drawerTitle">Seu pedido</h2>
-    <div class="steps" aria-label="Etapas">
-      <span data-step="cart">Itens</span>·<span data-step="buyer">Dados</span>·<span data-step="done">Enviado</span>
+<!-- ===== Início ===== -->
+<section class="view" data-view="home">
+  <header class="hello wrap">
+    <span class="avatar" id="avatar" aria-hidden="true">B</span>
+    <div>
+      <span class="hi" id="hi">Olá, lojista</span>
+      <b class="brand">Bebêtenkitê <span class="emoji" aria-hidden="true">🐵</span></b>
     </div>
-    <button class="x" id="closeCart" type="button" aria-label="Fechar">×</button>
   </header>
-  <div class="body" id="drawerBody"></div>
-  <footer id="drawerFoot"></footer>
-</aside>
-<div class="toast" id="toast" hidden></div>
+
+  <div class="wrap">
+    <label class="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
+      <input id="search" type="search" placeholder="Buscar por nome ou referência" aria-label="Buscar produtos">
+    </label>
+
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="hero-text">
+        <span class="demo" id="demoTag" title="Estoque fictício" hidden>Demonstração</span>
+        <h1 id="heroTitle">Atacado com o estoque de hoje</h1>
+        <p id="heroRules">Monte a grade de cada peça e envie pelo WhatsApp.</p>
+        <button class="hero-cta" type="button" id="toList">Ver referências</button>
+      </div>
+      <div class="hero-art" id="heroArt" aria-hidden="true"></div>
+    </section>
+
+    <nav class="cats" id="groups" aria-label="Categorias"></nav>
+
+    <div class="list-head" id="listHead">
+      <h2>Referências</h2>
+      <div class="stamp" id="stamp">Carregando estoque…</div>
+    </div>
+    <section class="grid" id="list" aria-live="polite"></section>
+  </div>
+</section>
+
+<!-- ===== Produto ===== -->
+<section class="view" data-view="product" hidden>
+  <header class="bar wrap">
+    <button class="icon-btn" type="button" id="back" aria-label="Voltar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+    </button>
+    <h2 id="pdTitle">Referência</h2>
+    <span class="bar-gap" aria-hidden="true"></span>
+  </header>
+  <div class="wrap pd" id="pd"></div>
+  <div class="pd-cta">
+    <div class="wrap"><button class="primary" type="button" id="commit"></button></div>
+  </div>
+</section>
+
+<!-- ===== Pedido ===== -->
+<section class="view" data-view="cart" hidden>
+  <header class="page-head wrap">
+    <h1 id="cartTitle">Seu pedido</h1>
+    <ol class="steps" aria-label="Etapas">
+      <li data-step="cart">Itens</li><li data-step="buyer">Seus dados</li><li data-step="done">Enviado</li>
+    </ol>
+  </header>
+  <div class="wrap cart">
+    <div class="cart-body" id="cartBody"></div>
+    <footer class="cart-foot" id="cartFoot"></footer>
+  </div>
+</section>
+
+<!-- ===== Perfil ===== -->
+<section class="view" data-view="profile" hidden>
+  <header class="page-head wrap">
+    <h1>Perfil</h1>
+    <p class="note">Esses dados preenchem seus pedidos automaticamente.</p>
+  </header>
+  <div class="wrap profile" id="profile"></div>
+</section>
+
+<nav class="tabbar" aria-label="Navegação">
+  <a href="#/" data-tab="home">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5H15v-6H9v6H5.5A1.5 1.5 0 0 1 4 19z"/></svg>Início</a>
+  <a href="#/pedido" data-tab="cart">
+    <span class="tab-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 11.1a2 2 0 0 1-2 1.9H8.2a2 2 0 0 1-2-1.9z"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></svg>
+      <span class="count" id="cartCount" data-zero>0</span></span>Pedido</a>
+  <a href="#/perfil" data-tab="profile">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5"/></svg>Perfil</a>
+</nav>
+<div class="toast" id="toast" role="status" hidden></div>
 <!--/APP-->
 <script src="app.js"></script>
 </body>

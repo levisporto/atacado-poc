@@ -1,275 +1,509 @@
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Bebêtenkitê Atacado</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=IBM+Plex+Mono:wght@400;600&family=Nunito+Sans:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Baloo+2:wght@600;700&display=swap">
 <style>
-/* Layout: header fino + barra de filtros; lista de referências, cada uma com a grade cor × tamanho;
-   carrinho em gaveta lateral (folha inferior no celular) com etapas carrinho → dados → enviado. */
+/* App em papel creme, quatro telas por hash: início (saudação, busca, destaque, linhas em ícones e grade
+   de produtos), produto (peça grande, cores em círculos, grade de tamanhos e "Adicionar ao pedido"),
+   pedido (itens → dados → enviado) e perfil. Barra de abas fixa embaixo; no desktop vira pílula flutuante. */
 :root {
-  --bg: #f5f6f9;
-  --surface: #ffffff;
-  --ink: #1c2242;
-  --muted: #646a85;
-  --line: #e2e4ec;
-  --accent: #2b7f72;
-  --accent-ink: #ffffff;
-  --accent-soft: #e2f1ee;
-  --blush: #f7e3e6;
+  --bg: #f4eee5;
+  --bg-2: #ebe3d6;
+  --surface: #fffdf9;
+  --ink: #1f1b17;
+  --ink-2: #4a433b;
+  --muted: #6f665b;
+  --line: #e2d8c8;
+  --tile: #f1e8db;
+  --on-ink: #fffaf2;
+  --brand: #388c5a;
+  --on-brand: #ffffff;
+  --accent: #c4561f;
+  --ok: #2d6a44;
+  --ok-soft: #dff0e3;
   --warn: #a5560f;
-  --warn-soft: #fbeedd;
+  --warn-soft: #f9ead4;
   --danger: #b3263e;
-  --danger-soft: #fbe5e9;
-  --shadow: 0 10px 30px rgba(28, 34, 66, .12);
+  --danger-soft: #f9e1e4;
+  --shadow: 0 1px 2px rgba(60, 40, 20, .05), 0 8px 24px rgba(60, 40, 20, .07);
+  --shadow-lg: 0 18px 50px rgba(40, 25, 10, .22);
   --f-display: "Baloo 2", "Trebuchet MS", system-ui, sans-serif;
-  --f-body: "Nunito Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-  --r: 10px;
+  --f-body: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r-card: 24px;
+  --r-ctl: 14px;
+  --tab-h: 68px;
+  --spring: cubic-bezier(.2, .9, .3, 1.15);
+  --ease-out: cubic-bezier(.2, .8, .2, 1);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #12152a; --surface: #1b1f38; --ink: #e8eaf5; --muted: #a2a7c2; --line: #2d3254;
-    --accent: #5cc2b0; --accent-ink: #0d1f1c; --accent-soft: #1d3a36; --blush: #3a2430;
-    --warn: #f0b072; --warn-soft: #3a2c1c; --danger: #f2869a; --danger-soft: #3d1f28;
-    --shadow: 0 10px 30px rgba(0, 0, 0, .45); color-scheme: dark;
+    --bg: #1a1714; --bg-2: #24201b; --surface: #26221d; --ink: #f4ede2; --ink-2: #d6ccbe; --muted: #a2978a;
+    --line: #3a342c; --tile: #312b24; --on-ink: #1a1714; --accent: #f08a55;
+    --ok: #7cc79a; --ok-soft: #1f3527; --warn: #f0b072; --warn-soft: #3a2c1c; --danger: #f2869a; --danger-soft: #3d1f28;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25); --shadow-lg: 0 18px 50px rgba(0, 0, 0, .55);
+    color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #12152a; --surface: #1b1f38; --ink: #e8eaf5; --muted: #a2a7c2; --line: #2d3254;
-  --accent: #5cc2b0; --accent-ink: #0d1f1c; --accent-soft: #1d3a36; --blush: #3a2430;
-  --warn: #f0b072; --warn-soft: #3a2c1c; --danger: #f2869a; --danger-soft: #3d1f28;
-  --shadow: 0 10px 30px rgba(0, 0, 0, .45); color-scheme: dark;
+  --bg: #1a1714; --bg-2: #24201b; --surface: #26221d; --ink: #f4ede2; --ink-2: #d6ccbe; --muted: #a2978a;
+  --line: #3a342c; --tile: #312b24; --on-ink: #1a1714; --accent: #f08a55;
+  --ok: #7cc79a; --ok-soft: #1f3527; --warn: #f0b072; --warn-soft: #3a2c1c; --danger: #f2869a; --danger-soft: #3d1f28;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25); --shadow-lg: 0 18px 50px rgba(0, 0, 0, .55);
+  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 html, body { background: var(--bg); color: var(--ink); }
-body { font-family: var(--f-body); font-size: 15px; line-height: 1.5; margin: 0; }
+body { font-family: var(--f-body); font-size: 15px; line-height: 1.5; margin: 0; -webkit-tap-highlight-color: transparent; }
 button, input, textarea, select { font: inherit; color: inherit; }
 button { cursor: pointer; }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 700; letter-spacing: -.015em; }
 
 .wrap {
-  max-width: 1120px; margin: 0 auto;
+  margin: 0 auto;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
+.view { padding-top: env(safe-area-inset-top, 0px); padding-bottom: calc(var(--tab-h) + 28px + env(safe-area-inset-bottom, 0px)); }
+.view.in { animation: viewIn .32s var(--ease-out); }
+.view.in-r { animation: viewInR .34s var(--ease-out); }
+@keyframes viewIn { from { opacity: 0; transform: translateY(8px); } }
+@keyframes viewInR { from { opacity: 0; transform: translateX(28px); } }
 
-/* ---------- header ---------- */
-.top {
-  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);
+.icon-btn {
+  position: relative; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+  border: 0; background: var(--surface); box-shadow: var(--shadow); color: var(--ink);
+  transition: transform .18s var(--spring);
 }
-.top .wrap { display: flex; align-items: center; gap: 16px; padding-block: 12px; }
-.brand { display: flex; flex-direction: column; line-height: 1.1; margin-right: auto; min-width: 0; }
-.brand b { font-family: var(--f-display); font-size: 1.45rem; font-weight: 700; letter-spacing: -.01em; }
-.brand span { font-size: .72rem; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); }
-.cart-btn {
-  display: flex; align-items: center; gap: 10px; border: 0; border-radius: 999px;
-  background: var(--accent); color: var(--accent-ink); padding: 8px 16px; font-weight: 700;
+.icon-btn:active { transform: scale(.94); }
+.count {
+  min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px;
+  background: var(--accent); color: #fff; font-size: .68rem; font-weight: 700; line-height: 18px; text-align: center;
+  font-variant-numeric: tabular-nums;
 }
-.cart-btn .count { background: var(--accent-ink); color: var(--accent); border-radius: 999px; padding: 0 8px; font-size: .85rem; }
-.cart-btn .sum { font-family: var(--f-mono); font-size: .9rem; }
+.count[data-zero] { display: none; }
+.bump { animation: bump .42s var(--spring); }
+@keyframes bump { 30% { transform: scale(1.3); } }
 
-/* ---------- intro / filtros ---------- */
-.intro { display: grid; gap: 6px; padding-block: 28px 8px; }
-.intro h1 { font-family: var(--f-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); line-height: 1.1; margin: 0; text-wrap: balance; }
-.intro p { margin: 0; color: var(--muted); max-width: 64ch; }
-.rules { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-.pill { font-size: .8rem; padding: 3px 10px; border-radius: 999px; background: var(--blush); }
-.pill.demo { background: var(--warn-soft); color: var(--warn); font-weight: 700; }
+/* ---------- início ---------- */
+.hello { display: flex; align-items: center; gap: 12px; padding-block: 16px 14px; }
+.avatar {
+  width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; flex: none;
+  background: var(--brand); color: var(--on-brand); font-family: var(--f-display); font-weight: 700; font-size: 1.3rem;
+}
+.hello div { display: grid; line-height: 1.15; min-width: 0; }
+.hi { font-size: .86rem; color: var(--muted); }
+.brand { font-family: var(--f-display); font-weight: 700; font-size: 1.4rem; white-space: nowrap; }
+.brand .emoji { font-size: 1.1rem; font-weight: 400; vertical-align: 2px; }
 
-.filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding-block: 16px; }
 .search {
-  flex: 1 1 260px; min-width: 0; padding: 10px 14px; border-radius: var(--r);
-  border: 1px solid var(--line); background: var(--surface);
+  display: flex; align-items: center; gap: 10px; padding: 0 16px; height: 50px; border-radius: 16px;
+  background: var(--surface); box-shadow: 0 0 0 1px var(--line); color: var(--muted);
 }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip {
-  border: 1px solid var(--line); background: var(--surface); border-radius: 999px;
-  padding: 6px 14px; font-size: .88rem;
-}
-.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-.stamp { font-size: .78rem; color: var(--muted); width: 100%; }
-.stamp button { border: 0; background: none; color: var(--accent); text-decoration: underline; padding: 0 4px; }
+.search input { flex: 1; min-width: 0; border: 0; background: none; outline: 0; color: var(--ink); height: 100%; }
+.search input::placeholder { color: var(--muted); }
+.search:focus-within { box-shadow: 0 0 0 2px var(--brand); }
 
-/* ---------- referências ---------- */
-.list { display: grid; gap: 16px; padding-block: 8px 80px; }
-.ref {
-  background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
-  display: grid; grid-template-columns: 180px 1fr; overflow: hidden;
+.hero {
+  position: relative; overflow: hidden; margin-top: 14px; border-radius: 28px; min-height: 210px;
+  background: var(--brand); color: var(--on-brand); display: grid; grid-template-columns: 1fr auto;
 }
-.ref-art {
-  position: relative; min-height: 160px; display: flex; align-items: flex-end; padding: 12px;
-  background: var(--blush);
+.hero-text { position: relative; z-index: 1; padding: 22px 6px 22px 22px; display: grid; align-content: center; justify-items: start; gap: 8px; }
+.hero h1 { margin: 0; font-size: clamp(1.7rem, 7.4vw, 2.6rem); line-height: 1.05; max-width: 11ch; }
+.hero p { margin: 0; font-size: .88rem; opacity: .95; max-width: 30ch; }
+.hero .demo {
+  font-size: .72rem; font-weight: 700; padding: 3px 10px; border-radius: 999px;
+  background: var(--warn-soft); color: var(--warn);
 }
-.ref-art .swatches { display: flex; gap: 6px; flex-wrap: wrap; }
-.sw { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--surface); box-shadow: 0 0 0 1px var(--line); }
-.ref-art .initial {
-  position: absolute; inset: 0; display: grid; place-items: center;
-  font-family: var(--f-display); font-size: 4.2rem; font-weight: 700; color: var(--ink); opacity: .12;
+.hero-cta {
+  margin-top: 6px; border: 0; height: 44px; padding: 0 22px; border-radius: 999px; font-weight: 700;
+  background: #ffffff; color: var(--brand); transition: transform .18s var(--spring);
 }
-.ref-body { padding: 16px 18px; display: grid; gap: 12px; min-width: 0; }
-.ref-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
-.ref-head h2 { font-family: var(--f-display); font-size: 1.25rem; margin: 0; line-height: 1.2; }
-.ref-head .code { font-size: .8rem; color: var(--muted); }
-.ref-head .price { margin-left: auto; font-family: var(--f-mono); font-weight: 600; }
-.ref-head .price small { font-family: var(--f-body); color: var(--muted); font-weight: 400; }
-.ref-meta { font-size: .82rem; color: var(--muted); display: flex; gap: 12px; flex-wrap: wrap; }
-.ref-meta .ok { color: var(--accent); font-weight: 700; }
-.ref-meta .low { color: var(--warn); font-weight: 700; }
+.hero-cta:active { transform: scale(.96); }
+.hero-art { position: relative; width: 150px; }
+.hero-art span {
+  position: absolute; display: grid; place-items: center; width: 84px; height: 84px; border-radius: 24px;
+  color: var(--ink); box-shadow: 0 10px 24px rgba(0, 0, 0, .25);
+}
+.hero-art span svg { width: 44px; height: 44px; stroke-width: 1.5; }
+.hero-art span:nth-child(1) { top: 18px; right: 24px; transform: rotate(8deg); }
+.hero-art span:nth-child(2) { top: 96px; right: 56px; transform: rotate(-10deg); }
+.hero-art span:nth-child(3) { top: 132px; right: -14px; transform: rotate(14deg); }
 
-.grid-wrap { overflow-x: auto; }
-table.grade { border-collapse: separate; border-spacing: 0; width: 100%; min-width: max-content; }
-.grade th, .grade td { padding: 6px 4px; text-align: center; }
-.grade thead th {
-  font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted);
-  font-weight: 700; border-bottom: 1px solid var(--line);
+.cats { display: flex; gap: 6px; margin: 18px -16px 0; padding: 2px 16px; overflow-x: auto; scrollbar-width: none; }
+.cats::-webkit-scrollbar { display: none; }
+.cats button {
+  flex: 1 0 74px; display: grid; justify-items: center; gap: 6px; border: 0; background: none; padding: 0;
+  font-size: .8rem; font-weight: 600; color: var(--ink-2);
 }
-.grade th.color { text-align: left; padding-right: 12px; white-space: nowrap; font-weight: 600; font-size: .9rem; }
-.grade th.color .sw { width: 14px; height: 14px; display: inline-block; vertical-align: -2px; margin-right: 6px; border-width: 1px; }
-.grade tbody tr + tr td, .grade tbody tr + tr th { border-top: 1px dashed var(--line); }
-.cell { display: grid; gap: 2px; justify-items: center; }
-.qty {
-  width: 54px; padding: 6px 4px; text-align: center; border-radius: 8px; border: 1px solid var(--line);
-  background: var(--bg); font-family: var(--f-mono); font-variant-numeric: tabular-nums;
+.cats .ico {
+  width: 58px; height: 58px; border-radius: 20px; display: grid; place-items: center;
+  background: var(--surface); box-shadow: 0 0 0 1px var(--line); color: var(--ink);
+  transition: background-color .25s, color .25s, transform .18s var(--spring);
 }
-.qty.has { border-color: var(--accent); background: var(--accent-soft); font-weight: 700; }
-.qty.over { border-color: var(--danger); background: var(--danger-soft); }
-.avail { font-size: .7rem; color: var(--muted); font-family: var(--f-mono); }
-.na { color: var(--line); font-size: .9rem; }
-.grade td.act { padding-left: 10px; }
+.cats .ico svg { width: 26px; height: 26px; }
+.cats button:active .ico { transform: scale(.94); }
+.cats button[aria-pressed="true"] { color: var(--ink); }
+.cats button:disabled { opacity: .4; cursor: default; }
+.cats button:disabled .ico { transform: none; }
+.cats button[aria-pressed="true"] .ico { background: var(--brand); color: var(--on-brand); box-shadow: none; }
+
+.list-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; padding: 24px 2px 12px; scroll-margin-top: 12px; }
+.list-head h2 { margin: 0 auto 0 0; font-size: 1.45rem; line-height: 1.1; }
+.stamp { font-size: .82rem; color: var(--muted); }
+.stamp button { border: 0; background: none; color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; padding: 4px; }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.card {
+  display: grid; align-content: start; gap: 10px; padding: 8px 8px 12px; text-decoration: none;
+  background: var(--surface); border-radius: 22px; box-shadow: var(--shadow);
+  transition: transform .18s var(--spring);
+}
+.card:active { transform: scale(.98); }
+.card.enter { animation: rise .45s var(--ease-out) both; animation-delay: calc(var(--i, 0) * 45ms); }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+.card-art {
+  position: relative; aspect-ratio: 1; border-radius: 16px; display: grid; place-items: center; color: var(--ink);
+}
+.card-art svg { width: 46%; height: 46%; stroke-width: 1.3; }
+.in-cart {
+  position: absolute; left: 8px; top: 8px; padding: 3px 9px; border-radius: 999px; font-size: .72rem; font-weight: 700;
+  background: var(--ok-soft); color: var(--ok);
+}
+.in-cart:empty { display: none; }
+.card-body { display: grid; gap: 3px; padding: 0 4px; min-width: 0; }
+.card-name {
+  font-weight: 700; font-size: .92rem; line-height: 1.25;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.card-price { font-weight: 700; font-size: .95rem; }
+.card-price small, .pd-price small { color: var(--muted); font-weight: 400; font-size: .8rem; }
+.card-meta { display: flex; align-items: center; gap: 8px; font-size: .76rem; color: var(--muted); }
+.low { color: var(--warn); font-weight: 600; }
+.dots { display: inline-flex; }
+.sw { width: 15px; height: 15px; border-radius: 50%; border: 2px solid var(--surface); box-shadow: 0 0 0 1px var(--line); display: inline-block; flex: none; }
+.dots .sw + .sw { margin-left: -5px; }
+.empty { grid-column: 1 / -1; text-align: center; color: var(--muted); padding: 48px 16px; background: var(--surface); border-radius: var(--r-card); }
+
+/* ---------- produto ---------- */
+body[data-view="product"] .tabbar { display: none; }
+.bar { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; gap: 8px; padding-block: 14px 10px; }
+.bar h2 { margin: 0; text-align: center; font-size: 1.15rem; line-height: 1.2; }
+.pd { display: grid; gap: 18px; }
+.pd-art {
+  position: relative; aspect-ratio: 1 / .92; border-radius: 28px; display: grid; place-items: center; color: var(--ink);
+  view-transition-name: art; transition: background-color .35s var(--ease-out);
+}
+.pd-art svg { width: 44%; height: 44%; stroke-width: 1.15; }
+.pd-art .mark { position: absolute; left: 20px; bottom: 16px; font-family: var(--f-display); font-weight: 700; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; opacity: .72; }
+.pd-art .stock { position: absolute; right: 14px; top: 14px; padding: 4px 11px; border-radius: 999px; background: var(--surface); font-size: .78rem; font-weight: 600; }
+.pd-info { display: grid; gap: 6px; }
+.pd-info h1 { margin: 0; font-size: 1.75rem; line-height: 1.1; }
+.pd-price { font-size: 1.2rem; font-weight: 700; }
+.pd-desc { margin: 4px 0 0; color: var(--ink-2); }
+
+.sec-title { display: flex; align-items: baseline; gap: 8px; margin: 0 0 10px; font-family: var(--f-body); font-size: .95rem; font-weight: 700; letter-spacing: 0; }
+.sec-title span { font-weight: 500; color: var(--muted); font-size: .86rem; }
+.colors { display: flex; gap: 14px; overflow-x: auto; scrollbar-width: none; margin: 0 -16px; padding: 4px 16px; }
+.colors::-webkit-scrollbar { display: none; }
+.colors button { flex: none; width: 64px; display: grid; justify-items: center; gap: 6px; border: 0; background: none; padding: 0; font-size: .74rem; color: var(--ink-2); }
+.colors .dot {
+  position: relative; width: 46px; height: 46px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .1);
+  outline: 2px solid transparent; outline-offset: 3px; transition: outline-color .2s, transform .18s var(--spring);
+}
+.colors button:active .dot { transform: scale(.92); }
+.colors button[aria-pressed="true"] .dot { outline-color: var(--brand); }
+.colors button[aria-pressed="true"] { color: var(--ink); font-weight: 700; }
+.colors .lbl { width: 100%; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.colors .dot .count { position: absolute; top: -6px; right: -8px; background: var(--brand); color: var(--on-brand); }
+
+.sizes-box { background: var(--surface); border-radius: var(--r-card); box-shadow: var(--shadow); padding: 14px; display: grid; gap: 12px; }
+.sizes-head { display: flex; align-items: center; gap: 8px; }
+.sizes-head b { margin-right: auto; font-size: .95rem; }
 .mini {
-  border: 1px solid var(--line); background: transparent; border-radius: 8px; padding: 5px 10px;
-  font-size: .78rem; white-space: nowrap;
+  border: 0; background: var(--bg); border-radius: 999px; padding: 8px 14px; font-size: .82rem; font-weight: 600; white-space: nowrap;
+  transition: transform .18s var(--spring);
 }
-.mini:hover { border-color: var(--accent); color: var(--accent); }
-.ref-foot { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; font-size: .85rem; }
-.ref-foot .sub { margin-left: auto; font-family: var(--f-mono); font-weight: 600; }
-.warnline { color: var(--warn); }
-.empty { text-align: center; color: var(--muted); padding: 48px 0; }
-
-/* ---------- gaveta do carrinho ---------- */
-.scrim { position: fixed; inset: 0; background: rgba(10, 12, 25, .45); z-index: 40; }
-.drawer {
-  position: fixed; top: 0; right: 0; bottom: 0; z-index: 50; width: min(440px, 100%);
-  background: var(--surface); box-shadow: var(--shadow); display: flex; flex-direction: column;
-  padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
-  padding-right: env(safe-area-inset-right, 0px);
+.mini:active { transform: scale(.95); }
+.sizes { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 10px; }
+.sizes.swap { animation: viewIn .25s var(--ease-out); }
+.cell { display: grid; gap: 3px; justify-items: center; }
+.cell .sz { font-size: .76rem; font-weight: 700; color: var(--ink-2); }
+.qty {
+  width: 100%; height: 48px; text-align: center; border-radius: 14px; border: 1.5px solid var(--line);
+  background: var(--bg); font-weight: 700; font-size: 1.05rem; font-variant-numeric: tabular-nums;
+  -moz-appearance: textfield; appearance: textfield; transition: background-color .2s, border-color .2s, color .2s;
 }
-.drawer header { display: flex; align-items: center; gap: 10px; padding: 16px 20px; border-bottom: 1px solid var(--line); }
-.drawer header h2 { font-family: var(--f-display); margin: 0; font-size: 1.3rem; margin-right: auto; }
-.steps { display: flex; gap: 6px; font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
-.steps span[aria-current="step"] { color: var(--accent); font-weight: 700; }
-.x { border: 0; background: none; font-size: 1.5rem; line-height: 1; padding: 4px 8px; color: var(--muted); }
-.drawer .body { flex: 1; overflow-y: auto; padding: 16px 20px; display: grid; align-content: start; gap: 14px; }
-.drawer footer { border-top: 1px solid var(--line); padding: 14px 20px; display: grid; gap: 10px; }
+.qty::-webkit-outer-spin-button, .qty::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.qty::placeholder { color: var(--muted); opacity: .45; font-weight: 400; }
+.qty:focus { outline: 0; border-color: var(--brand); }
+.qty.has { border-color: var(--brand); background: var(--brand); color: var(--on-brand); }
+.qty.over { border-color: var(--danger); background: var(--danger-soft); color: var(--danger); }
+.avail { font-size: .72rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.cell.na .qty { background: transparent; border-style: dashed; color: var(--muted); }
+.pd-sum { display: flex; flex-wrap: wrap; gap: 2px 12px; font-size: .88rem; color: var(--ink-2); padding: 0 4px; }
+.pd-sum b { color: var(--ink); }
+.pd-sum .warnline { color: var(--warn); }
 
-.line { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
-.line b { font-size: .95rem; }
-.line .g { font-size: .82rem; color: var(--muted); font-family: var(--f-mono); grid-column: 1; }
-.line .v { font-family: var(--f-mono); font-weight: 600; grid-row: 1; grid-column: 2; }
-.line .rm { grid-column: 2; justify-self: end; border: 0; background: none; color: var(--danger); font-size: .78rem; padding: 0; }
-.totals { display: grid; gap: 4px; }
-.totals div { display: flex; justify-content: space-between; }
-.totals .big { font-size: 1.2rem; font-weight: 800; }
-.totals .big span:last-child { font-family: var(--f-mono); }
-.meter { height: 6px; border-radius: 999px; background: var(--line); overflow: hidden; }
-.meter i { display: block; height: 100%; background: var(--accent); }
-.note { font-size: .82rem; color: var(--muted); }
-.problems { background: var(--danger-soft); color: var(--danger); border-radius: var(--r); padding: 10px 14px; font-size: .86rem; }
+.pd-cta {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+  padding: 12px 0 calc(12px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(to top, var(--bg) 70%, transparent);
+}
+
+/* ---------- pedido e perfil ---------- */
+.page-head { padding-block: 22px 14px; display: grid; gap: 10px; }
+.page-head h1 { margin: 0; font-size: 2rem; line-height: 1.05; }
+.steps { list-style: none; margin: 0; padding: 0; display: flex; gap: 6px; }
+.steps li {
+  flex: 1; font-size: .78rem; font-weight: 600; color: var(--muted);
+  padding-top: 8px; border-top: 3px solid var(--line); transition: border-color .3s, color .3s;
+}
+.steps li.past, .steps li[aria-current="step"] { border-color: var(--brand); color: var(--ink); }
+.cart { display: grid; gap: 14px; }
+.cart-body { display: grid; gap: 10px; align-content: start; }
+.cart-foot {
+  position: sticky; bottom: calc(var(--tab-h) + 10px + env(safe-area-inset-bottom, 0px)); z-index: 5;
+  display: grid; gap: 10px; padding: 16px; border-radius: var(--r-card); background: var(--surface); box-shadow: var(--shadow-lg);
+}
+.cart-foot:empty { display: none; }
+
+.line {
+  display: grid; grid-template-columns: 52px 1fr auto; gap: 2px 12px; align-items: center;
+  padding: 10px 12px 10px 10px; border-radius: 20px; background: var(--surface); box-shadow: var(--shadow);
+}
+.line .art { width: 52px; height: 52px; border-radius: 14px; grid-row: span 2; display: grid; place-items: center; }
+.line .art svg { width: 28px; height: 28px; }
+.line b { font-size: .92rem; line-height: 1.3; }
+.line .g { font-size: .8rem; color: var(--muted); grid-column: 2; font-variant-numeric: tabular-nums; }
+.line .v { font-weight: 700; grid-row: 1; grid-column: 3; text-align: right; font-variant-numeric: tabular-nums; }
+.line .acts { grid-column: 3; display: flex; gap: 14px; justify-content: end; }
+.line .acts a, .line .rm { border: 0; background: none; font-size: .8rem; font-weight: 600; padding: 4px 0; text-decoration: none; }
+.line .rm { color: var(--danger); }
+.line.leaving { animation: leave .22s ease-in forwards; }
+@keyframes leave { to { opacity: 0; transform: translateX(24px); } }
+.totals { display: grid; gap: 2px; }
+.totals div { display: flex; justify-content: space-between; align-items: baseline; color: var(--muted); font-size: .88rem; }
+.totals .big { color: var(--ink); font-size: 1.25rem; font-weight: 700; }
+.totals .big span:last-child { font-variant-numeric: tabular-nums; }
+.meter { height: 6px; border-radius: 999px; background: var(--bg-2); overflow: hidden; }
+.meter i { display: block; height: 100%; border-radius: 999px; background: var(--accent); transition: width .4s var(--ease-out); }
+.meter i.full { background: var(--ok); }
+.note { font-size: .88rem; color: var(--muted); margin: 0; }
+.problems { background: var(--danger-soft); color: var(--danger); border-radius: 18px; padding: 12px 16px; font-size: .86rem; }
 .problems ul { margin: 4px 0 0; padding-left: 18px; }
+.empty-cart { display: grid; justify-items: center; gap: 12px; text-align: center; padding: 40px 16px; background: var(--surface); border-radius: var(--r-card); }
+.empty-cart .ico { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; background: var(--bg); }
+.empty-cart .ico svg { width: 30px; height: 30px; }
+.empty-cart .primary { width: auto; padding: 0 28px; }
 
-.primary {
-  border: 0; border-radius: var(--r); background: var(--accent); color: var(--accent-ink);
-  padding: 13px 16px; font-weight: 800; font-size: 1rem; width: 100%;
+.primary, a.wa {
+  display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none;
+  border: 0; border-radius: 18px; background: var(--brand); color: var(--on-brand);
+  height: 56px; padding: 0 20px; font-weight: 700; font-size: 1.02rem; width: 100%;
+  transition: transform .18s var(--spring), opacity .2s;
 }
-.primary[disabled] { opacity: .45; cursor: not-allowed; }
-.ghost { border: 1px solid var(--line); background: transparent; border-radius: var(--r); padding: 11px 16px; width: 100%; }
+.primary:active, a.wa:active { transform: scale(.98); }
+.primary[disabled] { opacity: .35; cursor: not-allowed; transform: none; }
+.primary .spin { width: 18px; height: 18px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: spin .8s linear infinite; }
+.primary .sub { font-weight: 500; opacity: .92; }
+@keyframes spin { to { transform: rotate(1turn); } }
+.ghost {
+  display: flex; align-items: center; justify-content: center; text-decoration: none;
+  border: 0; background: var(--bg); border-radius: 18px; height: 50px; padding: 0 16px; width: 100%; font-weight: 600;
+  transition: transform .18s var(--spring);
+}
+.ghost:active { transform: scale(.98); }
 
-form.buyer { display: grid; gap: 12px; }
-.field { display: grid; gap: 4px; }
-.field label { font-size: .8rem; font-weight: 700; }
+form.buyer { display: grid; gap: 12px; background: var(--surface); border-radius: var(--r-card); padding: 16px; box-shadow: var(--shadow); }
+.field { display: grid; gap: 6px; }
+.field label { font-size: .82rem; font-weight: 600; color: var(--ink-2); }
 .field input, .field textarea {
-  padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg);
+  padding: 0 14px; height: 48px; border-radius: var(--r-ctl); border: 1.5px solid var(--line); background: var(--bg);
 }
-.field textarea { min-height: 72px; resize: vertical; }
-.field .err { font-size: .76rem; color: var(--danger); min-height: 0; }
-.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field textarea { padding: 12px 14px; height: auto; min-height: 84px; resize: vertical; }
+.field input:focus, .field textarea:focus { outline: 0; border-color: var(--brand); background: var(--surface); }
+.field input[aria-invalid="true"] { border-color: var(--danger); }
+.field .err { font-size: .78rem; color: var(--danger); }
+.field .err:empty { display: none; }
+.row2 { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.profile { display: grid; gap: 14px; }
+.facts { display: grid; background: var(--surface); border-radius: var(--r-card); box-shadow: var(--shadow); padding: 4px 16px; }
+.facts div { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; font-size: .9rem; }
+.facts div + div { border-top: 1px solid var(--line); }
+.facts span { color: var(--muted); }
 
-.done { text-align: center; display: grid; gap: 10px; justify-items: center; }
-.done .tick { width: 56px; height: 56px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-size: 1.8rem; font-weight: 800; }
-.done h3 { font-family: var(--f-display); margin: 0; font-size: 1.4rem; }
+.done { text-align: center; display: grid; gap: 10px; justify-items: center; padding: 8px 0; }
+.done .tick { width: 72px; height: 72px; border-radius: 50%; background: var(--ok-soft); color: var(--ok); display: grid; place-items: center; animation: pop .5s var(--spring); }
+.done .tick svg { width: 34px; height: 34px; stroke-width: 2.4; stroke-dasharray: 30; stroke-dashoffset: 30; animation: draw .45s .2s ease-out forwards; }
+@keyframes pop { from { transform: scale(.4); opacity: 0; } }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.done h3 { margin: 0; font-size: 1.7rem; line-height: 1.15; }
 pre.msg {
-  white-space: pre-wrap; text-align: left; font-family: var(--f-mono); font-size: .76rem; width: 100%;
-  background: var(--bg); border: 1px solid var(--line); border-radius: var(--r); padding: 12px; margin: 0;
-  max-height: 260px; overflow: auto;
-}
-a.wa {
-  display: block; text-align: center; text-decoration: none; border-radius: var(--r);
-  background: var(--accent); color: var(--accent-ink); padding: 13px 16px; font-weight: 800; width: 100%;
-}
-.toast {
-  position: fixed; left: 50%; transform: translateX(-50%);
-  bottom: calc(20px + env(safe-area-inset-bottom, 0px)); z-index: 60;
-  background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 999px; font-size: .9rem;
+  white-space: pre-wrap; text-align: left; font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size: .76rem;
+  width: 100%; background: var(--surface); border-radius: 18px; padding: 14px; margin: 0; max-height: 260px; overflow: auto;
 }
 
-@media (max-width: 720px) {
-  .ref { grid-template-columns: 1fr; }
-  .ref-art { min-height: 84px; }
-  .ref-art .initial { font-size: 3rem; justify-content: end; padding-right: 16px; place-items: center end; }
-  .cart-btn .sum { display: none; }
-  .drawer { top: auto; width: 100%; max-height: 92%; border-radius: 16px 16px 0 0; padding-left: env(safe-area-inset-left, 0px); }
-  .row2 { grid-template-columns: 1fr; }
+/* ---------- abas ---------- */
+.tabbar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; display: grid; grid-template-columns: repeat(3, 1fr);
+  height: calc(var(--tab-h) + env(safe-area-inset-bottom, 0px)); padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--line);
 }
-@media (prefers-reduced-motion: no-preference) {
-  .drawer { animation: slide .22s ease-out; }
-  @keyframes slide { from { transform: translateX(24px); opacity: .6; } }
+.tabbar a {
+  display: grid; justify-items: center; align-content: center; gap: 3px; text-decoration: none;
+  font-size: .74rem; font-weight: 600; color: var(--muted); transition: color .2s;
+}
+.tabbar a svg { width: 24px; height: 24px; transition: transform .25s var(--spring); }
+.tabbar a[aria-current="page"] { color: var(--brand); }
+.tabbar a[aria-current="page"] svg { stroke-width: 2.1; transform: translateY(-1px); }
+.tab-ico { position: relative; display: grid; }
+.tab-ico .count { position: absolute; top: -5px; right: -10px; }
+
+.toast {
+  position: fixed; left: 50%; transform: translateX(-50%); z-index: 60;
+  bottom: calc(var(--tab-h) + 16px + env(safe-area-inset-bottom, 0px));
+  background: var(--brand); color: var(--on-brand); padding: 11px 18px; border-radius: 999px; font-size: .9rem;
+  box-shadow: var(--shadow-lg); animation: toastIn .3s var(--spring); max-width: calc(100% - 32px);
+}
+@keyframes toastIn { from { opacity: 0; transform: translate(-50%, 10px); } }
+
+/* transição compartilhada: o quadro da peça cresce do cartão até a tela do produto */
+::view-transition-group(art) { animation-duration: .38s; animation-timing-function: var(--ease-out); }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: .22s; }
+
+/* ---------- telas maiores ---------- */
+@media (min-width: 560px) {
+  .row2 { grid-template-columns: 1fr 1fr; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+  .cats { margin-inline: 0; padding-inline: 0; }
+  .cats button { flex: 0 0 84px; }
+  .colors { margin-inline: 0; padding-inline: 0; }
+}
+@media (min-width: 900px) {
+  .wrap { max-width: 1240px; padding-left: max(40px, env(safe-area-inset-left, 0px)); padding-right: max(40px, env(safe-area-inset-right, 0px)); }
+  .cats { gap: 4px; }
+  .cats button { flex: 1 1 0; min-width: 72px; }
+  .hero { min-height: 280px; }
+  .hero-text { padding: 40px 0 40px 44px; gap: 12px; }
+  .hero h1 { font-size: clamp(2.8rem, 4.4vw, 4.2rem); max-width: 14ch; }
+  .hero p { font-size: 1rem; max-width: 44ch; }
+  .hero-art { width: 360px; }
+  .hero-art span { width: 120px; height: 120px; border-radius: 32px; }
+  .hero-art span svg { width: 62px; height: 62px; }
+  .hero-art span:nth-child(1) { top: 34px; right: 190px; }
+  .hero-art span:nth-child(2) { top: 140px; right: 90px; }
+  .hero-art span:nth-child(3) { top: 26px; right: 30px; }
+  .pd { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: repeat(4, auto) 1fr; gap: 20px 32px; align-items: start; }
+  .pd > * { grid-column: 2; }
+  .pd > .pd-art { grid-column: 1; grid-row: 1 / -1; position: sticky; top: 20px; }
+  .pd-cta .wrap { display: flex; justify-content: flex-end; }
+  .pd-cta .primary { width: calc(50% - 16px); }
+  .cart, .profile, .page-head { max-width: 760px; }
+  .tabbar {
+    left: 50%; right: auto; bottom: 16px; transform: translateX(-50%); width: 400px; height: 64px; padding: 0;
+    border: 0; border-radius: 999px; box-shadow: var(--shadow-lg);
+  }
+  .cart-foot { bottom: 96px; }
+  .toast { bottom: 96px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0ms !important; transition-duration: .01ms !important; }
 }
 
 </style>
 
-<header class="top">
-  <div class="wrap">
-    <div class="brand"><b>Bebêtenkitê</b><span>Portal do Atacado</span></div>
-    <button class="cart-btn" id="openCart" type="button" aria-label="Abrir carrinho">
-      Carrinho <span class="count" id="cartCount">0</span> <span class="sum" id="cartSum">R$ 0,00</span>
-    </button>
-  </div>
-</header>
-
-<main class="wrap">
-  <section class="intro">
-    <h1>Monte seu pedido pela grade, com o estoque de hoje</h1>
-    <p>Os saldos vêm direto do nosso sistema. Preencha as quantidades por cor e tamanho, revise o carrinho e envie: o pedido chega para a <span id="sellerName">Gleice</span>, que confirma frete e pagamento com você.</p>
-    <div class="rules" id="rules"></div>
-  </section>
-
-  <div class="filters">
-    <input class="search" id="search" type="search" placeholder="Buscar por nome ou referência" aria-label="Buscar produtos">
-    <div class="chips" id="groups" role="group" aria-label="Linhas"></div>
-    <div class="stamp" id="stamp">Carregando estoque…</div>
-  </div>
-
-  <section class="list" id="list" aria-live="polite"></section>
-</main>
-
-<div class="scrim" id="scrim" hidden></div>
-<aside class="drawer" id="drawer" hidden aria-label="Carrinho" role="dialog" aria-modal="true">
-  <header>
-    <h2 id="drawerTitle">Seu pedido</h2>
-    <div class="steps" aria-label="Etapas">
-      <span data-step="cart">Itens</span>·<span data-step="buyer">Dados</span>·<span data-step="done">Enviado</span>
+<!-- ===== Início ===== -->
+<section class="view" data-view="home">
+  <header class="hello wrap">
+    <span class="avatar" id="avatar" aria-hidden="true">B</span>
+    <div>
+      <span class="hi" id="hi">Olá, lojista</span>
+      <b class="brand">Bebêtenkitê <span class="emoji" aria-hidden="true">🐵</span></b>
     </div>
-    <button class="x" id="closeCart" type="button" aria-label="Fechar">×</button>
   </header>
-  <div class="body" id="drawerBody"></div>
-  <footer id="drawerFoot"></footer>
-</aside>
-<div class="toast" id="toast" hidden></div>
 
-<script>window.ATACADO_DEMO = {"config": {"mock": true, "minOrderValue": 500.0, "minQtyPerRef": 6, "sellerName": "Gleice", "sellerPhone": "5585999999999"}, "updatedAt": "2026-10-14T16:26:52.709477-03:00", "products": [{"reference": "10421", "name": "Body Manga Curta Canelado", "group": "Bebê", "colors": [{"color": "Off White", "skus": [{"productCode": 100001, "size": "RN", "available": 60, "price": 24.9}, {"productCode": 100004, "size": "G", "available": 8, "price": 24.9}]}, {"color": "Rosa Bebê", "skus": [{"productCode": 100005, "size": "RN", "available": 5, "price": 24.9}, {"productCode": 100006, "size": "P", "available": 5, "price": 24.9}, {"productCode": 100007, "size": "M", "available": 3, "price": 24.9}]}, {"color": "Azul Névoa", "skus": [{"productCode": 100009, "size": "RN", "available": 60, "price": 24.9}, {"productCode": 100010, "size": "P", "available": 36, "price": 24.9}, {"productCode": 100012, "size": "G", "available": 48, "price": 24.9}]}], "sizes": ["RN", "P", "M", "G"], "minPrice": 24.9, "maxPrice": 24.9, "totalAvailable": 225}, {"reference": "10422", "name": "Body Manga Longa Suedine", "group": "Bebê", "colors": [{"color": "Mescla", "skus": [{"productCode": 100013, "size": "RN", "available": 18, "price": 29.9}]}, {"color": "Verde Sálvia", "skus": [{"productCode": 100017, "size": "RN", "available": 5, "price": 29.9}, {"productCode": 100018, "size": "P", "available": 5, "price": 29.9}, {"productCode": 100019, "size": "M", "available": 36, "price": 29.9}, {"productCode": 100020, "size": "G", "available": 48, "price": 29.9}]}, {"color": "Off White", "skus": [{"productCode": 100022, "size": "P", "available": 36, "price": 29.9}, {"productCode": 100023, "size": "M", "available": 5, "price": 29.9}, {"productCode": 100024, "size": "G", "available": 60, "price": 29.9}]}], "sizes": ["RN", "P", "M", "G"], "minPrice": 29.9, "maxPrice": 29.9, "totalAvailable": 213}, {"reference": "10470", "name": "Kit 3 Culotes Suedine", "group": "Bebê", "colors": [{"color": "Neutros", "skus": [{"productCode": 100033, "size": "P", "available": 18, "price": 39.9}, {"productCode": 100034, "size": "M", "available": 12, "price": 39.9}, {"productCode": 100035, "size": "G", "available": 8, "price": 39.9}]}, {"color": "Coloridos", "skus": [{"productCode": 100036, "size": "P", "available": 3, "price": 39.9}, {"productCode": 100037, "size": "M", "available": 5, "price": 39.9}, {"productCode": 100038, "size": "G", "available": 12, "price": 39.9}]}], "sizes": ["P", "M", "G"], "minPrice": 39.9, "maxPrice": 39.9, "totalAvailable": 58}, {"reference": "10455", "name": "Macacão Plush com Pezinho", "group": "Bebê", "colors": [{"color": "Bege", "skus": [{"productCode": 100025, "size": "RN", "available": 36, "price": 54.9}, {"productCode": 100026, "size": "P", "available": 18, "price": 54.9}, {"productCode": 100027, "size": "M", "available": 5, "price": 54.9}, {"productCode": 100028, "size": "G", "available": 24, "price": 54.9}]}, {"color": "Rosa Bebê", "skus": [{"productCode": 100029, "size": "RN", "available": 48, "price": 54.9}, {"productCode": 100030, "size": "P", "available": 8, "price": 54.9}, {"productCode": 100032, "size": "G", "available": 3, "price": 54.9}]}], "sizes": ["RN", "P", "M", "G"], "minPrice": 54.9, "maxPrice": 54.9, "totalAvailable": 142}, {"reference": "20171", "name": "Bermuda Moletom", "group": "Infantil", "colors": [{"color": "Marinho", "skus": [{"productCode": 100093, "size": "2", "available": 5, "price": 36.9}, {"productCode": 100094, "size": "4", "available": 60, "price": 36.9}, {"productCode": 100095, "size": "6", "available": 12, "price": 36.9}, {"productCode": 100097, "size": "10", "available": 5, "price": 36.9}]}, {"color": "Mescla", "skus": [{"productCode": 100099, "size": "4", "available": 12, "price": 36.9}, {"productCode": 100100, "size": "6", "available": 18, "price": 36.9}, {"productCode": 100101, "size": "8", "available": 8, "price": 36.9}]}, {"color": "Preto", "skus": [{"productCode": 100103, "size": "2", "available": 5, "price": 36.9}, {"productCode": 100104, "size": "4", "available": 48, "price": 36.9}, {"productCode": 100105, "size": "6", "available": 12, "price": 36.9}, {"productCode": 100106, "size": "8", "available": 5, "price": 36.9}, {"productCode": 100107, "size": "10", "available": 60, "price": 36.9}]}], "sizes": ["2", "4", "6", "8", "10"], "minPrice": 36.9, "maxPrice": 36.9, "totalAvailable": 250}, {"reference": "20166", "name": "Camiseta Estampada Dino", "group": "Infantil", "colors": [{"color": "Verde", "skus": [{"productCode": 100083, "size": "2", "available": 60, "price": 32.9}, {"productCode": 100084, "size": "4", "available": 3, "price": 32.9}, {"productCode": 100085, "size": "6", "available": 36, "price": 32.9}, {"productCode": 100086, "size": "8", "available": 5, "price": 32.9}, {"productCode": 100087, "size": "10", "available": 3, "price": 32.9}]}, {"color": "Cinza Mescla", "skus": [{"productCode": 100088, "size": "2", "available": 24, "price": 32.9}, {"productCode": 100089, "size": "4", "available": 18, "price": 32.9}, {"productCode": 100090, "size": "6", "available": 8, "price": 32.9}, {"productCode": 100091, "size": "8", "available": 60, "price": 32.9}, {"productCode": 100092, "size": "10", "available": 36, "price": 32.9}]}], "sizes": ["2", "4", "6", "8", "10"], "minPrice": 32.9, "maxPrice": 32.9, "totalAvailable": 253}, {"reference": "20110", "name": "Conjunto Moletinho Urso", "group": "Infantil", "colors": [{"color": "Caramelo", "skus": [{"productCode": 100041, "size": "3", "available": 18, "price": 69.9}]}, {"color": "Marinho", "skus": [{"productCode": 100043, "size": "1", "available": 12, "price": 69.9}, {"productCode": 100044, "size": "2", "available": 12, "price": 69.9}, {"productCode": 100045, "size": "3", "available": 48, "price": 69.9}, {"productCode": 100046, "size": "4", "available": 8, "price": 69.9}]}], "sizes": ["1", "2", "3", "4"], "minPrice": 69.9, "maxPrice": 69.9, "totalAvailable": 98}, {"reference": "20118", "name": "Conjunto Verão Linho", "group": "Infantil", "colors": [{"color": "Areia", "skus": [{"productCode": 100048, "size": "2", "available": 24, "price": 74.9}, {"productCode": 100049, "size": "3", "available": 36, "price": 74.9}, {"productCode": 100051, "size": "6", "available": 18, "price": 74.9}]}, {"color": "Terracota", "skus": [{"productCode": 100053, "size": "2", "available": 36, "price": 74.9}, {"productCode": 100054, "size": "3", "available": 8, "price": 74.9}, {"productCode": 100055, "size": "4", "available": 60, "price": 74.9}, {"productCode": 100056, "size": "6", "available": 48, "price": 74.9}]}], "sizes": ["2", "3", "4", "6"], "minPrice": 74.9, "maxPrice": 74.9, "totalAvailable": 230}, {"reference": "20152", "name": "Jardineira Sarja", "group": "Infantil", "colors": [{"color": "Jeans Claro", "skus": [{"productCode": 100075, "size": "1", "available": 12, "price": 84.9}, {"productCode": 100076, "size": "2", "available": 5, "price": 84.9}, {"productCode": 100077, "size": "3", "available": 60, "price": 84.9}, {"productCode": 100078, "size": "4", "available": 8, "price": 84.9}]}, {"color": "Caqui", "skus": [{"productCode": 100079, "size": "1", "available": 60, "price": 84.9}, {"productCode": 100080, "size": "2", "available": 60, "price": 84.9}, {"productCode": 100082, "size": "4", "available": 48, "price": 84.9}]}], "sizes": ["1", "2", "3", "4"], "minPrice": 84.9, "maxPrice": 84.9, "totalAvailable": 253}, {"reference": "20190", "name": "Pijama Malha Estrelinhas", "group": "Infantil", "colors": [{"color": "Azul", "skus": [{"productCode": 100108, "size": "1", "available": 24, "price": 49.9}, {"productCode": 100109, "size": "2", "available": 18, "price": 49.9}, {"productCode": 100110, "size": "4", "available": 60, "price": 49.9}, {"productCode": 100111, "size": "6", "available": 24, "price": 49.9}, {"productCode": 100112, "size": "8", "available": 3, "price": 49.9}]}, {"color": "Rosa", "skus": [{"productCode": 100113, "size": "1", "available": 8, "price": 49.9}, {"productCode": 100114, "size": "2", "available": 3, "price": 49.9}, {"productCode": 100115, "size": "4", "available": 5, "price": 49.9}, {"productCode": 100116, "size": "6", "available": 36, "price": 49.9}, {"productCode": 100117, "size": "8", "available": 36, "price": 49.9}]}], "sizes": ["1", "2", "4", "6", "8"], "minPrice": 49.9, "maxPrice": 49.9, "totalAvailable": 217}, {"reference": "20140", "name": "Vestido Lese Babado", "group": "Infantil", "colors": [{"color": "Branco", "skus": [{"productCode": 100057, "size": "1", "available": 12, "price": 79.9}, {"productCode": 100058, "size": "2", "available": 48, "price": 79.9}, {"productCode": 100059, "size": "3", "available": 5, "price": 79.9}, {"productCode": 100062, "size": "8", "available": 60, "price": 79.9}]}, {"color": "Lavanda", "skus": [{"productCode": 100063, "size": "1", "available": 5, "price": 79.9}, {"productCode": 100064, "size": "2", "available": 8, "price": 79.9}, {"productCode": 100066, "size": "4", "available": 5, "price": 79.9}, {"productCode": 100068, "size": "8", "available": 18, "price": 79.9}]}, {"color": "Amarelo Manteiga", "skus": [{"productCode": 100069, "size": "1", "available": 8, "price": 79.9}, {"productCode": 100070, "size": "2", "available": 24, "price": 79.9}, {"productCode": 100071, "size": "3", "available": 60, "price": 79.9}, {"productCode": 100072, "size": "4", "available": 12, "price": 79.9}, {"productCode": 100073, "size": "6", "available": 3, "price": 79.9}, {"productCode": 100074, "size": "8", "available": 12, "price": 79.9}]}], "sizes": ["1", "2", "3", "4", "6", "8"], "minPrice": 79.9, "maxPrice": 79.9, "totalAvailable": 280}, {"reference": "30031", "name": "Kit Touca + Luva + Meia", "group": "Maternidade", "colors": [{"color": "Branco", "skus": [{"productCode": 100123, "size": "RN", "available": 12, "price": 27.9}, {"productCode": 100124, "size": "P", "available": 5, "price": 27.9}]}, {"color": "Azul", "skus": [{"productCode": 100125, "size": "RN", "available": 3, "price": 27.9}, {"productCode": 100126, "size": "P", "available": 36, "price": 27.9}]}, {"color": "Rosa", "skus": [{"productCode": 100127, "size": "RN", "available": 24, "price": 27.9}]}], "sizes": ["RN", "P"], "minPrice": 27.9, "maxPrice": 27.9, "totalAvailable": 80}, {"reference": "30020", "name": "Manta Soft Bordada", "group": "Maternidade", "colors": [{"color": "Cinza", "skus": [{"productCode": 100120, "size": "U", "available": 18, "price": 64.9}]}, {"color": "Bege", "skus": [{"productCode": 100121, "size": "U", "available": 48, "price": 64.9}]}, {"color": "Rosa", "skus": [{"productCode": 100122, "size": "U", "available": 18, "price": 64.9}]}], "sizes": ["U"], "minPrice": 64.9, "maxPrice": 64.9, "totalAvailable": 84}, {"reference": "30012", "name": "Saída de Maternidade Tricô", "group": "Maternidade", "colors": [{"color": "Off White", "skus": [{"productCode": 100118, "size": "RN", "available": 8, "price": 119.9}]}, {"color": "Cru", "skus": [{"productCode": 100119, "size": "RN", "available": 48, "price": 119.9}]}], "sizes": ["RN"], "minPrice": 119.9, "maxPrice": 119.9, "totalAvailable": 56}]};</script>
+  <div class="wrap">
+    <label class="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
+      <input id="search" type="search" placeholder="Buscar por nome ou referência" aria-label="Buscar produtos">
+    </label>
+
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="hero-text">
+        <span class="demo" id="demoTag" title="Estoque fictício" hidden>Demonstração</span>
+        <h1 id="heroTitle">Atacado com o estoque de hoje</h1>
+        <p id="heroRules">Monte a grade de cada peça e envie pelo WhatsApp.</p>
+        <button class="hero-cta" type="button" id="toList">Ver referências</button>
+      </div>
+      <div class="hero-art" id="heroArt" aria-hidden="true"></div>
+    </section>
+
+    <nav class="cats" id="groups" aria-label="Categorias"></nav>
+
+    <div class="list-head" id="listHead">
+      <h2>Referências</h2>
+      <div class="stamp" id="stamp">Carregando estoque…</div>
+    </div>
+    <section class="grid" id="list" aria-live="polite"></section>
+  </div>
+</section>
+
+<!-- ===== Produto ===== -->
+<section class="view" data-view="product" hidden>
+  <header class="bar wrap">
+    <button class="icon-btn" type="button" id="back" aria-label="Voltar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+    </button>
+    <h2 id="pdTitle">Referência</h2>
+    <span class="bar-gap" aria-hidden="true"></span>
+  </header>
+  <div class="wrap pd" id="pd"></div>
+  <div class="pd-cta">
+    <div class="wrap"><button class="primary" type="button" id="commit"></button></div>
+  </div>
+</section>
+
+<!-- ===== Pedido ===== -->
+<section class="view" data-view="cart" hidden>
+  <header class="page-head wrap">
+    <h1 id="cartTitle">Seu pedido</h1>
+    <ol class="steps" aria-label="Etapas">
+      <li data-step="cart">Itens</li><li data-step="buyer">Seus dados</li><li data-step="done">Enviado</li>
+    </ol>
+  </header>
+  <div class="wrap cart">
+    <div class="cart-body" id="cartBody"></div>
+    <footer class="cart-foot" id="cartFoot"></footer>
+  </div>
+</section>
+
+<!-- ===== Perfil ===== -->
+<section class="view" data-view="profile" hidden>
+  <header class="page-head wrap">
+    <h1>Perfil</h1>
+    <p class="note">Esses dados preenchem seus pedidos automaticamente.</p>
+  </header>
+  <div class="wrap profile" id="profile"></div>
+</section>
+
+<nav class="tabbar" aria-label="Navegação">
+  <a href="#/" data-tab="home">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5H15v-6H9v6H5.5A1.5 1.5 0 0 1 4 19z"/></svg>Início</a>
+  <a href="#/pedido" data-tab="cart">
+    <span class="tab-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 11.1a2 2 0 0 1-2 1.9H8.2a2 2 0 0 1-2-1.9z"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></svg>
+      <span class="count" id="cartCount" data-zero>0</span></span>Pedido</a>
+  <a href="#/perfil" data-tab="profile">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5"/></svg>Perfil</a>
+</nav>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>window.ATACADO_DEMO = {"config": {"mock": true, "minOrderValue": 50.0, "minQtyPerRef": 2, "sellerName": "Gleice", "sellerPhone": "5585999999999"}, "updatedAt": "2026-10-15T10:42:11.675023-03:00", "products": [{"reference": "10421", "name": "Body Manga Curta Canelado", "group": "Bebê", "colors": [{"color": "Off White", "skus": [{"productCode": 100001, "size": "RN", "available": 60, "price": 24.9}, {"productCode": 100004, "size": "G", "available": 8, "price": 24.9}]}, {"color": "Rosa Bebê", "skus": [{"productCode": 100005, "size": "RN", "available": 5, "price": 24.9}, {"productCode": 100006, "size": "P", "available": 5, "price": 24.9}, {"productCode": 100007, "size": "M", "available": 3, "price": 24.9}]}, {"color": "Azul Névoa", "skus": [{"productCode": 100009, "size": "RN", "available": 60, "price": 24.9}, {"productCode": 100010, "size": "P", "available": 36, "price": 24.9}, {"productCode": 100012, "size": "G", "available": 48, "price": 24.9}]}], "sizes": ["RN", "P", "M", "G"], "minPrice": 24.9, "maxPrice": 24.9, "totalAvailable": 225}, {"reference": "10422", "name": "Body Manga Longa Suedine", "group": "Bebê", "colors": [{"color": "Mescla", "skus": [{"productCode": 100013, "size": "RN", "available": 18, "price": 29.9}]}, {"color": "Verde Sálvia", "skus": [{"productCode": 100017, "size": "RN", "available": 5, "price": 29.9}, {"productCode": 100018, "size": "P", "available": 5, "price": 29.9}, {"productCode": 100019, "size": "M", "available": 36, "price": 29.9}, {"productCode": 100020, "size": "G", "available": 48, "price": 29.9}]}, {"color": "Off White", "skus": [{"productCode": 100022, "size": "P", "available": 36, "price": 29.9}, {"productCode": 100023, "size": "M", "available": 5, "price": 29.9}, {"productCode": 100024, "size": "G", "available": 60, "price": 29.9}]}], "sizes": ["RN", "P", "M", "G"], "minPrice": 29.9, "maxPrice": 29.9, "totalAvailable": 213}, {"reference": "10470", "name": "Kit 3 Culotes Suedine", "group": "Bebê", "colors": [{"color": "Neutros", "skus": [{"productCode": 100033, "size": "P", "available": 18, "price": 39.9}, {"productCode": 100034, "size": "M", "available": 12, "price": 39.9}, {"productCode": 100035, "size": "G", "available": 8, "price": 39.9}]}, {"color": "Coloridos", "skus": [{"productCode": 100036, "size": "P", "available": 3, "price": 39.9}, {"productCode": 100037, "size": "M", "available": 5, "price": 39.9}, {"productCode": 100038, "size": "G", "available": 12, "price": 39.9}]}], "sizes": ["P", "M", "G"], "minPrice": 39.9, "maxPrice": 39.9, "totalAvailable": 58}, {"reference": "10455", "name": "Macacão Plush com Pezinho", "group": "Bebê", "colors": [{"color": "Bege", "skus": [{"productCode": 100025, "size": "RN", "available": 36, "price": 54.9}, {"productCode": 100026, "size": "P", "available": 18, "price": 54.9}, {"productCode": 100027, "size": "M", "available": 5, "price": 54.9}, {"productCode": 100028, "size": "G", "available": 24, "price": 54.9}]}, {"color": "Rosa Bebê", "skus": [{"productCode": 100029, "size": "RN", "available": 48, "price": 54.9}, {"productCode": 100030, "size": "P", "available": 8, "price": 54.9}, {"productCode": 100032, "size": "G", "available": 3, "price": 54.9}]}], "sizes": ["RN", "P", "M", "G"], "minPrice": 54.9, "maxPrice": 54.9, "totalAvailable": 142}, {"reference": "20171", "name": "Bermuda Moletom", "group": "Infantil", "colors": [{"color": "Marinho", "skus": [{"productCode": 100093, "size": "2", "available": 5, "price": 36.9}, {"productCode": 100094, "size": "4", "available": 60, "price": 36.9}, {"productCode": 100095, "size": "6", "available": 12, "price": 36.9}, {"productCode": 100097, "size": "10", "available": 5, "price": 36.9}]}, {"color": "Mescla", "skus": [{"productCode": 100099, "size": "4", "available": 12, "price": 36.9}, {"productCode": 100100, "size": "6", "available": 18, "price": 36.9}, {"productCode": 100101, "size": "8", "available": 8, "price": 36.9}]}, {"color": "Preto", "skus": [{"productCode": 100103, "size": "2", "available": 5, "price": 36.9}, {"productCode": 100104, "size": "4", "available": 48, "price": 36.9}, {"productCode": 100105, "size": "6", "available": 12, "price": 36.9}, {"productCode": 100106, "size": "8", "available": 5, "price": 36.9}, {"productCode": 100107, "size": "10", "available": 60, "price": 36.9}]}], "sizes": ["2", "4", "6", "8", "10"], "minPrice": 36.9, "maxPrice": 36.9, "totalAvailable": 250}, {"reference": "20166", "name": "Camiseta Estampada Dino", "group": "Infantil", "colors": [{"color": "Verde", "skus": [{"productCode": 100083, "size": "2", "available": 60, "price": 32.9}, {"productCode": 100084, "size": "4", "available": 3, "price": 32.9}, {"productCode": 100085, "size": "6", "available": 36, "price": 32.9}, {"productCode": 100086, "size": "8", "available": 5, "price": 32.9}, {"productCode": 100087, "size": "10", "available": 3, "price": 32.9}]}, {"color": "Cinza Mescla", "skus": [{"productCode": 100088, "size": "2", "available": 24, "price": 32.9}, {"productCode": 100089, "size": "4", "available": 18, "price": 32.9}, {"productCode": 100090, "size": "6", "available": 8, "price": 32.9}, {"productCode": 100091, "size": "8", "available": 60, "price": 32.9}, {"productCode": 100092, "size": "10", "available": 36, "price": 32.9}]}], "sizes": ["2", "4", "6", "8", "10"], "minPrice": 32.9, "maxPrice": 32.9, "totalAvailable": 253}, {"reference": "20110", "name": "Conjunto Moletinho Urso", "group": "Infantil", "colors": [{"color": "Caramelo", "skus": [{"productCode": 100041, "size": "3", "available": 18, "price": 69.9}]}, {"color": "Marinho", "skus": [{"productCode": 100043, "size": "1", "available": 12, "price": 69.9}, {"productCode": 100044, "size": "2", "available": 12, "price": 69.9}, {"productCode": 100045, "size": "3", "available": 48, "price": 69.9}, {"productCode": 100046, "size": "4", "available": 8, "price": 69.9}]}], "sizes": ["1", "2", "3", "4"], "minPrice": 69.9, "maxPrice": 69.9, "totalAvailable": 98}, {"reference": "20118", "name": "Conjunto Verão Linho", "group": "Infantil", "colors": [{"color": "Areia", "skus": [{"productCode": 100048, "size": "2", "available": 24, "price": 74.9}, {"productCode": 100049, "size": "3", "available": 36, "price": 74.9}, {"productCode": 100051, "size": "6", "available": 18, "price": 74.9}]}, {"color": "Terracota", "skus": [{"productCode": 100053, "size": "2", "available": 36, "price": 74.9}, {"productCode": 100054, "size": "3", "available": 8, "price": 74.9}, {"productCode": 100055, "size": "4", "available": 60, "price": 74.9}, {"productCode": 100056, "size": "6", "available": 48, "price": 74.9}]}], "sizes": ["2", "3", "4", "6"], "minPrice": 74.9, "maxPrice": 74.9, "totalAvailable": 230}, {"reference": "20152", "name": "Jardineira Sarja", "group": "Infantil", "colors": [{"color": "Jeans Claro", "skus": [{"productCode": 100075, "size": "1", "available": 12, "price": 84.9}, {"productCode": 100076, "size": "2", "available": 5, "price": 84.9}, {"productCode": 100077, "size": "3", "available": 60, "price": 84.9}, {"productCode": 100078, "size": "4", "available": 8, "price": 84.9}]}, {"color": "Caqui", "skus": [{"productCode": 100079, "size": "1", "available": 60, "price": 84.9}, {"productCode": 100080, "size": "2", "available": 60, "price": 84.9}, {"productCode": 100082, "size": "4", "available": 48, "price": 84.9}]}], "sizes": ["1", "2", "3", "4"], "minPrice": 84.9, "maxPrice": 84.9, "totalAvailable": 253}, {"reference": "20190", "name": "Pijama Malha Estrelinhas", "group": "Infantil", "colors": [{"color": "Azul", "skus": [{"productCode": 100108, "size": "1", "available": 24, "price": 49.9}, {"productCode": 100109, "size": "2", "available": 18, "price": 49.9}, {"productCode": 100110, "size": "4", "available": 60, "price": 49.9}, {"productCode": 100111, "size": "6", "available": 24, "price": 49.9}, {"productCode": 100112, "size": "8", "available": 3, "price": 49.9}]}, {"color": "Rosa", "skus": [{"productCode": 100113, "size": "1", "available": 8, "price": 49.9}, {"productCode": 100114, "size": "2", "available": 3, "price": 49.9}, {"productCode": 100115, "size": "4", "available": 5, "price": 49.9}, {"productCode": 100116, "size": "6", "available": 36, "price": 49.9}, {"productCode": 100117, "size": "8", "available": 36, "price": 49.9}]}], "sizes": ["1", "2", "4", "6", "8"], "minPrice": 49.9, "maxPrice": 49.9, "totalAvailable": 217}, {"reference": "20140", "name": "Vestido Lese Babado", "group": "Infantil", "colors": [{"color": "Branco", "skus": [{"productCode": 100057, "size": "1", "available": 12, "price": 79.9}, {"productCode": 100058, "size": "2", "available": 48, "price": 79.9}, {"productCode": 100059, "size": "3", "available": 5, "price": 79.9}, {"productCode": 100062, "size": "8", "available": 60, "price": 79.9}]}, {"color": "Lavanda", "skus": [{"productCode": 100063, "size": "1", "available": 5, "price": 79.9}, {"productCode": 100064, "size": "2", "available": 8, "price": 79.9}, {"productCode": 100066, "size": "4", "available": 5, "price": 79.9}, {"productCode": 100068, "size": "8", "available": 18, "price": 79.9}]}, {"color": "Amarelo Manteiga", "skus": [{"productCode": 100069, "size": "1", "available": 8, "price": 79.9}, {"productCode": 100070, "size": "2", "available": 24, "price": 79.9}, {"productCode": 100071, "size": "3", "available": 60, "price": 79.9}, {"productCode": 100072, "size": "4", "available": 12, "price": 79.9}, {"productCode": 100073, "size": "6", "available": 3, "price": 79.9}, {"productCode": 100074, "size": "8", "available": 12, "price": 79.9}]}], "sizes": ["1", "2", "3", "4", "6", "8"], "minPrice": 79.9, "maxPrice": 79.9, "totalAvailable": 280}, {"reference": "30031", "name": "Kit Touca + Luva + Meia", "group": "Maternidade", "colors": [{"color": "Branco", "skus": [{"productCode": 100123, "size": "RN", "available": 12, "price": 27.9}, {"productCode": 100124, "size": "P", "available": 5, "price": 27.9}]}, {"color": "Azul", "skus": [{"productCode": 100125, "size": "RN", "available": 3, "price": 27.9}, {"productCode": 100126, "size": "P", "available": 36, "price": 27.9}]}, {"color": "Rosa", "skus": [{"productCode": 100127, "size": "RN", "available": 24, "price": 27.9}]}], "sizes": ["RN", "P"], "minPrice": 27.9, "maxPrice": 27.9, "totalAvailable": 80}, {"reference": "30020", "name": "Manta Soft Bordada", "group": "Maternidade", "colors": [{"color": "Cinza", "skus": [{"productCode": 100120, "size": "U", "available": 18, "price": 64.9}]}, {"color": "Bege", "skus": [{"productCode": 100121, "size": "U", "available": 48, "price": 64.9}]}, {"color": "Rosa", "skus": [{"productCode": 100122, "size": "U", "available": 18, "price": 64.9}]}], "sizes": ["U"], "minPrice": 64.9, "maxPrice": 64.9, "totalAvailable": 84}, {"reference": "30012", "name": "Saída de Maternidade Tricô", "group": "Maternidade", "colors": [{"color": "Off White", "skus": [{"productCode": 100118, "size": "RN", "available": 8, "price": 119.9}]}, {"color": "Cru", "skus": [{"productCode": 100119, "size": "RN", "available": 48, "price": 119.9}]}], "sizes": ["RN"], "minPrice": 119.9, "maxPrice": 119.9, "totalAvailable": 56}]};</script>
 <script>
 /* Bebêtenkitê Atacado — front-end (vanilla JS).
  * Modo API: conversa com o backend FastAPI (/api/config, /api/catalogo, /api/pedido).
@@ -284,9 +518,11 @@ a.wa {
   const S = {
     config: { minOrderValue: 500, minQtyPerRef: 6, sellerName: "Gleice", mock: true },
     products: [], index: new Map(), updatedAt: null,
-    cart: new Map(), group: "Todos", q: "", step: "cart",
+    cart: new Map(), cat: "Todos", q: "", step: "cart",
+    view: "home", ref: null, color: null, draft: new Map(), homeScroll: 0, fromApp: false, routed: false,
     buyer: { name: "", company: "", document: "", phone: "", city: "", notes: "" },
     problems: [], result: null, sending: false,
+    firstPaint: true,
   };
 
   // ---------- util ----------
@@ -348,7 +584,63 @@ a.wa {
     const [a, b] = colorsIn(name);
     return !a ? MULTI : b ? `linear-gradient(135deg, ${a} 50%, ${b} 50%)` : a;
   }
-  const tintFor = name => (colorsIn(name)[0] || NEUTRAL) + "33";
+  // fundo do ícone da peça: a primeira cor reconhecida misturada ao creme
+  const tintFor = name => `color-mix(in srgb, ${colorsIn(name)[0] || NEUTRAL} 34%, var(--tile))`;
+
+  // silhuetas em traço, escolhidas pelo nome da referência
+  const ICONS = {
+    body: '<path d="M8.5 3.5h7l4 3-1.8 3.2-2.2-1.2V14c0 1-.5 1.9-1.3 2.4L13 20.5h-2l-1.2-4.1C9 15.9 8.5 15 8.5 14V8.5L6.3 9.7 4.5 6.5z"/><path d="M10 3.5a2 2 0 0 0 4 0"/>',
+    dress: '<path d="M9.5 3v3.5L7.8 9.2 4.5 20h15l-3.3-10.8-1.7-2.7V3"/><path d="M9.5 6.5h5"/><path d="M7.8 9.2c1.4.8 2.8 1.2 4.2 1.2s2.8-.4 4.2-1.2"/>',
+    tee: '<path d="M9 3.5 4 6l1.8 4.2 2.4-1V20.5h7.6V9.2l2.4 1L20 6l-5-2.5c-.4 1.3-1.6 2.2-3 2.2s-2.6-.9-3-2.2z"/>',
+    shorts: '<path d="M5.5 4.5h13l1 14.5h-6L12 11l-1.5 8h-6z"/><path d="M5.5 7.5h13"/>',
+    pants: '<path d="M7 3.5h10l1.5 17h-4.6L12 10.5l-1.9 10H5.5z"/><path d="M7 6.5h10"/>',
+    jacket: '<path d="M9 3.5 5 5.5 3.5 20.5h4.5V12M15 3.5l4 2 1.5 15H16V12"/><path d="M9 3.5 12 7l3-3.5M12 7v13.5M8 20.5h8"/>',
+    set: '<path d="M8.5 3 5 4.8l1.2 2.8 1.6-.6V12h8.4V7l1.6.6L19 4.8 15.5 3c-.4 1-1.9 1.6-3.5 1.6S8.9 4 8.5 3z"/><path d="M7.5 14h9l.7 7h-3.7L12 17.5 10.5 21H6.8z"/>',
+    shoe: '<path d="M3.5 16.5v-7c2 0 3.5-.8 4.5-2.5l2.5 1.5c1 3 4 4 7.5 4.5 1.5.2 2.5 1.2 2.5 2.5v1z"/><path d="M3.5 16.5h17v2.5h-17z"/>',
+    sun: '<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6 7 7M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4"/>',
+    blanket: '<rect x="4" y="4.5" width="16" height="15" rx="2.5"/><path d="M4 9h16"/><path d="M8 13.5h.01M12 13.5h.01M16 13.5h.01M10 16.5h.01M14 16.5h.01" stroke-width="2.4"/>',
+    hat: '<path d="M5 16a7 7 0 0 1 14 0"/><rect x="4" y="16" width="16" height="3.5" rx="1.75"/><circle cx="12" cy="4.5" r="1.5"/>',
+    box: '<path d="M3.5 7.5 12 3.5l8.5 4v9L12 20.5l-8.5-4z"/><path d="M3.5 7.5 12 11.5l8.5-4M12 11.5v9"/><path d="m7.8 5.5 8.5 4v3"/>',
+    overall: '<path d="M8 3.5v5M16 3.5v5"/><path d="M6.5 8.5h11l1 12h-5L12 14l-1.5 6.5h-5z"/><rect x="9.5" y="9.5" width="5" height="3" rx="1"/>',
+    more: '<circle cx="6" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="18" cy="12" r="1.3"/>',
+  };
+  const svg = d => `<svg viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
+  const BAG = svg('<path d="M5 8h14l-1.2 11.1a2 2 0 0 1-2 1.9H8.2a2 2 0 0 1-2-1.9z"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/>');
+  const ALL = svg('<rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/>');
+  const plain = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+
+  // Categorias da vitrine, tiradas do nome da referência. A ordem importa: a primeira que casar vence
+  // ("Bermuda Moletom" é bermuda, não casaco; "Saída de Praia" é moda praia; "Calçados" não é calça).
+  const CATEGORIES = [
+    { name: "Moda Praia", icon: "sun", re: /biquini|maio\b|sunga|praia|\buv\b|piscina/ },
+    { name: "Conjunto", icon: "set", re: /conjunto|pijama/ },
+    { name: "Macacão", icon: "overall", re: /macacao|macaquinho|jardineira|banho de sol/ },
+    { name: "Body", icon: "body", re: /\bbody\b|bodies/ },
+    { name: "Vestido", icon: "dress", re: /vestido|saia|salopete/ },
+    { name: "Bermuda", icon: "shorts", re: /bermuda|short/ },
+    { name: "Calçado", icon: "shoe", re: /calcado|sapat|tenis|all ?star|sandalia|\bbotas?\b|botinha|chinelo|pantufa|crocs/ },
+    { name: "Calça", icon: "pants", re: /\bcalcas?\b|legging|culote|mijao|jogger/ },
+    { name: "Casaco", icon: "jacket", re: /casaco|jaqueta|moletom|cardigan|colete|blusao|sueter|corta.?vento|japona|parka/ },
+    { name: "Camisa", icon: "tee", re: /camis|blusa|regata|polo|bata\b|cropped|\btop\b/ },
+    { name: "Acessórios", icon: "hat", re: /touca|gorro|chapeu|bone\b|luva|meia|laco|tiara|faixa|babador|prendedor|naninha|bolsa|mochila/ },
+  ];
+  const OTHER = { name: "Outros", icon: "more" };
+  // ordem em que aparecem na faixa (a de cima é só a ordem de busca)
+  const CAT_ORDER = ["Camisa", "Macacão", "Bermuda", "Calça", "Body", "Vestido", "Casaco", "Conjunto", "Calçado", "Moda Praia", "Acessórios"]
+    .map(n => CATEGORIES.find(c => c.name === n));
+  const catCache = new Map();
+  function categoryOf(name) {
+    if (!catCache.has(name)) catCache.set(name, CATEGORIES.find(c => c.re.test(plain(name))) || OTHER);
+    return catCache.get(name);
+  }
+  function iconFor(name) {
+    const n = plain(name), cat = categoryOf(name);
+    const k = /embalage|caixa|sacola|saquinho/.test(n) ? "box" : /manta|cueiro|toalha|saida de maternidade/.test(n) ? "blanket"
+      : cat === OTHER ? "tee" : cat.icon;
+    return svg(ICONS[k]);
+  }
+  const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const sum = (arr, f) => arr.reduce((a, x) => a + f(x), 0);
 
   // ---------- dados ----------
   const api = {
@@ -406,92 +698,205 @@ a.wa {
     return out;
   }
 
-  // ---------- render: catálogo ----------
-  function renderRules() {
-    $("#sellerName").textContent = S.config.sellerName;
-    $("#rules").innerHTML =
-      (S.config.mock || DEMO ? `<span class="pill demo">Demonstração: estoque fictício</span>` : "");
+  // ---------- render: início ----------
+  function renderHello() {
+    const first = (S.buyer.name || "").trim().split(/\s+/)[0];
+    $("#hi").textContent = first ? `Olá, ${first}` : "Olá, lojista";
+    $("#avatar").textContent = (first || S.buyer.company || "B")[0].toUpperCase();
   }
+  function renderRules() {
+    $("#demoTag").hidden = !(S.config.mock || DEMO);
+    $("#heroRules").textContent = `Pedido mínimo de ${brl(S.config.minOrderValue)} e ${S.config.minQtyPerRef} peças por referência. ` +
+      "Monte a grade de cada peça e envie pelo WhatsApp.";
+  }
+  // três peças do catálogo, inclinadas, como vitrine do destaque
+  function renderHeroArt() {
+    const picks = [];
+    for (const p of S.products) {
+      if (!picks.some(x => iconFor(x.name) === iconFor(p.name))) picks.push(p);
+      if (picks.length === 3) break;
+    }
+    $("#heroArt").innerHTML = picks.map(p =>
+      `<span style="background:color-mix(in srgb, ${colorsIn(p.colors[0].color)[0] || NEUTRAL} 45%, #fffaf2)">${iconFor(p.name)}</span>`).join("");
+  }
+  // "Todos" e as categorias fixas; as que não têm peça no estoque de hoje ficam apagadas
   function renderGroups() {
-    const groups = ["Todos", ...new Set(S.products.map(p => p.group).filter(Boolean))];
-    $("#groups").innerHTML = groups.map(g =>
-      `<button type="button" class="chip" aria-pressed="${g === S.group}" data-group="${esc(g)}">${esc(g)}</button>`).join("");
+    const used = new Set(S.products.map(p => categoryOf(p.name).name));
+    $("#groups").innerHTML = [{ name: "Todos" }, ...CAT_ORDER, OTHER].map(c => {
+      const empty = c.name !== "Todos" && !used.has(c.name);
+      return `<button type="button" aria-pressed="${c.name === S.cat}" data-group="${esc(c.name)}"${empty ? ' disabled title="Sem peças em estoque agora"' : ""}>
+        <span class="ico">${c.name === "Todos" ? ALL : svg(ICONS[c.icon])}</span>${esc(c.name)}</button>`;
+    }).join("");
   }
   function renderStamp() {
     if (!S.updatedAt) return;
     const d = new Date(S.updatedAt);
-    $("#stamp").innerHTML = `Estoque consultado às ${d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}` +
-      ` · ${S.products.length} referências` + (DEMO ? "" : ` <button type="button" id="refresh">atualizar</button>`);
+    $("#stamp").innerHTML = `${S.products.length} referências · estoque das ${d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}` +
+      (DEMO ? "" : ` <button type="button" id="refresh">atualizar</button>`);
   }
 
   function visibleProducts() {
     const q = S.q.trim().toLowerCase();
     return S.products.filter(p =>
-      (S.group === "Todos" || p.group === S.group) &&
+      (S.cat === "Todos" || categoryOf(p.name).name === S.cat) &&
       (!q || p.name.toLowerCase().includes(q) || p.reference.toLowerCase().includes(q)));
   }
+  const priceOf = p => p.minPrice === p.maxPrice ? brl(p.minPrice) : `${brl(p.minPrice)} – ${brl(p.maxPrice)}`;
+  const refPieces = ref => sum(cartLines().filter(l => l.reference === ref), l => l.quantity);
 
-  function refCard(p) {
-    const priceTxt = p.minPrice === p.maxPrice ? brl(p.minPrice) : `${brl(p.minPrice)} – ${brl(p.maxPrice)}`;
-    const head = p.sizes.map(s => `<th scope="col">${esc(s)}</th>`).join("");
-    const rows = p.colors.map(c => {
-      const bySize = new Map(c.skus.map(s => [s.size, s]));
-      const cells = p.sizes.map(size => {
-        const s = bySize.get(size);
-        if (!s) return `<td><span class="na" title="Sem estoque">—</span></td>`;
-        const q = S.cart.get(s.productCode) || "";
-        const cls = q ? (q > s.available ? "qty over" : "qty has") : "qty";
-        return `<td><div class="cell">
-          <input class="${cls}" id="q-${s.productCode}" type="number" inputmode="numeric" min="0" max="${s.available}"
-            step="1" value="${q}" data-code="${s.productCode}" aria-label="${esc(p.name)} ${esc(c.color)} tamanho ${esc(size)}">
-          <span class="avail">${s.available} disp.</span></div></td>`;
-      }).join("");
-      return `<tr><th scope="row" class="color"><span class="sw" style="background:${swatchBg(c.color)}"></span>${esc(c.color)}</th>${cells}
-        <td class="act"><button type="button" class="mini" data-grade="${esc(p.reference)}|${esc(c.color)}" title="Soma 1 peça em cada tamanho disponível">+1 grade</button></td></tr>`;
-    }).join("");
-    const stockCls = p.totalAvailable < 40 ? "low" : "ok";
-    return `<article class="ref" data-ref="${esc(p.reference)}">
-      <div class="ref-art" style="background:${tintFor(p.colors[0].color)}">
-        <span class="initial" aria-hidden="true">${esc(p.name[0])}</span>
-        <div class="swatches">${p.colors.map(c => `<span class="sw" title="${esc(c.color)}" style="background:${swatchBg(c.color)}"></span>`).join("")}</div>
-      </div>
-      <div class="ref-body">
-        <div class="ref-head">
-          <h2>${esc(p.name)}</h2><span class="code mono">ref. ${esc(p.reference)}</span>
-          <span class="price">${priceTxt} <small>/ peça</small></span>
-        </div>
-        <div class="ref-meta"><span>${esc(p.group || "")}</span>
-          <span class="${stockCls}">${p.totalAvailable} peças em estoque</span>
-          <span>${p.colors.length} ${p.colors.length > 1 ? "cores" : "cor"} · ${p.sizes.join(" ")}</span></div>
-        <div class="grid-wrap"><table class="grade"><thead><tr><th></th>${head}<th></th></tr></thead><tbody>${rows}</tbody></table></div>
-        <div class="ref-foot" id="foot-${esc(p.reference)}"></div>
-      </div></article>`;
+  function productCard(p, i) {
+    const q = refPieces(p.reference);
+    return `<a class="card${S.firstPaint ? " enter" : ""}" style="--i:${Math.min(i, 10)}" href="#/p/${encodeURIComponent(p.reference)}" data-ref="${esc(p.reference)}">
+      <span class="card-art" style="background:${tintFor(p.colors[0].color)}">${iconFor(p.name)}
+        <span class="in-cart">${q ? `${q} no pedido` : ""}</span></span>
+      <span class="card-body">
+        <span class="card-name">${esc(p.name)}</span>
+        <span class="card-price">${priceOf(p)} <small>/ peça</small></span>
+        <span class="card-meta"><span class="dots">${p.colors.slice(0, 5).map(c => `<span class="sw" title="${esc(c.color)}" style="background:${swatchBg(c.color)}"></span>`).join("")}</span>
+          <span class="${p.totalAvailable < 40 ? "low" : ""}">${p.totalAvailable} em estoque</span></span>
+      </span></a>`;
   }
-
-  function renderRefFoot(ref) {
-    const el = document.getElementById(`foot-${ref}`); if (!el) return;
-    const lines = cartLines().filter(l => l.reference === ref);
-    const q = lines.reduce((a, l) => a + l.quantity, 0);
-    if (!q) { el.innerHTML = ""; return; }
-    const sub = lines.reduce((a, l) => a + l.subtotal, 0);
-    const warn = q < S.config.minQtyPerRef ? `<span class="warnline">Faltam ${S.config.minQtyPerRef - q} peças para o mínimo da referência</span>` : "";
-    el.innerHTML = `<span><b>${q}</b> peças no carrinho</span>${warn}<span class="sub">${brl(sub)}</span>`;
-  }
-
   function renderList() {
     const items = visibleProducts();
-    $("#list").innerHTML = items.length ? items.map(refCard).join("")
+    $("#list").innerHTML = items.length ? items.map(productCard).join("")
       : `<div class="empty">Nenhuma referência encontrada para essa busca.</div>`;
-    items.forEach(p => renderRefFoot(p.reference));
+    if (items.length) S.firstPaint = false; // a entrada em cascata só toca na primeira vez
+  }
+  function renderTabs() {
+    const pieces = sum(cartLines(), l => l.quantity);
+    const count = $("#cartCount");
+    if (pieces && count.textContent !== String(pieces)) { count.classList.remove("bump"); void count.offsetWidth; count.classList.add("bump"); }
+    count.textContent = pieces;
+    count.toggleAttribute("data-zero", !pieces);
+    document.querySelectorAll(".tabbar a").forEach(a =>
+      a.dataset.tab === S.view ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
   }
 
-  function renderHeader() {
-    const lines = cartLines();
-    $("#cartCount").textContent = lines.reduce((a, l) => a + l.quantity, 0);
-    $("#cartSum").textContent = brl(lines.reduce((a, l) => a + l.subtotal, 0));
+  // ---------- render: produto ----------
+  // a grade é preenchida num rascunho; só vai para o pedido no botão "Adicionar ao pedido"
+  const productBy = ref => S.products.find(p => p.reference === ref);
+  const skusOf = p => p.colors.flatMap(c => c.skus);
+  const draftDirty = p => skusOf(p).some(s => (S.draft.get(s.productCode) || 0) !== (S.cart.get(s.productCode) || 0));
+
+  function openProduct(p) {
+    if (S.ref !== p.reference || !S.draft.size) {
+      S.ref = p.reference;
+      S.draft = new Map(skusOf(p).map(s => [s.productCode, S.cart.get(s.productCode) || 0]));
+      const withQty = p.colors.find(c => c.skus.some(s => S.draft.get(s.productCode)));
+      S.color = (withQty || p.colors[0]).color;
+    }
+    renderProduct();
+  }
+  function renderProduct() {
+    const p = productBy(S.ref); if (!p) return;
+    const c = p.colors.find(x => x.color === S.color) || p.colors[0];
+    $("#pdTitle").textContent = `ref. ${p.reference}`;
+    const sizes = p.sizes.length > 1 ? `${p.sizes[0]} a ${p.sizes[p.sizes.length - 1]}` : p.sizes[0];
+    $("#pd").innerHTML = `
+      <div class="pd-art" id="pdArt" style="background:${tintFor(c.color)}">${iconFor(p.name)}
+        <span class="stock ${p.totalAvailable < 40 ? "low" : ""}">${p.totalAvailable} em estoque</span>
+        <span class="mark">Bebêtenkitê</span></div>
+      <div class="pd-info">
+        <h1>${esc(p.name)}</h1>
+        <span class="pd-price">${priceOf(p)} <small>/ peça</small></span>
+        <p class="pd-desc">${esc(p.group || "Linha")} em ${p.colors.length} ${p.colors.length > 1 ? "cores" : "cor"}, tamanhos ${esc(sizes)}.
+          Escolha a cor e preencha quantas peças quer de cada tamanho; o mínimo é de ${S.config.minQtyPerRef} peças nesta referência.</p>
+      </div>
+      <div>
+        <h3 class="sec-title">Cor <span id="colorName">${esc(c.color)}</span></h3>
+        <div class="colors" id="colors" role="group" aria-label="Cores"></div>
+      </div>
+      <div class="sizes-box">
+        <div class="sizes-head"><b>Tamanhos</b>
+          <button type="button" class="mini" id="plusGrade" title="Soma 1 peça em cada tamanho disponível desta cor">+1 grade</button></div>
+        <div class="sizes" id="sizes"></div>
+      </div>
+      <div class="pd-sum" id="pdSum"></div>`;
+    renderColors(); renderSizes(false); renderCommit();
+  }
+  function renderColors() {
+    const p = productBy(S.ref);
+    $("#colors").innerHTML = p.colors.map(c => {
+      const q = sum(c.skus, s => S.draft.get(s.productCode) || 0);
+      return `<button type="button" aria-pressed="${c.color === S.color}" data-color="${esc(c.color)}" aria-label="${esc(c.color)}${q ? `, ${q} peças` : ""}">
+        <span class="dot" style="background:${swatchBg(c.color)}">${q ? `<span class="count">${q}</span>` : ""}</span>
+        <span class="lbl">${esc(c.color)}</span></button>`;
+    }).join("");
+  }
+  function qtyClass(q, available) { return q ? (q > available ? "qty over" : "qty has") : "qty"; }
+  function renderSizes(animate = true) {
+    const p = productBy(S.ref), c = p.colors.find(x => x.color === S.color);
+    const bySize = new Map(c.skus.map(s => [s.size, s]));
+    const el = $("#sizes");
+    el.innerHTML = p.sizes.map(size => {
+      const s = bySize.get(size);
+      if (!s) return `<div class="cell na"><span class="sz">${esc(size)}</span>
+        <input class="qty" type="text" value="—" disabled aria-label="Tamanho ${esc(size)}: sem estoque"><span class="avail">esgotado</span></div>`;
+      const q = S.draft.get(s.productCode) || "";
+      return `<div class="cell"><label class="sz" for="q-${s.productCode}">${esc(size)}</label>
+        <input class="${qtyClass(q, s.available)}" id="q-${s.productCode}" type="number" inputmode="numeric" min="0" max="${s.available}"
+          step="1" value="${q}" placeholder="0" data-code="${s.productCode}" aria-label="${esc(c.color)} tamanho ${esc(size)}">
+        <span class="avail">${s.available} disp.</span></div>`;
+    }).join("");
+    if (animate && !reduced()) { el.classList.remove("swap"); void el.offsetWidth; el.classList.add("swap"); }
+  }
+  function draftTotals(p) {
+    const skus = skusOf(p);
+    return {
+      q: sum(skus, s => S.draft.get(s.productCode) || 0),
+      v: sum(skus, s => (S.draft.get(s.productCode) || 0) * s.price),
+      over: skus.some(s => (S.draft.get(s.productCode) || 0) > s.available),
+    };
+  }
+  function renderCommit() {
+    const p = productBy(S.ref); if (!p) return;
+    const t = draftTotals(p), inCart = refPieces(p.reference) > 0, dirty = draftDirty(p);
+    const min = S.config.minQtyPerRef;
+    $("#pdSum").innerHTML = t.q
+      ? `<span><b>${t.q}</b> ${t.q === 1 ? "peça" : "peças"} · <b>${brl(t.v)}</b></span>` +
+        (t.over ? `<span class="warnline">Há tamanhos acima do estoque</span>` : t.q < min ? `<span class="warnline">Faltam ${min - t.q} para o mínimo de ${min}</span>` : "")
+      : "";
+    const btn = $("#commit");
+    btn.disabled = t.over || (!t.q && !inCart);
+    btn.dataset.mode = !dirty && inCart ? "view" : "save";
+    btn.innerHTML = !dirty && inCart ? `${BAG} Ver pedido`
+      : !t.q && inCart ? `Remover do pedido`
+      : !t.q ? `${BAG} Preencha a grade`
+      : `${BAG} ${inCart ? "Atualizar pedido" : "Adicionar ao pedido"} <span class="sub">· ${brl(t.v)}</span>`;
+  }
+  function setDraft(code, qty) {
+    qty = Math.max(0, Math.floor(Number(qty) || 0));
+    S.draft.set(code, qty);
+    const input = document.getElementById(`q-${code}`), sku = S.index.get(code);
+    if (input && sku) {
+      if (document.activeElement !== input) input.value = qty || "";
+      input.className = qtyClass(qty, sku.available);
+    }
+    renderColors(); renderCommit();
+  }
+  function commitDraft() {
+    const p = productBy(S.ref); if (!p) return;
+    const before = refPieces(p.reference);
+    for (const s of skusOf(p)) {
+      const q = S.draft.get(s.productCode) || 0;
+      if (q) S.cart.set(s.productCode, q); else S.cart.delete(s.productCode);
+    }
+    store.set("atc-cart", [...S.cart]);
+    const after = refPieces(p.reference);
+    toast(!after ? "Referência removida do pedido" : before ? `Pedido atualizado: ${after} peças de ${p.name}` : `${after} peças adicionadas ao pedido`);
+    renderTabs(); updateCardBadge(p.reference);
+    leaveProduct();
+  }
+  function updateCardBadge(ref) {
+    const b = document.querySelector(`.card[data-ref="${CSS.escape(ref)}"] .in-cart`);
+    if (b) { const q = refPieces(ref); b.textContent = q ? `${q} no pedido` : ""; }
+  }
+  function leaveProduct() {
+    S.draft = new Map();
+    if (S.fromApp) history.back(); else location.hash = "#/";
   }
 
-  // ---------- render: gaveta ----------
+  // ---------- render: pedido ----------
   function groupLines(lines) {
     const m = new Map();
     for (const l of lines) {
@@ -501,72 +906,90 @@ a.wa {
     }
     return [...m.values()];
   }
+  const field = (b, id, label, attrs = "") => `<div class="field"><label for="b-${id}">${label}</label>
+    <input id="b-${id}" name="${id}" value="${esc(b[id] || "")}" ${attrs}><span class="err" data-err="${id}"></span></div>`;
+  const buyerFields = b => `${field(b, "name", "Seu nome", 'autocomplete="name" required')}
+    ${field(b, "company", "Loja / razão social", 'autocomplete="organization" required')}
+    <div class="row2">${field(b, "document", "CNPJ ou CPF", 'inputmode="numeric" required')}
+    ${field(b, "phone", "WhatsApp com DDD", 'inputmode="tel" autocomplete="tel" required')}</div>
+    ${field(b, "city", "Cidade / UF", 'autocomplete="address-level2" required')}`;
 
-  function renderDrawer() {
-    document.querySelectorAll(".steps span").forEach(s =>
-      s.toggleAttribute("aria-current", false) || (s.dataset.step === S.step && s.setAttribute("aria-current", "step")));
-    const body = $("#drawerBody"), foot = $("#drawerFoot");
+  function renderCart() {
+    const order = ["cart", "buyer", "done"];
+    document.querySelectorAll(".steps li").forEach(s => {
+      const d = order.indexOf(s.dataset.step) - order.indexOf(S.step);
+      s.classList.toggle("past", d < 0);
+      if (d === 0) s.setAttribute("aria-current", "step"); else s.removeAttribute("aria-current");
+    });
+    const body = $("#cartBody"), foot = $("#cartFoot");
     const lines = cartLines();
-    const total = lines.reduce((a, l) => a + l.subtotal, 0);
-    const pieces = lines.reduce((a, l) => a + l.quantity, 0);
+    const total = sum(lines, l => l.subtotal), pieces = sum(lines, l => l.quantity);
     const probs = cartProblems(lines);
 
     if (S.step === "cart") {
-      $("#drawerTitle").textContent = "Seu pedido";
+      $("#cartTitle").textContent = "Seu pedido";
       if (!lines.length) {
-        body.innerHTML = `<p class="note">O carrinho está vazio. Preencha as quantidades na grade de cada referência.</p>`;
-        foot.innerHTML = `<button class="ghost" type="button" data-close>Voltar ao catálogo</button>`;
+        body.innerHTML = `<div class="empty-cart"><span class="ico">${BAG}</span>
+          <p class="note">Seu pedido está vazio. Abra uma referência, preencha a grade e toque em “Adicionar ao pedido”.</p>
+          <a class="primary" href="#/">Ver referências</a></div>`;
+        foot.innerHTML = "";
         return;
       }
       body.innerHTML = groupLines(lines).map(g => {
-        const sub = g.items.reduce((a, l) => a + l.subtotal, 0);
+        const sub = sum(g.items, l => l.subtotal);
         const grade = g.items.map(i => `${i.size}×${i.quantity}`).join(" · ");
-        return `<div class="line"><b>${esc(g.name)} · ${esc(g.color)}</b><span class="v">${brl(sub)}</span>
-          <span class="g">ref. ${esc(g.reference)} — ${esc(grade)}</span>
-          <button class="rm" type="button" data-remove="${esc(g.reference)}|${esc(g.color)}">remover</button></div>`;
+        return `<div class="line"><span class="art" style="background:${tintFor(g.color)}">${iconFor(g.name)}</span>
+          <b>${esc(g.name)} · ${esc(g.color)}</b><span class="v">${brl(sub)}</span>
+          <span class="g">${esc(grade)}</span>
+          <span class="acts"><a href="#/p/${encodeURIComponent(g.reference)}">editar</a>
+            <button class="rm" type="button" data-remove="${esc(g.reference)}|${esc(g.color)}">remover</button></span></div>`;
       }).join("") + (probs.length ? `<div class="problems"><b>Antes de continuar:</b><ul>${probs.map(p => `<li>${esc(p)}</li>`).join("")}</ul></div>` : "");
       const pct = Math.min(100, (total / S.config.minOrderValue) * 100);
-      foot.innerHTML = `<div class="totals"><div><span>${pieces} peças</span><span class="mono">${lines.length} SKUs</span></div>
+      foot.innerHTML = `<div class="totals"><div><span>${pieces} peças · ${lines.length} SKUs</span><span>mínimo ${brl(S.config.minOrderValue)}</span></div>
         <div class="big"><span>Total</span><span>${brl(total)}</span></div></div>
-        <div class="meter" aria-label="Progresso até o pedido mínimo"><i style="width:${pct}%"></i></div>
+        <div class="meter" role="progressbar" aria-label="Progresso até o pedido mínimo" aria-valuenow="${Math.round(pct)}" aria-valuemin="0" aria-valuemax="100"><i class="${pct >= 100 ? "full" : ""}" style="width:${pct}%"></i></div>
         <button class="primary" type="button" id="toBuyer" ${probs.length ? "disabled" : ""}>Continuar para seus dados</button>`;
       return;
     }
 
     if (S.step === "buyer") {
-      $("#drawerTitle").textContent = "Seus dados";
+      $("#cartTitle").textContent = "Seus dados";
       const b = S.buyer;
-      const f = (id, label, attrs = "") => `<div class="field"><label for="b-${id}">${label}</label>
-        <input id="b-${id}" name="${id}" value="${esc(b[id])}" ${attrs}><span class="err" id="e-${id}"></span></div>`;
       body.innerHTML = `<form class="buyer" id="buyerForm" novalidate>
-        ${f("name", "Seu nome", 'autocomplete="name" required')}
-        ${f("company", "Loja / razão social", 'autocomplete="organization" required')}
-        <div class="row2">${f("document", "CNPJ ou CPF", 'inputmode="numeric" required')}
-        ${f("phone", "WhatsApp com DDD", 'inputmode="tel" autocomplete="tel" required')}</div>
-        ${f("city", "Cidade / UF", 'autocomplete="address-level2" required')}
+        ${buyerFields(b)}
         <div class="field"><label for="b-notes">Observações (opcional)</label>
           <textarea id="b-notes" name="notes" placeholder="Prazo, transportadora preferida, forma de pagamento…">${esc(b.notes)}</textarea></div>
         ${S.problems.length ? `<div class="problems"><b>O estoque mudou:</b><ul>${S.problems.map(p => `<li>${esc(p)}</li>`).join("")}</ul></div>` : ""}
       </form>`;
       foot.innerHTML = `<div class="totals"><div class="big"><span>${pieces} peças</span><span>${brl(total)}</span></div></div>
-        <button class="primary" type="submit" form="buyerForm" id="send" ${S.sending ? "disabled" : ""}>${S.sending ? "Conferindo estoque…" : `Enviar pedido para ${esc(S.config.sellerName)}`}</button>
+        <button class="primary" type="submit" form="buyerForm" id="send" ${S.sending ? "disabled" : ""}>${S.sending ? `<span class="spin" aria-hidden="true"></span>Conferindo estoque…` : `Enviar pedido para ${esc(S.config.sellerName)}`}</button>
         <button class="ghost" type="button" id="backCart">Voltar aos itens</button>`;
       return;
     }
 
-    // done
     const r = S.result;
-    $("#drawerTitle").textContent = "Pedido pronto";
-    body.innerHTML = `<div class="done"><div class="tick" aria-hidden="true">✓</div>
+    $("#cartTitle").textContent = "Pedido pronto";
+    body.innerHTML = `<div class="done"><div class="tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
       <h3>${r.sent ? `Pedido enviado para ${esc(S.config.sellerName)}` : "Falta só um toque"}</h3>
-      <p class="note"><span class="mono">${esc(r.orderId)}</span> · ${brl(r.total)}</p>
+      <p class="note">${esc(r.orderId)} · ${brl(r.total)}</p>
       <p class="note">${r.sent
         ? `${esc(S.config.sellerName)} recebeu o pedido no WhatsApp e vai falar com você para confirmar frete e pagamento.`
-        : `Abra o WhatsApp pelo botão abaixo e envie a mensagem que já vai preenchida para ${esc(S.config.sellerName)}. Se o botão não abrir, copie o texto e mande para <b class="mono">${esc(r.sellerPhone || "")}</b>.`}</p>
+        : `Abra o WhatsApp pelo botão abaixo e envie a mensagem que já vai preenchida para ${esc(S.config.sellerName)}. Se o botão não abrir, copie o texto e mande para <b>${esc(r.sellerPhone || "")}</b>.`}</p>
       <pre class="msg" id="msg">${esc(r.message)}</pre></div>`;
     foot.innerHTML = (r.whatsappUrl ? `<a class="wa" href="${esc(r.whatsappUrl)}" target="_blank" rel="noopener">Abrir WhatsApp com o pedido</a>` : "") +
       `<button class="ghost" type="button" id="copyMsg">Copiar mensagem</button>
        <button class="ghost" type="button" id="newOrder">Fazer outro pedido</button>`;
+  }
+
+  // ---------- render: perfil ----------
+  function renderProfile() {
+    $("#profile").innerHTML = `<form class="buyer" id="profileForm" novalidate>${buyerFields(S.buyer)}
+        <button class="primary" type="submit">Salvar dados</button></form>
+      <div class="facts">
+        <div><span>Pedido mínimo</span><b>${brl(S.config.minOrderValue)}</b></div>
+        <div><span>Mínimo por referência</span><b>${S.config.minQtyPerRef} peças</b></div>
+        <div><span>Atendimento</span><b>WhatsApp</b></div>
+      </div>`;
   }
 
   // ---------- demo: monta o pedido no navegador ----------
@@ -605,38 +1028,79 @@ a.wa {
       whatsappUrl: `https://wa.me/${DEMO.config.sellerPhone}?text=${encodeURIComponent(message)}` };
   }
 
+  // ---------- navegação ----------
+  function parseHash() {
+    const h = location.hash.slice(1) || "/";
+    if (h.startsWith("/p/")) return { view: "product", ref: decodeURIComponent(h.slice(3)) };
+    if (h === "/pedido") return { view: "cart" };
+    if (h === "/perfil") return { view: "profile" };
+    return { view: "home" };
+  }
+  function route() {
+    if (!S.products.length) return;
+    const r = parseHash(), prev = S.view;
+    if (r.view === "product" && !productBy(r.ref)) { location.replace("#/"); return; }
+    if (prev === "home") S.homeScroll = scrollY;
+    if (prev === "cart" && S.step === "done" && r.view !== "cart") { S.step = "cart"; S.result = null; }
+    if (r.view === "product") S.fromApp = S.routed; // aberto por link direto: voltar leva ao início
+    S.routed = true;
+    if (prev === "product" && r.view !== "product") S.draft = new Map();
+
+    const swap = () => {
+      if (r.view === "product") openProduct(productBy(r.ref));
+      if (r.view === "cart") renderCart();
+      if (r.view === "profile") renderProfile();
+      document.querySelectorAll(".view").forEach(v => (v.hidden = v.dataset.view !== r.view));
+      document.body.dataset.view = S.view = r.view;
+      renderTabs();
+      scrollTo(0, r.view === "home" ? S.homeScroll : 0);
+    };
+    // cartão ↔ produto: o quadro da peça cresce até a tela do produto e volta ao lugar
+    const pair = (prev === "home" && r.view === "product") || (prev === "product" && r.view === "home");
+    if (pair && document.startViewTransition && !reduced()) {
+      const ref = r.view === "product" ? r.ref : S.ref;
+      const art = document.querySelector(`.card[data-ref="${CSS.escape(ref)}"] .card-art`);
+      if (art) art.style.viewTransitionName = "art";
+      document.startViewTransition(swap).finished.finally(() => { if (art) art.style.viewTransitionName = ""; });
+      return;
+    }
+    swap();
+    if (prev !== r.view && !reduced()) {
+      const v = document.querySelector(`.view[data-view="${r.view}"]`);
+      v.classList.remove("in", "in-r"); void v.offsetWidth; v.classList.add(r.view === "product" ? "in-r" : "in");
+    }
+  }
+
   // ---------- ações ----------
   function setQty(code, qty) {
     qty = Math.max(0, Math.floor(Number(qty) || 0));
     if (qty) S.cart.set(code, qty); else S.cart.delete(code);
     store.set("atc-cart", [...S.cart]);
-    const input = document.getElementById(`q-${code}`), sku = S.index.get(code);
-    if (input && sku) {
-      if (document.activeElement !== input) input.value = qty || "";
-      input.className = qty ? (qty > sku.available ? "qty over" : "qty has") : "qty";
-    }
-    if (sku) renderRefFoot(sku.reference);
-    renderHeader();
+    const sku = S.index.get(code); if (sku) updateCardBadge(sku.reference);
+    renderTabs();
   }
-  function openDrawer(step = "cart") { S.step = step; $("#drawer").hidden = false; $("#scrim").hidden = false; renderDrawer(); }
-  function closeDrawer() { $("#drawer").hidden = true; $("#scrim").hidden = true; if (S.step === "done") { S.step = "cart"; } }
+  function goCart(step) { S.step = step; if (S.view === "cart") renderCart(); else location.hash = "#/pedido"; scrollTo(0, 0); }
 
-  function validateBuyer(form) {
+  function validateBuyer(form, keys = ["name", "company", "document", "phone", "city"]) {
     const b = Object.fromEntries(new FormData(form)); const errs = {};
     if ((b.name || "").trim().length < 2) errs.name = "Informe seu nome.";
     if ((b.company || "").trim().length < 2) errs.company = "Informe o nome da loja.";
     if (![11, 14].includes(digits(b.document).length)) errs.document = "CNPJ com 14 dígitos ou CPF com 11.";
     if (digits(b.phone).length < 10) errs.phone = "WhatsApp com DDD.";
     if ((b.city || "").trim().length < 2) errs.city = "Informe a cidade.";
-    for (const k of ["name", "company", "document", "phone", "city"]) { const e = $(`#e-${k}`); if (e) e.textContent = errs[k] || ""; }
+    for (const k of keys) {
+      const e = form.querySelector(`[data-err="${k}"]`); if (e) e.textContent = errs[k] || "";
+      const i = form.querySelector(`[name="${k}"]`); if (i) i.setAttribute("aria-invalid", errs[k] ? "true" : "false");
+    }
+    const first = form.querySelector('[aria-invalid="true"]'); if (first) first.focus();
     return { b, ok: !Object.keys(errs).length };
   }
 
   async function submitOrder(form) {
     const { b, ok } = validateBuyer(form);
-    S.buyer = { ...S.buyer, ...b }; store.set("atc-buyer", S.buyer);
+    S.buyer = { ...S.buyer, ...b }; store.set("atc-buyer", S.buyer); renderHello();
     if (!ok || S.sending) return;
-    S.sending = true; S.problems = []; renderDrawer();
+    S.sending = true; S.problems = []; renderCart();
     try {
       const payload = {
         buyer: { ...S.buyer, document: digits(S.buyer.document), phone: digits(S.buyer.phone) },
@@ -646,10 +1110,10 @@ a.wa {
       if (res.problems) { S.problems = res.problems; await reloadCatalog(true); }
       else {
         S.result = { ...res, sellerPhone: DEMO ? DEMO.config.sellerPhone : "" };
-        S.cart.clear(); store.set("atc-cart", []); renderList(); renderHeader(); S.step = "done";
+        S.cart.clear(); store.set("atc-cart", []); renderList(); renderTabs(); S.step = "done";
       }
     } catch (e) { toast(e.message || "Não foi possível enviar. Tente de novo."); }
-    finally { S.sending = false; renderDrawer(); }
+    finally { S.sending = false; renderCart(); }
   }
 
   async function reloadCatalog(refresh = false) {
@@ -659,33 +1123,51 @@ a.wa {
       b.totalAvailable - a.totalAvailable || a.name.localeCompare(b.name, "pt-BR"));
     S.updatedAt = data.updatedAt; indexProducts(S.products);
     for (const code of [...S.cart.keys()]) if (!S.index.has(code)) S.cart.delete(code);
-    renderGroups(); renderStamp(); renderList(); renderHeader();
+    renderGroups(); renderStamp(); renderHeroArt(); renderList(); renderTabs();
   }
 
   // ---------- eventos ----------
   document.addEventListener("input", e => {
-    if (e.target.matches(".qty")) setQty(Number(e.target.dataset.code), e.target.value);
+    if (e.target.matches(".qty")) setDraft(Number(e.target.dataset.code), e.target.value);
     if (e.target.id === "search") { S.q = e.target.value; renderList(); }
   });
   document.addEventListener("click", e => {
-    const t = e.target.closest("button, [data-close]"); if (!t) return;
-    if (t.dataset.group) { S.group = t.dataset.group; renderGroups(); renderList(); }
-    else if (t.dataset.grade) {
-      const [ref, color] = t.dataset.grade.split("|");
-      const p = S.products.find(x => x.reference === ref); const c = p.colors.find(x => x.color === color);
+    const t = e.target.closest("button"); if (!t) return;
+    if (t.dataset.group) {
+      S.cat = t.dataset.group;
+      document.querySelectorAll("#groups button").forEach(b => b.setAttribute("aria-pressed", b === t));
+      renderList();
+    }
+    else if (t.dataset.color) {
+      S.color = t.dataset.color;
+      $("#colorName").textContent = S.color;
+      $("#pdArt").style.background = tintFor(S.color);
+      document.querySelectorAll("#colors button").forEach(b => b.setAttribute("aria-pressed", b === t));
+      renderSizes();
+    }
+    else if (t.id === "plusGrade") {
+      const c = productBy(S.ref).colors.find(x => x.color === S.color);
       let capped = false;
-      for (const s of c.skus) { const cur = S.cart.get(s.productCode) || 0; if (cur < s.available) setQty(s.productCode, cur + 1); else capped = true; }
+      for (const s of c.skus) { const cur = S.draft.get(s.productCode) || 0; if (cur < s.available) setDraft(s.productCode, cur + 1); else capped = true; }
       if (capped) toast("Alguns tamanhos já estão no limite do estoque.");
     }
-    else if (t.id === "openCart") openDrawer("cart");
-    else if (t.id === "closeCart" || t.hasAttribute("data-close")) closeDrawer();
-    else if (t.id === "toBuyer") { S.problems = []; openDrawer("buyer"); }
-    else if (t.id === "backCart") openDrawer("cart");
+    else if (t.id === "commit") { if (t.dataset.mode === "view") location.hash = "#/pedido"; else commitDraft(); }
+    else if (t.id === "back") {
+      const p = productBy(S.ref);
+      if (p && draftDirty(p) && !confirm("Sair sem adicionar a grade ao pedido?")) return;
+      leaveProduct();
+    }
+    else if (t.id === "toList") $("#listHead").scrollIntoView({ behavior: reduced() ? "auto" : "smooth" });
+    else if (t.id === "toBuyer") { S.problems = []; goCart("buyer"); }
+    else if (t.id === "backCart") goCart("cart");
     else if (t.id === "refresh") reloadCatalog(true).then(() => toast("Estoque atualizado"));
     else if (t.dataset.remove) {
       const [ref, color] = t.dataset.remove.split("|");
-      for (const l of cartLines()) if (l.reference === ref && l.color === color) setQty(l.productCode, 0);
-      renderDrawer();
+      t.closest(".line").classList.add("leaving");
+      setTimeout(() => {
+        for (const l of cartLines()) if (l.reference === ref && l.color === color) setQty(l.productCode, 0);
+        renderCart();
+      }, reduced() ? 0 : 200);
     }
     else if (t.id === "copyMsg") {
       const text = S.result?.message || "";
@@ -694,20 +1176,31 @@ a.wa {
         const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); toast("Texto selecionado: copie com Ctrl+C");
       });
     }
-    else if (t.id === "newOrder") { closeDrawer(); S.result = null; }
+    else if (t.id === "newOrder") { S.step = "cart"; S.result = null; location.hash = "#/"; }
   });
-  $("#scrim").addEventListener("click", closeDrawer);
-  document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("#drawer").hidden) closeDrawer(); });
-  document.addEventListener("submit", e => { if (e.target.id === "buyerForm") { e.preventDefault(); submitOrder(e.target); } });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && S.view === "product") $("#back").click(); });
+  document.addEventListener("submit", e => {
+    e.preventDefault();
+    if (e.target.id === "buyerForm") submitOrder(e.target);
+    if (e.target.id === "profileForm") {
+      const { b, ok } = validateBuyer(e.target);
+      if (!ok) return;
+      S.buyer = { ...S.buyer, ...b }; store.set("atc-buyer", S.buyer); renderHello();
+      toast("Dados salvos: vão preencher seus próximos pedidos");
+    }
+  });
+  addEventListener("hashchange", route);
 
   // ---------- início ----------
   (async () => {
     S.cart = new Map(store.get("atc-cart", []));
     S.buyer = { ...S.buyer, ...store.get("atc-buyer", {}) };
+    renderHello();
     try {
       S.config = { ...S.config, ...(await api.config()) };
       renderRules();
       await reloadCatalog();
+      route();
     } catch (e) {
       $("#stamp").textContent = "";
       $("#list").innerHTML = `<div class="empty">Não foi possível carregar o estoque agora. ${esc(e.message || "")}<br>Recarregue a página em alguns minutos.</div>`;

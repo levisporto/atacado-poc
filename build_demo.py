@@ -30,7 +30,8 @@ demo = {
     "products": group_catalog(mock_skus()),
 }
 
-page = f"""<title>Bebêtenkitê Atacado</title>
+page = f"""<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bebêtenkitê Atacado</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="{fonts}">
 <style>
