@@ -34,22 +34,7 @@
   --tab-h: 68px;
   --spring: cubic-bezier(.2, .9, .3, 1.15);
   --ease-out: cubic-bezier(.2, .8, .2, 1);
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #1a1714; --bg-2: #24201b; --surface: #26221d; --ink: #f4ede2; --ink-2: #d6ccbe; --muted: #a2978a;
-    --line: #3a342c; --tile: #312b24; --on-ink: #1a1714; --accent: #f08a55;
-    --ok: #7cc79a; --ok-soft: #1f3527; --warn: #f0b072; --warn-soft: #3a2c1c; --danger: #f2869a; --danger-soft: #3d1f28;
-    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25); --shadow-lg: 0 18px 50px rgba(0, 0, 0, .55);
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #1a1714; --bg-2: #24201b; --surface: #26221d; --ink: #f4ede2; --ink-2: #d6ccbe; --muted: #a2978a;
-  --line: #3a342c; --tile: #312b24; --on-ink: #1a1714; --accent: #f08a55;
-  --ok: #7cc79a; --ok-soft: #1f3527; --warn: #f0b072; --warn-soft: #3a2c1c; --danger: #f2869a; --danger-soft: #3d1f28;
-  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25); --shadow-lg: 0 18px 50px rgba(0, 0, 0, .55);
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 * { box-sizing: border-box; }
@@ -130,6 +115,7 @@ h1, h2, h3 { font-family: var(--f-display); font-weight: 700; letter-spacing: -.
   color: var(--ink); box-shadow: 0 10px 24px rgba(0, 0, 0, .25);
 }
 .hero-art span svg { width: 44px; height: 44px; stroke-width: 1.5; }
+.hero-art span { overflow: hidden; }
 .hero-art span:nth-child(1) { top: 18px; right: 24px; transform: rotate(8deg); }
 .hero-art span:nth-child(2) { top: 96px; right: 56px; transform: rotate(-10deg); }
 .hero-art span:nth-child(3) { top: 132px; right: -14px; transform: rotate(14deg); }
@@ -170,6 +156,10 @@ h1, h2, h3 { font-family: var(--f-display); font-weight: 700; letter-spacing: -.
   position: relative; aspect-ratio: 1; border-radius: 16px; display: grid; place-items: center; color: var(--ink);
 }
 .card-art svg { width: 46%; height: 46%; stroke-width: 1.3; }
+/* fotos: fundo branco do estúdio, ocupam o quadro todo; o tom da cor fica por trás enquanto carregam */
+.card-art, .line .art { overflow: hidden; }
+.card-art > img, .hero-art img, .line .art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.line .art { position: relative; }
 .in-cart {
   position: absolute; left: 8px; top: 8px; padding: 3px 9px; border-radius: 999px; font-size: .72rem; font-weight: 700;
   background: var(--ok-soft); color: var(--ok);
@@ -200,6 +190,14 @@ body[data-view="product"] .tabbar { display: none; }
   view-transition-name: art; transition: background-color .35s var(--ease-out);
 }
 .pd-art svg { width: 44%; height: 44%; stroke-width: 1.15; }
+.pd-art.photo { overflow: hidden; }
+.pd-art.photo .mark { display: none; }
+.pd-photos { position: absolute; inset: 0; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.pd-photos::-webkit-scrollbar { display: none; }
+.pd-photos img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; scroll-snap-align: center; }
+.pd-dots { position: absolute; left: 0; right: 0; bottom: 12px; display: flex; justify-content: center; gap: 6px; pointer-events: none; }
+.pd-dots i { width: 7px; height: 7px; border-radius: 50%; background: rgba(0, 0, 0, .18); transition: background-color .2s, transform .2s; }
+.pd-dots i.on { background: var(--ink); transform: scale(1.15); }
 .pd-art .mark { position: absolute; left: 20px; bottom: 16px; font-family: var(--f-display); font-weight: 700; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; opacity: .72; }
 .pd-art .stock { position: absolute; right: 14px; top: 14px; padding: 4px 11px; border-radius: 999px; background: var(--surface); font-size: .78rem; font-weight: 600; }
 .pd-info { display: grid; gap: 6px; }
@@ -503,7 +501,7 @@ pre.msg {
 </nav>
 <div class="toast" id="toast" role="status" hidden></div>
 
-<script>window.ATACADO_DEMO = {"config": {"mock": true, "minOrderValue": 50.0, "minQtyPerRef": 2, "sellerName": "Gleice", "sellerPhone": "5585999999999"}, "updatedAt": "2026-10-15T10:51:28.271138-03:00", "products": [{"reference": "10421", "name": "Body Manga Curta Canelado", "group": "Bebê", "colors": [{"color": "Off White", "skus": [{"productCode": 100001, "size": "RN", "available": 60, "price": 24.9}, {"productCode": 100004, "size": "G", "available": 8, "price": 24.9}]}, {"color": "Rosa Bebê", "skus": [{"productCode": 100005, "size": "RN", "available": 5, "price": 24.9}, {"productCode": 100006, "size": "P", "available": 5, "price": 24.9}, {"productCode": 100007, "size": "M", "available": 3, "price": 24.9}]}, {"color": "Azul Névoa", "skus": [{"productCode": 100009, "size": "RN", "available": 60, "price": 24.9}, {"productCode": 100010, "size": "P", "available": 36, "price": 24.9}, {"productCode": 100012, "size": "G", "available": 48, "price": 24.9}]}], "sizes": ["RN", "P", "M", "G"], "minPrice": 24.9, "maxPrice": 24.9, "totalAvailable": 225}, {"reference": "10422", "name": "Body Manga Longa Suedine", "group": "Bebê", "colors": [{"color": "Mescla", "skus": [{"productCode": 100013, "size": "RN", "available": 18, "price": 29.9}]}, {"color": "Verde Sálvia", "skus": [{"productCode": 100017, "size": "RN", "available": 5, "price": 29.9}, {"productCode": 100018, "size": "P", "available": 5, "price": 29.9}, {"productCode": 100019, "size": "M", "available": 36, "price": 29.9}, {"productCode": 100020, "size": "G", "available": 48, "price": 29.9}]}, {"color": "Off White", "skus": [{"productCode": 100022, "size": "P", "available": 36, "price": 29.9}, {"productCode": 100023, "size": "M", "available": 5, "price": 29.9}, {"productCode": 100024, "size": "G", "available": 60, "price": 29.9}]}], "sizes": ["RN", "P", "M", "G"], "minPrice": 29.9, "maxPrice": 29.9, "totalAvailable": 213}, {"reference": "10470", "name": "Kit 3 Culotes Suedine", "group": "Bebê", "colors": [{"color": "Neutros", "skus": [{"productCode": 100033, "size": "P", "available": 18, "price": 39.9}, {"productCode": 100034, "size": "M", "available": 12, "price": 39.9}, {"productCode": 100035, "size": "G", "available": 8, "price": 39.9}]}, {"color": "Coloridos", "skus": [{"productCode": 100036, "size": "P", "available": 3, "price": 39.9}, {"productCode": 100037, "size": "M", "available": 5, "price": 39.9}, {"productCode": 100038, "size": "G", "available": 12, "price": 39.9}]}], "sizes": ["P", "M", "G"], "minPrice": 39.9, "maxPrice": 39.9, "totalAvailable": 58}, {"reference": "10455", "name": "Macacão Plush com Pezinho", "group": "Bebê", "colors": [{"color": "Bege", "skus": [{"productCode": 100025, "size": "RN", "available": 36, "price": 54.9}, {"productCode": 100026, "size": "P", "available": 18, "price": 54.9}, {"productCode": 100027, "size": "M", "available": 5, "price": 54.9}, {"productCode": 100028, "size": "G", "available": 24, "price": 54.9}]}, {"color": "Rosa Bebê", "skus": [{"productCode": 100029, "size": "RN", "available": 48, "price": 54.9}, {"productCode": 100030, "size": "P", "available": 8, "price": 54.9}, {"productCode": 100032, "size": "G", "available": 3, "price": 54.9}]}], "sizes": ["RN", "P", "M", "G"], "minPrice": 54.9, "maxPrice": 54.9, "totalAvailable": 142}, {"reference": "20171", "name": "Bermuda Moletom", "group": "Infantil", "colors": [{"color": "Marinho", "skus": [{"productCode": 100093, "size": "2", "available": 5, "price": 36.9}, {"productCode": 100094, "size": "4", "available": 60, "price": 36.9}, {"productCode": 100095, "size": "6", "available": 12, "price": 36.9}, {"productCode": 100097, "size": "10", "available": 5, "price": 36.9}]}, {"color": "Mescla", "skus": [{"productCode": 100099, "size": "4", "available": 12, "price": 36.9}, {"productCode": 100100, "size": "6", "available": 18, "price": 36.9}, {"productCode": 100101, "size": "8", "available": 8, "price": 36.9}]}, {"color": "Preto", "skus": [{"productCode": 100103, "size": "2", "available": 5, "price": 36.9}, {"productCode": 100104, "size": "4", "available": 48, "price": 36.9}, {"productCode": 100105, "size": "6", "available": 12, "price": 36.9}, {"productCode": 100106, "size": "8", "available": 5, "price": 36.9}, {"productCode": 100107, "size": "10", "available": 60, "price": 36.9}]}], "sizes": ["2", "4", "6", "8", "10"], "minPrice": 36.9, "maxPrice": 36.9, "totalAvailable": 250}, {"reference": "20166", "name": "Camiseta Estampada Dino", "group": "Infantil", "colors": [{"color": "Verde", "skus": [{"productCode": 100083, "size": "2", "available": 60, "price": 32.9}, {"productCode": 100084, "size": "4", "available": 3, "price": 32.9}, {"productCode": 100085, "size": "6", "available": 36, "price": 32.9}, {"productCode": 100086, "size": "8", "available": 5, "price": 32.9}, {"productCode": 100087, "size": "10", "available": 3, "price": 32.9}]}, {"color": "Cinza Mescla", "skus": [{"productCode": 100088, "size": "2", "available": 24, "price": 32.9}, {"productCode": 100089, "size": "4", "available": 18, "price": 32.9}, {"productCode": 100090, "size": "6", "available": 8, "price": 32.9}, {"productCode": 100091, "size": "8", "available": 60, "price": 32.9}, {"productCode": 100092, "size": "10", "available": 36, "price": 32.9}]}], "sizes": ["2", "4", "6", "8", "10"], "minPrice": 32.9, "maxPrice": 32.9, "totalAvailable": 253}, {"reference": "20110", "name": "Conjunto Moletinho Urso", "group": "Infantil", "colors": [{"color": "Caramelo", "skus": [{"productCode": 100041, "size": "3", "available": 18, "price": 69.9}]}, {"color": "Marinho", "skus": [{"productCode": 100043, "size": "1", "available": 12, "price": 69.9}, {"productCode": 100044, "size": "2", "available": 12, "price": 69.9}, {"productCode": 100045, "size": "3", "available": 48, "price": 69.9}, {"productCode": 100046, "size": "4", "available": 8, "price": 69.9}]}], "sizes": ["1", "2", "3", "4"], "minPrice": 69.9, "maxPrice": 69.9, "totalAvailable": 98}, {"reference": "20118", "name": "Conjunto Verão Linho", "group": "Infantil", "colors": [{"color": "Areia", "skus": [{"productCode": 100048, "size": "2", "available": 24, "price": 74.9}, {"productCode": 100049, "size": "3", "available": 36, "price": 74.9}, {"productCode": 100051, "size": "6", "available": 18, "price": 74.9}]}, {"color": "Terracota", "skus": [{"productCode": 100053, "size": "2", "available": 36, "price": 74.9}, {"productCode": 100054, "size": "3", "available": 8, "price": 74.9}, {"productCode": 100055, "size": "4", "available": 60, "price": 74.9}, {"productCode": 100056, "size": "6", "available": 48, "price": 74.9}]}], "sizes": ["2", "3", "4", "6"], "minPrice": 74.9, "maxPrice": 74.9, "totalAvailable": 230}, {"reference": "20152", "name": "Jardineira Sarja", "group": "Infantil", "colors": [{"color": "Jeans Claro", "skus": [{"productCode": 100075, "size": "1", "available": 12, "price": 84.9}, {"productCode": 100076, "size": "2", "available": 5, "price": 84.9}, {"productCode": 100077, "size": "3", "available": 60, "price": 84.9}, {"productCode": 100078, "size": "4", "available": 8, "price": 84.9}]}, {"color": "Caqui", "skus": [{"productCode": 100079, "size": "1", "available": 60, "price": 84.9}, {"productCode": 100080, "size": "2", "available": 60, "price": 84.9}, {"productCode": 100082, "size": "4", "available": 48, "price": 84.9}]}], "sizes": ["1", "2", "3", "4"], "minPrice": 84.9, "maxPrice": 84.9, "totalAvailable": 253}, {"reference": "20190", "name": "Pijama Malha Estrelinhas", "group": "Infantil", "colors": [{"color": "Azul", "skus": [{"productCode": 100108, "size": "1", "available": 24, "price": 49.9}, {"productCode": 100109, "size": "2", "available": 18, "price": 49.9}, {"productCode": 100110, "size": "4", "available": 60, "price": 49.9}, {"productCode": 100111, "size": "6", "available": 24, "price": 49.9}, {"productCode": 100112, "size": "8", "available": 3, "price": 49.9}]}, {"color": "Rosa", "skus": [{"productCode": 100113, "size": "1", "available": 8, "price": 49.9}, {"productCode": 100114, "size": "2", "available": 3, "price": 49.9}, {"productCode": 100115, "size": "4", "available": 5, "price": 49.9}, {"productCode": 100116, "size": "6", "available": 36, "price": 49.9}, {"productCode": 100117, "size": "8", "available": 36, "price": 49.9}]}], "sizes": ["1", "2", "4", "6", "8"], "minPrice": 49.9, "maxPrice": 49.9, "totalAvailable": 217}, {"reference": "20140", "name": "Vestido Lese Babado", "group": "Infantil", "colors": [{"color": "Branco", "skus": [{"productCode": 100057, "size": "1", "available": 12, "price": 79.9}, {"productCode": 100058, "size": "2", "available": 48, "price": 79.9}, {"productCode": 100059, "size": "3", "available": 5, "price": 79.9}, {"productCode": 100062, "size": "8", "available": 60, "price": 79.9}]}, {"color": "Lavanda", "skus": [{"productCode": 100063, "size": "1", "available": 5, "price": 79.9}, {"productCode": 100064, "size": "2", "available": 8, "price": 79.9}, {"productCode": 100066, "size": "4", "available": 5, "price": 79.9}, {"productCode": 100068, "size": "8", "available": 18, "price": 79.9}]}, {"color": "Amarelo Manteiga", "skus": [{"productCode": 100069, "size": "1", "available": 8, "price": 79.9}, {"productCode": 100070, "size": "2", "available": 24, "price": 79.9}, {"productCode": 100071, "size": "3", "available": 60, "price": 79.9}, {"productCode": 100072, "size": "4", "available": 12, "price": 79.9}, {"productCode": 100073, "size": "6", "available": 3, "price": 79.9}, {"productCode": 100074, "size": "8", "available": 12, "price": 79.9}]}], "sizes": ["1", "2", "3", "4", "6", "8"], "minPrice": 79.9, "maxPrice": 79.9, "totalAvailable": 280}, {"reference": "30031", "name": "Kit Touca + Luva + Meia", "group": "Maternidade", "colors": [{"color": "Branco", "skus": [{"productCode": 100123, "size": "RN", "available": 12, "price": 27.9}, {"productCode": 100124, "size": "P", "available": 5, "price": 27.9}]}, {"color": "Azul", "skus": [{"productCode": 100125, "size": "RN", "available": 3, "price": 27.9}, {"productCode": 100126, "size": "P", "available": 36, "price": 27.9}]}, {"color": "Rosa", "skus": [{"productCode": 100127, "size": "RN", "available": 24, "price": 27.9}]}], "sizes": ["RN", "P"], "minPrice": 27.9, "maxPrice": 27.9, "totalAvailable": 80}, {"reference": "30020", "name": "Manta Soft Bordada", "group": "Maternidade", "colors": [{"color": "Cinza", "skus": [{"productCode": 100120, "size": "U", "available": 18, "price": 64.9}]}, {"color": "Bege", "skus": [{"productCode": 100121, "size": "U", "available": 48, "price": 64.9}]}, {"color": "Rosa", "skus": [{"productCode": 100122, "size": "U", "available": 18, "price": 64.9}]}], "sizes": ["U"], "minPrice": 64.9, "maxPrice": 64.9, "totalAvailable": 84}, {"reference": "30012", "name": "Saída de Maternidade Tricô", "group": "Maternidade", "colors": [{"color": "Off White", "skus": [{"productCode": 100118, "size": "RN", "available": 8, "price": 119.9}]}, {"color": "Cru", "skus": [{"productCode": 100119, "size": "RN", "available": 48, "price": 119.9}]}], "sizes": ["RN"], "minPrice": 119.9, "maxPrice": 119.9, "totalAvailable": 56}]};</script>
+<script>window.ATACADO_DEMO = {"config": {"mock": true, "minOrderValue": 500.0, "minQtyPerRef": 6, "sellerName": "Gleice", "sellerPhone": "5585999999999"}, "updatedAt": "2026-10-16T07:58:26.418463-03:00", "products": [{"reference": "10421", "name": "Body Manga Curta Canelado", "group": "Bebê", "colors": [{"color": "Off White", "skus": [{"productCode": 100001, "size": "RN", "available": 60, "price": 24.9}, {"productCode": 100004, "size": "G", "available": 8, "price": 24.9}], "images": []}, {"color": "Rosa Bebê", "skus": [{"productCode": 100005, "size": "RN", "available": 5, "price": 24.9}, {"productCode": 100006, "size": "P", "available": 5, "price": 24.9}, {"productCode": 100007, "size": "M", "available": 3, "price": 24.9}], "images": []}, {"color": "Azul Névoa", "skus": [{"productCode": 100009, "size": "RN", "available": 60, "price": 24.9}, {"productCode": 100010, "size": "P", "available": 36, "price": 24.9}, {"productCode": 100012, "size": "G", "available": 48, "price": 24.9}], "images": []}], "sizes": ["RN", "P", "M", "G"], "minPrice": 24.9, "maxPrice": 24.9, "totalAvailable": 225, "image": null}, {"reference": "10422", "name": "Body Manga Longa Suedine", "group": "Bebê", "colors": [{"color": "Mescla", "skus": [{"productCode": 100013, "size": "RN", "available": 18, "price": 29.9}], "images": []}, {"color": "Verde Sálvia", "skus": [{"productCode": 100017, "size": "RN", "available": 5, "price": 29.9}, {"productCode": 100018, "size": "P", "available": 5, "price": 29.9}, {"productCode": 100019, "size": "M", "available": 36, "price": 29.9}, {"productCode": 100020, "size": "G", "available": 48, "price": 29.9}], "images": []}, {"color": "Off White", "skus": [{"productCode": 100022, "size": "P", "available": 36, "price": 29.9}, {"productCode": 100023, "size": "M", "available": 5, "price": 29.9}, {"productCode": 100024, "size": "G", "available": 60, "price": 29.9}], "images": []}], "sizes": ["RN", "P", "M", "G"], "minPrice": 29.9, "maxPrice": 29.9, "totalAvailable": 213, "image": null}, {"reference": "10470", "name": "Kit 3 Culotes Suedine", "group": "Bebê", "colors": [{"color": "Neutros", "skus": [{"productCode": 100033, "size": "P", "available": 18, "price": 39.9}, {"productCode": 100034, "size": "M", "available": 12, "price": 39.9}, {"productCode": 100035, "size": "G", "available": 8, "price": 39.9}], "images": []}, {"color": "Coloridos", "skus": [{"productCode": 100036, "size": "P", "available": 3, "price": 39.9}, {"productCode": 100037, "size": "M", "available": 5, "price": 39.9}, {"productCode": 100038, "size": "G", "available": 12, "price": 39.9}], "images": []}], "sizes": ["P", "M", "G"], "minPrice": 39.9, "maxPrice": 39.9, "totalAvailable": 58, "image": null}, {"reference": "10455", "name": "Macacão Plush com Pezinho", "group": "Bebê", "colors": [{"color": "Bege", "skus": [{"productCode": 100025, "size": "RN", "available": 36, "price": 54.9}, {"productCode": 100026, "size": "P", "available": 18, "price": 54.9}, {"productCode": 100027, "size": "M", "available": 5, "price": 54.9}, {"productCode": 100028, "size": "G", "available": 24, "price": 54.9}], "images": []}, {"color": "Rosa Bebê", "skus": [{"productCode": 100029, "size": "RN", "available": 48, "price": 54.9}, {"productCode": 100030, "size": "P", "available": 8, "price": 54.9}, {"productCode": 100032, "size": "G", "available": 3, "price": 54.9}], "images": []}], "sizes": ["RN", "P", "M", "G"], "minPrice": 54.9, "maxPrice": 54.9, "totalAvailable": 142, "image": null}, {"reference": "20171", "name": "Bermuda Moletom", "group": "Infantil", "colors": [{"color": "Marinho", "skus": [{"productCode": 100093, "size": "2", "available": 5, "price": 36.9}, {"productCode": 100094, "size": "4", "available": 60, "price": 36.9}, {"productCode": 100095, "size": "6", "available": 12, "price": 36.9}, {"productCode": 100097, "size": "10", "available": 5, "price": 36.9}], "images": []}, {"color": "Mescla", "skus": [{"productCode": 100099, "size": "4", "available": 12, "price": 36.9}, {"productCode": 100100, "size": "6", "available": 18, "price": 36.9}, {"productCode": 100101, "size": "8", "available": 8, "price": 36.9}], "images": []}, {"color": "Preto", "skus": [{"productCode": 100103, "size": "2", "available": 5, "price": 36.9}, {"productCode": 100104, "size": "4", "available": 48, "price": 36.9}, {"productCode": 100105, "size": "6", "available": 12, "price": 36.9}, {"productCode": 100106, "size": "8", "available": 5, "price": 36.9}, {"productCode": 100107, "size": "10", "available": 60, "price": 36.9}], "images": []}], "sizes": ["2", "4", "6", "8", "10"], "minPrice": 36.9, "maxPrice": 36.9, "totalAvailable": 250, "image": null}, {"reference": "20166", "name": "Camiseta Estampada Dino", "group": "Infantil", "colors": [{"color": "Verde", "skus": [{"productCode": 100083, "size": "2", "available": 60, "price": 32.9}, {"productCode": 100084, "size": "4", "available": 3, "price": 32.9}, {"productCode": 100085, "size": "6", "available": 36, "price": 32.9}, {"productCode": 100086, "size": "8", "available": 5, "price": 32.9}, {"productCode": 100087, "size": "10", "available": 3, "price": 32.9}], "images": []}, {"color": "Cinza Mescla", "skus": [{"productCode": 100088, "size": "2", "available": 24, "price": 32.9}, {"productCode": 100089, "size": "4", "available": 18, "price": 32.9}, {"productCode": 100090, "size": "6", "available": 8, "price": 32.9}, {"productCode": 100091, "size": "8", "available": 60, "price": 32.9}, {"productCode": 100092, "size": "10", "available": 36, "price": 32.9}], "images": []}], "sizes": ["2", "4", "6", "8", "10"], "minPrice": 32.9, "maxPrice": 32.9, "totalAvailable": 253, "image": null}, {"reference": "20110", "name": "Conjunto Moletinho Urso", "group": "Infantil", "colors": [{"color": "Caramelo", "skus": [{"productCode": 100041, "size": "3", "available": 18, "price": 69.9}], "images": []}, {"color": "Marinho", "skus": [{"productCode": 100043, "size": "1", "available": 12, "price": 69.9}, {"productCode": 100044, "size": "2", "available": 12, "price": 69.9}, {"productCode": 100045, "size": "3", "available": 48, "price": 69.9}, {"productCode": 100046, "size": "4", "available": 8, "price": 69.9}], "images": []}], "sizes": ["1", "2", "3", "4"], "minPrice": 69.9, "maxPrice": 69.9, "totalAvailable": 98, "image": null}, {"reference": "20118", "name": "Conjunto Verão Linho", "group": "Infantil", "colors": [{"color": "Areia", "skus": [{"productCode": 100048, "size": "2", "available": 24, "price": 74.9}, {"productCode": 100049, "size": "3", "available": 36, "price": 74.9}, {"productCode": 100051, "size": "6", "available": 18, "price": 74.9}], "images": []}, {"color": "Terracota", "skus": [{"productCode": 100053, "size": "2", "available": 36, "price": 74.9}, {"productCode": 100054, "size": "3", "available": 8, "price": 74.9}, {"productCode": 100055, "size": "4", "available": 60, "price": 74.9}, {"productCode": 100056, "size": "6", "available": 48, "price": 74.9}], "images": []}], "sizes": ["2", "3", "4", "6"], "minPrice": 74.9, "maxPrice": 74.9, "totalAvailable": 230, "image": null}, {"reference": "20152", "name": "Jardineira Sarja", "group": "Infantil", "colors": [{"color": "Jeans Claro", "skus": [{"productCode": 100075, "size": "1", "available": 12, "price": 84.9}, {"productCode": 100076, "size": "2", "available": 5, "price": 84.9}, {"productCode": 100077, "size": "3", "available": 60, "price": 84.9}, {"productCode": 100078, "size": "4", "available": 8, "price": 84.9}], "images": []}, {"color": "Caqui", "skus": [{"productCode": 100079, "size": "1", "available": 60, "price": 84.9}, {"productCode": 100080, "size": "2", "available": 60, "price": 84.9}, {"productCode": 100082, "size": "4", "available": 48, "price": 84.9}], "images": []}], "sizes": ["1", "2", "3", "4"], "minPrice": 84.9, "maxPrice": 84.9, "totalAvailable": 253, "image": null}, {"reference": "20190", "name": "Pijama Malha Estrelinhas", "group": "Infantil", "colors": [{"color": "Azul", "skus": [{"productCode": 100108, "size": "1", "available": 24, "price": 49.9}, {"productCode": 100109, "size": "2", "available": 18, "price": 49.9}, {"productCode": 100110, "size": "4", "available": 60, "price": 49.9}, {"productCode": 100111, "size": "6", "available": 24, "price": 49.9}, {"productCode": 100112, "size": "8", "available": 3, "price": 49.9}], "images": []}, {"color": "Rosa", "skus": [{"productCode": 100113, "size": "1", "available": 8, "price": 49.9}, {"productCode": 100114, "size": "2", "available": 3, "price": 49.9}, {"productCode": 100115, "size": "4", "available": 5, "price": 49.9}, {"productCode": 100116, "size": "6", "available": 36, "price": 49.9}, {"productCode": 100117, "size": "8", "available": 36, "price": 49.9}], "images": []}], "sizes": ["1", "2", "4", "6", "8"], "minPrice": 49.9, "maxPrice": 49.9, "totalAvailable": 217, "image": null}, {"reference": "20140", "name": "Vestido Lese Babado", "group": "Infantil", "colors": [{"color": "Branco", "skus": [{"productCode": 100057, "size": "1", "available": 12, "price": 79.9}, {"productCode": 100058, "size": "2", "available": 48, "price": 79.9}, {"productCode": 100059, "size": "3", "available": 5, "price": 79.9}, {"productCode": 100062, "size": "8", "available": 60, "price": 79.9}], "images": []}, {"color": "Lavanda", "skus": [{"productCode": 100063, "size": "1", "available": 5, "price": 79.9}, {"productCode": 100064, "size": "2", "available": 8, "price": 79.9}, {"productCode": 100066, "size": "4", "available": 5, "price": 79.9}, {"productCode": 100068, "size": "8", "available": 18, "price": 79.9}], "images": []}, {"color": "Amarelo Manteiga", "skus": [{"productCode": 100069, "size": "1", "available": 8, "price": 79.9}, {"productCode": 100070, "size": "2", "available": 24, "price": 79.9}, {"productCode": 100071, "size": "3", "available": 60, "price": 79.9}, {"productCode": 100072, "size": "4", "available": 12, "price": 79.9}, {"productCode": 100073, "size": "6", "available": 3, "price": 79.9}, {"productCode": 100074, "size": "8", "available": 12, "price": 79.9}], "images": []}], "sizes": ["1", "2", "3", "4", "6", "8"], "minPrice": 79.9, "maxPrice": 79.9, "totalAvailable": 280, "image": null}, {"reference": "30031", "name": "Kit Touca + Luva + Meia", "group": "Maternidade", "colors": [{"color": "Branco", "skus": [{"productCode": 100123, "size": "RN", "available": 12, "price": 27.9}, {"productCode": 100124, "size": "P", "available": 5, "price": 27.9}], "images": []}, {"color": "Azul", "skus": [{"productCode": 100125, "size": "RN", "available": 3, "price": 27.9}, {"productCode": 100126, "size": "P", "available": 36, "price": 27.9}], "images": []}, {"color": "Rosa", "skus": [{"productCode": 100127, "size": "RN", "available": 24, "price": 27.9}], "images": []}], "sizes": ["RN", "P"], "minPrice": 27.9, "maxPrice": 27.9, "totalAvailable": 80, "image": null}, {"reference": "30020", "name": "Manta Soft Bordada", "group": "Maternidade", "colors": [{"color": "Cinza", "skus": [{"productCode": 100120, "size": "U", "available": 18, "price": 64.9}], "images": []}, {"color": "Bege", "skus": [{"productCode": 100121, "size": "U", "available": 48, "price": 64.9}], "images": []}, {"color": "Rosa", "skus": [{"productCode": 100122, "size": "U", "available": 18, "price": 64.9}], "images": []}], "sizes": ["U"], "minPrice": 64.9, "maxPrice": 64.9, "totalAvailable": 84, "image": null}, {"reference": "30012", "name": "Saída de Maternidade Tricô", "group": "Maternidade", "colors": [{"color": "Off White", "skus": [{"productCode": 100118, "size": "RN", "available": 8, "price": 119.9}], "images": []}, {"color": "Cru", "skus": [{"productCode": 100119, "size": "RN", "available": 48, "price": 119.9}], "images": []}], "sizes": ["RN"], "minPrice": 119.9, "maxPrice": 119.9, "totalAvailable": 56, "image": null}]};</script>
 <script>
 /* Bebêtenkitê Atacado — front-end (vanilla JS).
  * Modo API: conversa com o backend FastAPI (/api/config, /api/catalogo, /api/pedido).
@@ -639,6 +637,18 @@ pre.msg {
       : cat === OTHER ? "tee" : cat.icon;
     return svg(ICONS[k]);
   }
+  // fotos da cor (pasta imagens_ecommerce no backend); sem foto dessa cor, a capa da referência
+  function photosOf(p, color) {
+    const c = p.colors.find(x => x.color === color);
+    return c && c.images && c.images.length ? c.images : p.image ? [p.image] : [];
+  }
+  const photo = (src, alt = "", eager = false) =>
+    `<img src="${esc(API + src)}" alt="${esc(alt)}" loading="${eager ? "eager" : "lazy"}" decoding="async">`;
+  // foto quando houver, senão o ícone pelo nome
+  function artFor(p, color) {
+    const [src] = photosOf(p, color);
+    return src ? photo(src) : iconFor(p.name);
+  }
   const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
   const sum = (arr, f) => arr.reduce((a, x) => a + f(x), 0);
 
@@ -711,13 +721,17 @@ pre.msg {
   }
   // três peças do catálogo, inclinadas, como vitrine do destaque
   function renderHeroArt() {
+    // com fotos: três peças de categorias diferentes que tenham foto; sem fotos, três ícones diferentes
+    const withPhoto = S.products.filter(p => p.image);
+    const pool = withPhoto.length >= 3 ? withPhoto : S.products;
+    const kind = p => withPhoto.length >= 3 ? categoryOf(p.name) : iconFor(p.name);
     const picks = [];
-    for (const p of S.products) {
-      if (!picks.some(x => iconFor(x.name) === iconFor(p.name))) picks.push(p);
+    for (const p of pool) {
+      if (!picks.some(x => kind(x) === kind(p))) picks.push(p);
       if (picks.length === 3) break;
     }
     $("#heroArt").innerHTML = picks.map(p =>
-      `<span style="background:color-mix(in srgb, ${colorsIn(p.colors[0].color)[0] || NEUTRAL} 45%, #fffaf2)">${iconFor(p.name)}</span>`).join("");
+      `<span style="background:color-mix(in srgb, ${colorsIn(p.colors[0].color)[0] || NEUTRAL} 45%, #fffaf2)">${artFor(p, p.colors[0].color)}</span>`).join("");
   }
   // "Todos" e as categorias fixas; as que não têm peça no estoque de hoje ficam apagadas
   function renderGroups() {
@@ -747,7 +761,7 @@ pre.msg {
   function productCard(p, i) {
     const q = refPieces(p.reference);
     return `<a class="card${S.firstPaint ? " enter" : ""}" style="--i:${Math.min(i, 10)}" href="#/p/${encodeURIComponent(p.reference)}" data-ref="${esc(p.reference)}">
-      <span class="card-art" style="background:${tintFor(p.colors[0].color)}">${iconFor(p.name)}
+      <span class="card-art" style="background:${tintFor(p.colors[0].color)}">${artFor(p, p.colors[0].color)}
         <span class="in-cart">${q ? `${q} no pedido` : ""}</span></span>
       <span class="card-body">
         <span class="card-name">${esc(p.name)}</span>
@@ -793,9 +807,7 @@ pre.msg {
     $("#pdTitle").textContent = `ref. ${p.reference}`;
     const sizes = p.sizes.length > 1 ? `${p.sizes[0]} a ${p.sizes[p.sizes.length - 1]}` : p.sizes[0];
     $("#pd").innerHTML = `
-      <div class="pd-art" id="pdArt" style="background:${tintFor(c.color)}">${iconFor(p.name)}
-        <span class="stock ${p.totalAvailable < 40 ? "low" : ""}">${p.totalAvailable} em estoque</span>
-        <span class="mark">Bebêtenkitê</span></div>
+      <div class="pd-art" id="pdArt"></div>
       <div class="pd-info">
         <h1>${esc(p.name)}</h1>
         <span class="pd-price">${priceOf(p)} <small>/ peça</small></span>
@@ -812,7 +824,20 @@ pre.msg {
         <div class="sizes" id="sizes"></div>
       </div>
       <div class="pd-sum" id="pdSum"></div>`;
-    renderColors(); renderSizes(false); renderCommit();
+    renderArt(); renderColors(); renderSizes(false); renderCommit();
+  }
+  // fotos da cor escolhida, deslizando para o lado quando há mais de uma; sem foto, o ícone
+  function renderArt() {
+    const p = productBy(S.ref), el = $("#pdArt");
+    const pics = photosOf(p, S.color);
+    el.style.background = tintFor(S.color);
+    el.classList.toggle("photo", pics.length > 0);
+    el.innerHTML = (pics.length
+      ? `<div class="pd-photos">${pics.map((src, i) => photo(src, `${p.name}, ${S.color}`, i === 0)).join("")}</div>` +
+        (pics.length > 1 ? `<span class="pd-dots" aria-hidden="true">${pics.map((_, i) => `<i${i ? "" : ' class="on"'}></i>`).join("")}</span>` : "")
+      : iconFor(p.name)) +
+      `<span class="stock ${p.totalAvailable < 40 ? "low" : ""}">${p.totalAvailable} em estoque</span>
+       <span class="mark">Bebêtenkitê</span>`;
   }
   function renderColors() {
     const p = productBy(S.ref);
@@ -938,7 +963,8 @@ pre.msg {
       body.innerHTML = groupLines(lines).map(g => {
         const sub = sum(g.items, l => l.subtotal);
         const grade = g.items.map(i => `${i.size}×${i.quantity}`).join(" · ");
-        return `<div class="line"><span class="art" style="background:${tintFor(g.color)}">${iconFor(g.name)}</span>
+        const p = productBy(g.reference);
+        return `<div class="line"><span class="art" style="background:${tintFor(g.color)}">${p ? artFor(p, g.color) : iconFor(g.name)}</span>
           <b>${esc(g.name)} · ${esc(g.color)}</b><span class="v">${brl(sub)}</span>
           <span class="g">${esc(grade)}</span>
           <span class="acts"><a href="#/p/${encodeURIComponent(g.reference)}">editar</a>
@@ -1131,6 +1157,12 @@ pre.msg {
     if (e.target.matches(".qty")) setDraft(Number(e.target.dataset.code), e.target.value);
     if (e.target.id === "search") { S.q = e.target.value; renderList(); }
   });
+  // bolinhas da galeria do produto acompanham a foto visível
+  document.addEventListener("scroll", e => {
+    const g = e.target; if (!g.classList || !g.classList.contains("pd-photos")) return;
+    const i = Math.round(g.scrollLeft / g.clientWidth);
+    g.parentElement.querySelectorAll(".pd-dots i").forEach((d, k) => d.classList.toggle("on", k === i));
+  }, true);
   document.addEventListener("click", e => {
     const t = e.target.closest("button"); if (!t) return;
     if (t.dataset.group) {
@@ -1141,7 +1173,7 @@ pre.msg {
     else if (t.dataset.color) {
       S.color = t.dataset.color;
       $("#colorName").textContent = S.color;
-      $("#pdArt").style.background = tintFor(S.color);
+      renderArt();
       document.querySelectorAll("#colors button").forEach(b => b.setAttribute("aria-pressed", b === t));
       renderSizes();
     }
