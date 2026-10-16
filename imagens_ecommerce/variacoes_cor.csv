@@ -1,0 +1,598 @@
+﻿referencia;cor;nome_cor;hex_aprox;status
+001 BB ACE604;002;Azul;#1E63B5;recolorido
+001 BB ACE604;004;Vermelho;#C62828;recolorido
+001 BB ACE604;005;Diversas;;ignorado: estampa/sem cor
+001 BB ACE604;013;Rosa;#F2A2B8;recolorido
+001 BB ACE604;161;Amarelo;#F6C915;recolorido
+001 BB BMD392;001;Branco;#F7F7F5;recolorido
+001 BB BMD392;004;Vermelho;#C62828;recolorido
+001 BB BMD392;105;Verde;#2E9E4F;recolorido
+001 BB BMD392;173;Laranja;#F07F1E;recolorido
+001 BB BMD401;094;Azul Marinho.;#1B2A4E;original
+001 BB BMD401;808;Bege;#D9C3A0;recolorido
+001 BB BMD409;001;Branco;#F7F7F5;recolorido
+001 BB BMD409;002;Azul;#1E63B5;recolorido
+001 BB BMD409;003;Preto;#1C1C1C;recolorido
+001 BB BMD409;021;Amarelo;#F6C915;recolorido
+001 BB BMD409;105;Verde;#2E9E4F;recolorido
+001 BB BMD409;1080;Verde;#2E9E4F;recolorido
+001 BB BMD409;251;Azul;#1E63B5;recolorido
+001 BB BMD409;501;Azul Marinho;#1B2A4E;recolorido
+001 BB BMD409;531;Vermelho;#C62828;recolorido
+001 BB BMD409;808;Bege;#D9C3A0;original
+001 BB BMD439;105;Verde;#2E9E4F;recolorido
+001 BB BMD439;193;Cinza;#9E9E9E;recolorido
+001 BB BMD444;003;Preto;#1C1C1C;recolorido
+001 BB BMD444;096;Off White;#EFE9DC;original
+001 BB BMD444;104;Marrom;#6D4C35;recolorido
+001 BB BMD449;001;Branco;#F7F7F5;recolorido
+001 BB BMD449;002;Azul;#1E63B5;recolorido
+001 BB BMD449;003;Preto;#1C1C1C;original
+001 BB BMD452;021;Amarelo;#F6C915;recolorido
+001 BB BMD452;501;Azul Marinho;#1B2A4E;recolorido
+001 BB BMD459;300;Caqui;#B8A27A;recolorido
+001 BB BMD459;501;Azul Marinho;#1B2A4E;original
+001 BB BMD464;004;Vermelho;#C62828;original
+001 BB BMD464;105;Verde;#2E9E4F;recolorido
+001 BB BMD474;001;Branco;#F7F7F5;recolorido
+001 BB BMD474;021;Amarelo;#F6C915;recolorido
+001 BB BMD478;004;Vermelho;#C62828;recolorido
+001 BB BMD478;501;Azul Marinho;#1B2A4E;original
+002 001 BLS185;005;Diversas;;ignorado: estampa/sem cor
+002 001 BLS185;017;Vermelho 803;#B42821;recolorido
+002 001 BLS185;049;Preto 6500;#1C1C1C;recolorido
+002 001 BLS185;0686;Vermelho 1812;#C03B24;recolorido
+002 001 BLS185;1236;Amarelo 1816;#F3C440;recolorido
+002 001 BLS185;1327;Vermelho 2118;#DB3731;recolorido
+002 001 BLS185;1378;Laranja 2233;#ED5A17;recolorido
+002 001 BLS185;1439;Roxo 2330;#5F3AA2;recolorido
+002 001 BLS185;1552;Rosa 2425;#EB8694;recolorido
+002 001 BLS185;1587;Laranja  2426;#E27913;recolorido
+002 001 BLS185;1588;Roxo 2502;#533281;recolorido
+002 001 BLS185;1647;Rosa 2505;#F29DBA;recolorido
+002 001 BLS185;1868;Amarelo 2008;#F3CB3C;recolorido
+002 001 BLS185;1879;Verde2126;#36A54A;recolorido
+002 001 BLS185;1888;Laranja2117;#EF7B24;recolorido
+002 001 BLS185;2028;Vermelho 2001;#D53D4C;recolorido
+002 001 BLS185;2055;Verde1905;#35B14D;recolorido
+002 001 BLS185;2081;Azul Marinho 2137;#243363;recolorido
+002 001 BLS185;2116;Verde 2129;#2BA15C;recolorido
+002 001 BLS185;2302;Amarelo 2325;#F8DA13;recolorido
+002 001 BLS185;509;Azul Marinho 9735;#1A244A;recolorido
+002 001 BLS252;001;Branco;#F7F7F5;recolorido
+002 001 BLS252;004;Vermelho;#C62828;recolorido
+002 001 BLS252;021;Amarelo;#F6C915;recolorido
+002 001 BLS252;105;Verde;#2E9E4F;recolorido
+002 001 BLS252;1439;Roxo 2330;#5F3AA2;recolorido
+002 001 BLS252;1643;Azul 2523;#1F5EA5;recolorido
+002 001 BLS252;1644;Marrom 2404;#5C3D28;recolorido
+002 BB ACE641;808;Bege;#D9C3A0;original
+002 BB ACE641;O27;Rosa;#F2A2B8;recolorido
+002 BB ACE645;251;Azul;#1E63B5;recolorido
+002 BB ACE645;O27;Rosa;#F2A2B8;recolorido
+002 BB ACE649;1285;Leleko;;ignorado: estampa/sem cor
+002 BB ACE649;1286;Lelekinha;;ignorado: estampa/sem cor
+002 BB ACE668;002;Azul;#1E63B5;recolorido
+002 BB ACE668;013;Rosa;#F2A2B8;recolorido
+002 BB BLS184;005;Diversas;;ignorado: estampa/sem cor
+002 BB BLS184;010;Branco 6001;#F7F7F5;recolorido
+002 BB BLS184;017;Vermelho 803;#B42821;original
+002 BB BLS184;049;Preto 6500;#1C1C1C;recolorido
+002 BB BLS184;0686;Vermelho 1812;#C03B24;recolorido
+002 BB BLS184;1236;Amarelo 1816;#F3C440;recolorido
+002 BB BLS184;1339;Rosa 2111;#F7BBD0;recolorido
+002 BB BLS184;1414;Rosa 2222;#F5B3CB;recolorido
+002 BB BLS184;1438;Rosa 2327;#F5A4B2;recolorido
+002 BB BLS184;1439;Roxo 2330;#5F3AA2;recolorido
+002 BB BLS184;1441;Amarelo 2306;#F2CD14;recolorido
+002 BB BLS184;1555;Laranja 2411;#D57811;recolorido
+002 BB BLS184;1556;Rosa 2412;#F28EB3;recolorido
+002 BB BLS184;1589;Roxo 2531;#6E368C;recolorido
+002 BB BLS184;1643;Azul 2523;#1F5EA5;recolorido
+002 BB BLS184;1646;Rosa 2414;#F5B3CF;recolorido
+002 BB BLS184;1647;Rosa 2505;#F29DBA;recolorido
+002 BB BLS184;1876;Amarelo2122;#F4E91C;recolorido
+002 BB BLS184;1880;Vermelho2001;#D53D4C;recolorido
+002 BB BLS184;2081;Azul Marinho 2137;#243363;recolorido
+002 BB BLS187;049;Preto 6500;#1C1C1C;recolorido
+002 BB BLS187;1339;Rosa 2111;#F7BBD0;recolorido
+002 BB BLS187;1552;Rosa 2425;#EB8694;recolorido
+002 BB BLS187;1554;Verde 2430;#2C8B40;recolorido
+002 BB BLS187;1587;Laranja  2426;#E27913;recolorido
+002 BB BLS187;2050;Azul2102;#1F69A5;recolorido
+002 BB BLS240;003;Preto;#1C1C1C;recolorido
+002 BB BLS240;105;Verde;#2E9E4F;recolorido
+002 BB BLS240;1269;Roxo 2022;#6A3BA6;recolorido
+002 BB BLS240;531;Vermelho;#C62828;recolorido
+002 BB BLS245;001;Branco;#F7F7F5;recolorido
+002 BB BLS245;004;Vermelho;#C62828;original
+002 BB BLS245;1552;Rosa 2425;#EB8694;recolorido
+002 BB BLS277;173;Laranja;#F07F1E;original
+002 BB BLS277;251;Azul;#1E63B5;recolorido
+002 BB BLS279;001;Branco;#F7F7F5;recolorido
+002 BB BLS279;161;Amarelo;#F6C915;recolorido
+002 BB BLS280;021;Amarelo;#F6C915;original
+002 BB BLS280;105;Verde;#2E9E4F;recolorido
+003 BB CAL117;001;Branco;#F7F7F5;recolorido
+003 BB CAL117;105;Verde;#2E9E4F;recolorido
+003 BB CAL120;001;Branco;#F7F7F5;original
+003 BB CAL120;300;Caqui;#B8A27A;recolorido
+003 BB CST412;001;Branco;#F7F7F5;original
+003 BB CST412;0249;Azul 11214;#1B58B8;recolorido
+003 BB CST412;101;Vermelho 44990;#B2283D;recolorido
+003 BB CST412;1080;Verde;#2E9E4F;recolorido
+003 BB CST412;1084;Laranja;#F07F1E;recolorido
+003 BB CST412;1376;Rosa 2234;#EF91A1;recolorido
+003 BB CST412;1412;Bege 2133;#E3CCB4;recolorido
+003 BB CST412;1448;Bege 2140;#CEB787;recolorido
+003 BB CST412;183;Amarelo;#F6C915;recolorido
+003 BB CST412;2028;Vermelho 2001;#D53D4C;recolorido
+003 BB CST412;778;Verde;#2E9E4F;recolorido
+003 BB CST413;010;Branco 6001;#F7F7F5;recolorido
+003 BB CST413;017;Vermelho 803;#B42821;recolorido
+003 BB CST413;040;Bege 8006;#D8C0A1;recolorido
+003 BB CST413;0686;Vermelho 1812;#C03B24;recolorido
+003 BB CST413;1236;Amarelo 1816;#F3C440;recolorido
+003 BB CST413;1326;Verde 2128;#3ABB4C;recolorido
+003 BB CST413;1327;Vermelho 2118;#DB3731;recolorido
+003 BB CST413;1375;Azul 2229;#2485CE;recolorido
+003 BB CST413;1378;Laranja 2233;#ED5A17;recolorido
+003 BB CST413;1434;Bege 2305;#D1B68F;recolorido
+003 BB CST413;1436;Laranja 2300;#D18514;recolorido
+003 BB CST413;1441;Amarelo 2306;#F2CD14;recolorido
+003 BB CST413;1486;Verde 2323;#36A159;recolorido
+003 BB CST413;1533;Verde 2416;#2FAC63;recolorido
+003 BB CST413;1551;Bege 2403;#DCC1A7;recolorido
+003 BB CST413;1554;Verde 2430;#2C8B40;recolorido
+003 BB CST413;1555;Laranja 2411;#D57811;recolorido
+003 BB CST413;1587;Laranja  2426;#E27913;recolorido
+003 BB CST413;1590;Verde 2520;#2B833A;recolorido
+003 BB CST413;1643;Azul 2523;#1F5EA5;recolorido
+003 BB CST413;1644;Marrom 2404;#5C3D28;recolorido
+003 BB CST413;1645;Azul 2105;#1C63A8;recolorido
+003 BB CST413;1648;Amarelo 2510;#F2CF04;recolorido
+003 BB CST413;1868;Amarelo 2008;#F3CB3C;recolorido
+003 BB CST413;1875;Amarelo2120;#E1A10B;recolorido
+003 BB CST413;2050;Azul2102;#1F69A5;original
+003 BB CST413;2056;Laranja2116;#F69B41;recolorido
+003 BB CST413;2116;Verde 2129;#2BA15C;recolorido
+003 BB CST413;2202;Bege 2508;#CBAC8B;recolorido
+003 BB CST413;2302;Amarelo 2325;#F8DA13;recolorido
+003 BB CST415;004;Vermelho;#C62828;recolorido
+003 BB CST415;010;Branco 6001;#F7F7F5;original
+003 BB CST415;040;Bege 8006;#D8C0A1;recolorido
+003 BB CST415;077;Preto;#1C1C1C;recolorido
+003 BB CST415;1453;Verde Endro 9645;#7E973E;recolorido
+003 BB CST415;1536;Amarelo 2428;#F8BC09;recolorido
+003 BB CST415;1551;Bege 2403;#DCC1A7;recolorido
+003 BB CST415;1597;Azul 2526;#154D9B;recolorido
+003 BB CST415;1598;Marron 2509;#6D553A;recolorido
+003 BB CST415;531;Vermelho;#C62828;recolorido
+003 BB CST415B;001;Branco;#F7F7F5;recolorido
+003 BB CST415B;040;Bege 8006;#D8C0A1;recolorido
+003 BB CST415B;071;Laranja;#F07F1E;recolorido
+003 BB CST415B;159;Azul Claro;#8EC5EE;original
+003 BB CST508;001;Branco;#F7F7F5;recolorido
+003 BB CST508;004;Vermelho;#C62828;recolorido
+003 BB CST508;105;Verde;#2E9E4F;recolorido
+003 BB CST508;161;Amarelo;#F6C915;original
+003 BB CST508;193;Cinza;#9E9E9E;recolorido
+003 BB CST529;096;Off White;#EFE9DC;original
+003 BB CST529;105;Verde;#2E9E4F;recolorido
+003 BB CST529;247;Laranja;#F07F1E;recolorido
+003 BB CST542;001;Branco;#F7F7F5;original
+003 BB CST542;251;Azul;#1E63B5;recolorido
+003 BB CST549;004;Vermelho;#C62828;original
+003 BB CST549;105;Verde;#2E9E4F;recolorido
+003 BB CST569;096;Off White;#EFE9DC;original
+003 BB CST569;173;Laranja;#F07F1E;recolorido
+003 BB CST572;001;Branco;#F7F7F5;original
+003 BB CST572;004;Vermelho;#C62828;recolorido
+003 BB CST572;040;Bege 8006;#D8C0A1;recolorido
+003 BB CST572;1214;Azul 1922;#1946B5;recolorido
+003 BB CST572;1536;Amarelo 2428;#F8BC09;recolorido
+003 BB CST572;1599;Azul 2527;#1D7BCA;recolorido
+003 BB CST572;2072;Bege 1939;#D7C3A2;recolorido
+003 BB CST572;2202;Bege 2508;#CBAC8B;recolorido
+003 BB CST572;251;Azul;#1E63B5;recolorido
+003 BB CST572;495;Laranja 1914;#ED7526;recolorido
+003 BB CST575;0279;Litras Marrom;;ignorado: estampa/sem cor
+003 BB CST575;176;Listra Azul Marinho/Off;;ignorado: estampa/sem cor
+003 BB CST581;001;Branco;#F7F7F5;original
+003 BB CST581;094;Azul Marinho.;#1B2A4E;recolorido
+003 BB CST581;105;Verde;#2E9E4F;recolorido
+003 BB CST581;1222;Verde Escuro 36;#246738;recolorido
+003 BB CST581;173;Laranja;#F07F1E;recolorido
+003 BB CST581;193;Cinza;#9E9E9E;recolorido
+003 BB CST581;251;Azul;#1E63B5;recolorido
+003 BB CST581;720;Branco;#F7F7F5;recolorido
+003 BB CST581;967;Azul Marinho;#1B2A4E;recolorido
+003 BB CST586;161;Amarelo;#F6C915;recolorido
+003 BB CST586;808;Bege;#D9C3A0;recolorido
+003 BB CST592;001;Branco;#F7F7F5;recolorido
+003 BB CST592;004;Vermelho;#C62828;original
+003 BB CST594;002;Azul;#1E63B5;recolorido
+003 BB CST594;021;Amarelo;#F6C915;recolorido
+003 BB CST603;001;Branco;#F7F7F5;original
+003 BB CST603;105;Verde;#2E9E4F;recolorido
+003 BB CST606;001;Branco;#F7F7F5;recolorido
+003 BB CST606;003;Preto;#1C1C1C;recolorido
+003 BB CST606;004;Vermelho;#C62828;recolorido
+003 BB CST606;1346;Azul 2102;#1F69A5;original
+003 BB CST606;1554;Verde 2430;#2C8B40;recolorido
+003 BB CST606;156;Vermelho;#C62828;recolorido
+003 BB CST606;1657;Verde 2205;#2C903E;recolorido
+003 BB CST606;2202;Bege 2508;#CBAC8B;recolorido
+003 BB CST612;021;Amarelo;#F6C915;original
+003 BB CST612;105;Verde;#2E9E4F;recolorido
+003 BB CST614;021;Amarelo;#F6C915;recolorido
+003 BB CST614;105;Verde;#2E9E4F;recolorido
+003 BB CST615;003;Preto;#1C1C1C;original
+003 BB CST615;021;Amarelo;#F6C915;recolorido
+003 BB CST622;004;Vermelho;#C62828;original
+003 BB CST622;501;Azul Marinho;#1B2A4E;recolorido
+003 BB CST624;002;Azul;#1E63B5;recolorido
+003 BB CST624;096;Off White;#EFE9DC;original
+003 BB CST625;105;Verde;#2E9E4F;recolorido
+003 BB CST625;808;Bege;#D9C3A0;original
+004 BB ACE002;057;Rosa 9914;#F18AA3;recolorido
+004 BB ACE002;232;Rosa Fiesta;#E0607E;original
+004 BB ACE002;233;Roxo 55984;#7443B7;recolorido
+004 BB ACE002;252;Rosa Claro;#F8CAD6;recolorido
+004 BB ACE553;002;Azul;#1E63B5;recolorido
+004 BB ACE553;010;Branco 6001;#F7F7F5;recolorido
+004 BB ACE553;192;Rosa 44935;#F4AAB5;recolorido
+004 BB ACE553;214;Rosa Claro;#F8CAD6;recolorido
+004 BB ACE553;509;Azul Marinho 9735;#1A244A;recolorido
+004 BB ACE553;993;Rosa Claro;#F8CAD6;recolorido
+004 BB CHUCHU004;001;Branco;#F7F7F5;recolorido
+004 BB CHUCHU004;013;Rosa;#F2A2B8;recolorido
+004 BB CHUCHU004;055;Rosa;#F2A2B8;recolorido
+004 BB CHUCHU004;159;Azul Claro;#8EC5EE;original
+004 BB CHUCHU004;247;Laranja;#F07F1E;recolorido
+004 BB MTA001;013;Rosa;#F2A2B8;recolorido
+004 BB MTA001;1012;Framboesa 7891;#C5155A;recolorido
+004 BB MTA025;013;Rosa;#F2A2B8;recolorido
+004 BB MTA025;075;Azul 66577;#1843AC;recolorido
+004 BB MTA025;094;Azul Marinho.;#1B2A4E;recolorido
+004 BB MTA025;156;Vermelho;#C62828;recolorido
+004 BB MTA025;159;Azul Claro;#8EC5EE;recolorido
+004 BB MTA025;173;Laranja;#F07F1E;recolorido
+004 BB SHT337;001;Branco;#F7F7F5;original
+004 BB SHT337;501;Azul Marinho;#1B2A4E;recolorido
+004 BB TAP027T;005;Diversas;;ignorado: estampa/sem cor
+004 BB TAP027T;010;Branco 6001;#F7F7F5;recolorido
+004 BB TAP027T;040;Bege 8006;#D8C0A1;recolorido
+004 BB TAP027T;0686;Vermelho 1812;#C03B24;recolorido
+004 BB TAP027T;1229;Verde 1905;#35B14D;recolorido
+004 BB TAP027T;1327;Vermelho 2118;#DB3731;recolorido
+004 BB TAP027T;1375;Azul 2229;#2485CE;recolorido
+004 BB TAP027T;1439;Roxo 2330;#5F3AA2;recolorido
+004 BB TAP027T;1643;Azul 2523;#1F5EA5;recolorido
+004 BB TAP027T;1868;Amarelo 2008;#F3CB3C;recolorido
+004 BB TAP027T;1888;Laranja2117;#EF7B24;recolorido
+004 BB TAP027T;1914;Azul 1911;#1B6BB8;recolorido
+004 BB TAP027T;2116;Verde 2129;#2BA15C;recolorido
+004 BB TAP027T;2180;Rosa 2114;#F199A4;original
+004 BB TAP027T;2202;Bege 2508;#CBAC8B;recolorido
+005 BB MCF195;004;Vermelho;#C62828;recolorido
+005 BB MCF195;0409;Laranja 44517;#F1803C;recolorido
+005 BB MCF195;193;Cinza;#9E9E9E;recolorido
+005 BB MCF195;2102;Marron Escuro;#4A3222;recolorido
+005 BB MCF196;010;Branco 6001;#F7F7F5;recolorido
+005 BB MCF196;0686;Vermelho 1812;#C03B24;recolorido
+005 BB MCF196;1339;Rosa 2111;#F7BBD0;recolorido
+005 BB MCF196;1439;Roxo 2330;#5F3AA2;recolorido
+005 BB MCF196;1643;Azul 2523;#1F5EA5;recolorido
+005 BB MCF196;1868;Amarelo 2008;#F3CB3C;recolorido
+005 BB MCF196;2202;Bege 2508;#CBAC8B;recolorido
+005 BB MCF240;1536;Amarelo 2428;#F8BC09;recolorido
+005 BB MCF240;2054;Vermelho1812;#C03B24;recolorido
+005 BB MCF305;010;Branco 6001;#F7F7F5;recolorido
+005 BB MCF305;1414;Rosa 2222;#F5B3CB;original
+005 BB MCF305;2054;Vermelho1812;#C03B24;recolorido
+005 BB MCF333;013;Rosa;#F2A2B8;recolorido
+005 BB MCF333;105;Verde;#2E9E4F;recolorido
+005 BB MCF333;1439;Roxo 2330;#5F3AA2;recolorido
+005 BB MCF333;1643;Azul 2523;#1F5EA5;recolorido
+005 BB MCF333;1646;Rosa 2414;#F5B3CF;recolorido
+005 BB MCF333;2081;Azul Marinho 2137;#243363;recolorido
+005 BB MCF333;808;Bege;#D9C3A0;recolorido
+006 BB CAC024;004;Vermelho;#C62828;recolorido
+006 BB CAC024;161;Amarelo;#F6C915;original
+006 BB CAC024;183;Amarelo;#F6C915;recolorido
+006 BB CAC024;306;Rosa Claro;#F8CAD6;recolorido
+006 BB CAC033;021;Amarelo;#F6C915;recolorido
+006 BB CAC033;096;Off White;#EFE9DC;recolorido
+006 BB CAC033;1169;Pessego;#F6B48F;original
+006 BB CAC033;1281;Rosa Pink;#E4407B;recolorido
+006 BB CAC033;159;Azul Claro;#8EC5EE;recolorido
+006 BB CAC033;164;Roxo;#6A3D9A;recolorido
+006 BB CAC033;254;Rosa;#F2A2B8;recolorido
+006 BB CAC033;978;Verde;#2E9E4F;recolorido
+006 BB CAC033;O27;Rosa;#F2A2B8;recolorido
+006 BB CAC036;001;Branco;#F7F7F5;recolorido
+006 BB CAC036;013;Rosa;#F2A2B8;recolorido
+006 BB CAC036;585;Nude;#E8C4A8;recolorido
+006 BB PJM002;001;Branco;#F7F7F5;recolorido
+006 BB PJM002;013;Rosa;#F2A2B8;recolorido
+006 BB PJM002;071;Laranja;#F07F1E;recolorido
+006 BB PJM002;076;Branco;#F7F7F5;recolorido
+006 BB PJM002;097;Verde Claro;#9ED9A0;recolorido
+006 BB PJM002;1014;Rosa Malva 7950;#D8A5AA;recolorido
+006 BB PJM002;105;Verde;#2E9E4F;recolorido
+006 BB PJM002;1386;Pessego Ponche 7418;#F48359;recolorido
+006 BB PJM002;215;Azul;#1E63B5;recolorido
+006 BB PJM002;2300;Maca Verde;#8DC63F;recolorido
+006 BB PJM002;266;Azul Claro;#8EC5EE;recolorido
+006 BB PJM002;273;Rosa Claro;#F8CAD6;recolorido
+006 BB PJM002;274;Lilas;#B79CD9;recolorido
+006 BB PJM002;306;Rosa Claro;#F8CAD6;recolorido
+007 BB SHT219;010;Branco 6001;#F7F7F5;recolorido
+007 BB SHT219;017;Vermelho 803;#B42821;recolorido
+007 BB SHT219;0668;Rosa 1913;#F5C7D4;recolorido
+007 BB SHT219;0684;Laranja 1914;#ED7526;recolorido
+007 BB SHT219;0686;Vermelho 1812;#C03B24;recolorido
+007 BB SHT219;1236;Amarelo 1816;#F3C440;recolorido
+007 BB SHT219;1237;Verde 1925;#247F34;recolorido
+007 BB SHT219;1241;Amarelo 1915;#E7CB0F;recolorido
+007 BB SHT219;1375;Azul 2229;#2485CE;recolorido
+007 BB SHT219;1484;Rosa 2317;#F09FBB;recolorido
+007 BB SHT219;1554;Verde 2430;#2C8B40;recolorido
+007 BB SHT219;1587;Laranja  2426;#E27913;recolorido
+007 BB SHT219;1868;Amarelo 2008;#F3CB3C;recolorido
+007 BB SHT219;1876;Amarelo2122;#F4E91C;recolorido
+007 BB SHT219;1887;Amarelo2121;#F5EF35;recolorido
+007 BB SHT219;1957;Rosa 1714;#F7C5DB;recolorido
+007 BB SHT219;1991;Rosa Pink 1715;#DE3289;recolorido
+007 BB SHT219;2063;Rosa 2113;#F392A1;original
+007 BB SHT256;001;Branco;#F7F7F5;recolorido
+007 BB SHT256;002;Azul;#1E63B5;recolorido
+007 BB SHT280;214;Rosa Claro;#F8CAD6;recolorido
+007 BB SHT280;501;Azul Marinho;#1B2A4E;recolorido
+007 BB SHT286;001;Branco;#F7F7F5;recolorido
+007 BB SHT286;002;Azul;#1E63B5;recolorido
+007 BB SHT286;003;Preto;#1C1C1C;recolorido
+007 BB SHT306;004;Vermelho;#C62828;recolorido
+007 BB SHT306;O27;Rosa;#F2A2B8;original
+007 BB SHT307;013;Rosa;#F2A2B8;recolorido
+007 BB SHT307;161;Amarelo;#F6C915;recolorido
+007 BB SHT307;164;Roxo;#6A3D9A;recolorido
+007 BB SHT314;001;Branco;#F7F7F5;recolorido
+007 BB SHT314;002;Azul;#1E63B5;recolorido
+007 BB SHT314;013;Rosa;#F2A2B8;original
+007 BB SHT314;1466;Azul 2;#247DD2;recolorido
+007 BB SHT318;105;Verde;#2E9E4F;recolorido
+007 BB SHT318;173;Laranja;#F07F1E;recolorido
+007 BB SHT325;013;Rosa;#F2A2B8;original
+007 BB SHT325;021;Amarelo;#F6C915;recolorido
+007 BB SHT330;1217;Listra Bege/Off;;ignorado: estampa/sem cor
+007 BB SHT330;421;Listra Azul Claro/Off White;;ignorado: estampa/sem cor
+008 BB VST252;040;Bege 8006;#D8C0A1;recolorido
+008 BB VST252;0667;Laranja 1902;#E25013;recolorido
+008 BB VST252;0686;Vermelho 1812;#C03B24;recolorido
+008 BB VST252;1092;Vermelho 803;#B42821;original
+008 BB VST252;1229;Verde 1905;#35B14D;recolorido
+008 BB VST252;1236;Amarelo 1816;#F3C440;recolorido
+008 BB VST252;1256;Verde 2012;#29893F;recolorido
+008 BB VST252;1868;Amarelo 2008;#F3CB3C;recolorido
+008 BB VST252;1880;Vermelho2001;#D53D4C;recolorido
+008 BB VST252;1997;Laranja 1914;#ED7526;recolorido
+008 BB VST252;2116;Verde 2129;#2BA15C;recolorido
+008 BB VST266;026;Azul 9735;#1D54B1;recolorido
+008 BB VST266;0437;Verde 1701;#22823F;recolorido
+008 BB VST266;1883;Rosa1931;#F5B3CC;recolorido
+008 BB VST275;0686;Vermelho 1812;#C03B24;recolorido
+008 BB VST275;1092;Vermelho 803;#B42821;original
+008 BB VST275;1552;Rosa 2425;#EB8694;recolorido
+008 BB VST275;1588;Roxo 2502;#533281;recolorido
+008 BB VST275;173;Laranja;#F07F1E;recolorido
+008 BB VST275;1997;Laranja 1914;#ED7526;recolorido
+008 BB VST275;2081;Azul Marinho 2137;#243363;recolorido
+008 BB VST279;001;Branco;#F7F7F5;recolorido
+008 BB VST279;013;Rosa;#F2A2B8;recolorido
+008 BB VST279;071;Laranja;#F07F1E;recolorido
+008 BB VST322;003;Preto;#1C1C1C;recolorido
+008 BB VST322;094;Azul Marinho.;#1B2A4E;original
+008 BB VST329;105;Verde;#2E9E4F;recolorido
+008 BB VST329;1646;Rosa 2414;#F5B3CF;recolorido
+008 BB VST329;1647;Rosa 2505;#F29DBA;recolorido
+008 BB VST329;1887;Amarelo2121;#F5EF35;recolorido
+008 BB VST329;2028;Vermelho 2001;#D53D4C;recolorido
+008 BB VST336;001;Branco;#F7F7F5;recolorido
+008 BB VST336;531;Vermelho;#C62828;original
+008 BB VST362;001;Branco;#F7F7F5;recolorido
+008 BB VST362;004;Vermelho;#C62828;recolorido
+008 BB VST362;105;Verde;#2E9E4F;recolorido
+008 BB VST362;1339;Rosa 2111;#F7BBD0;recolorido
+008 BB VST362;1436;Laranja 2300;#D18514;recolorido
+008 BB VST362;161;Amarelo;#F6C915;recolorido
+008 BB VST362;164;Roxo;#6A3D9A;recolorido
+008 BB VST377;1092;Vermelho 803;#B42821;recolorido
+008 BB VST377;1396;Rosa 2221;#F8C4CB;recolorido
+008 BB VST377;1439;Roxo 2330;#5F3AA2;recolorido
+008 BB VST377;1441;Amarelo 2306;#F2CD14;recolorido
+008 BB VST377;1555;Laranja 2411;#D57811;original
+008 BB VST377;1556;Rosa 2412;#F28EB3;recolorido
+008 BB VST377;1876;Amarelo2122;#F4E91C;recolorido
+008 BB VST377;2054;Vermelho1812;#C03B24;recolorido
+008 BB VST387;013;Rosa;#F2A2B8;recolorido
+008 BB VST387;105;Verde;#2E9E4F;recolorido
+008 BB VST397;013;Rosa;#F2A2B8;original
+008 BB VST397;021;Amarelo;#F6C915;recolorido
+008 BB VST397;1655;Laranja 2410;#E46C0B;recolorido
+008 BB VST410;013;Rosa;#F2A2B8;recolorido
+008 BB VST410;105;Verde;#2E9E4F;recolorido
+008 BB VST412;094;Azul Marinho.;#1B2A4E;recolorido
+008 BB VST412;274;Lilas;#B79CD9;recolorido
+008 BB VST412;286;Pink;#E4407B;recolorido
+008 BB VST412;798;Estampa Coqueiros;;ignorado: estampa/sem cor
+008 BB VST420;105;Verde;#2E9E4F;recolorido
+008 BB VST420;164;Roxo;#6A3D9A;recolorido
+008 BB VST422;021;Amarelo;#F6C915;recolorido
+008 BB VST422;105;Verde;#2E9E4F;recolorido
+009 BB TIA008;1376;Rosa 2234;#EF91A1;recolorido
+009 BB TIA008;1552;Rosa 2425;#EB8694;recolorido
+009 BB TIA008;1588;Roxo 2502;#533281;recolorido
+009 BB TIA008;1643;Azul 2523;#1F5EA5;recolorido
+009 BB TIA008;2050;Azul2102;#1F69A5;recolorido
+009 BB TIA008;2081;Azul Marinho 2137;#243363;recolorido
+009 BB TIA008;2302;Amarelo 2325;#F8DA13;recolorido
+009 BB TIA008;254;Rosa;#F2A2B8;recolorido
+01 BB BMD413;001;Branco;#F7F7F5;original
+01 BB BMD413;098;Bordo;#7B1E2B;recolorido
+01 BB BMD413;808;Bege;#D9C3A0;recolorido
+01 BB BMD440;001;Branco;#F7F7F5;recolorido
+01 BB BMD440;300;Caqui;#B8A27A;original
+01 BB BMD448;001;Branco;#F7F7F5;original
+01 BB BMD448;501;Azul Marinho;#1B2A4E;recolorido
+01 BB BMD457;001;Branco;#F7F7F5;recolorido
+01 BB BMD457;1561;Capuccino;#8E6E53;original
+01 BB BMD470;001;Branco;#F7F7F5;recolorido
+01 BB BMD470;300;Caqui;#B8A27A;original
+01 BB BMD492;001;Branco;#F7F7F5;original
+01 BB BMD492;501;Azul Marinho;#1B2A4E;recolorido
+010 BB BD001 M;009;Azul 1911;#1B6BB8;recolorido
+010 BB BD001 M;026;Azul 9735;#1D54B1;recolorido
+010 BB BD001 M;049;Preto 6500;#1C1C1C;recolorido
+010 BB BD186;010;Branco 6001;#F7F7F5;original
+010 BB BD186;049;Preto 6500;#1C1C1C;recolorido
+010 BB BD186;0686;Vermelho 1812;#C03B24;recolorido
+010 BB BD186;1438;Rosa 2327;#F5A4B2;recolorido
+010 BB BD186;1439;Roxo 2330;#5F3AA2;recolorido
+010 BB BD186;1486;Verde 2323;#36A159;recolorido
+010 BB BD186;1556;Rosa 2412;#F28EB3;recolorido
+010 BB BD186;1643;Azul 2523;#1F5EA5;recolorido
+010 BB BD186;1868;Amarelo 2008;#F3CB3C;recolorido
+010 BB BD186;2028;Vermelho 2001;#D53D4C;recolorido
+010 BB BD186;2050;Azul2102;#1F69A5;recolorido
+010 BB BD186;2116;Verde 2129;#2BA15C;recolorido
+010 BB BD186;2202;Bege 2508;#CBAC8B;recolorido
+010 BB BD188;009;Azul 1911;#1B6BB8;recolorido
+010 BB BD188;026;Azul 9735;#1D54B1;recolorido
+010 BB BD188;049;Preto 6500;#1C1C1C;recolorido
+010 BB BD188;0686;Vermelho 1812;#C03B24;original
+010 BB BD188;1396;Rosa 2221;#F8C4CB;recolorido
+010 BB BD188;1434;Bege 2305;#D1B68F;recolorido
+010 BB BD188;1484;Rosa 2317;#F09FBB;recolorido
+010 BB BD188;1487;Verde 2329;#31B969;recolorido
+010 BB BD188;1552;Rosa 2425;#EB8694;recolorido
+010 BB BD188;1874;Azul2106;#2268D5;recolorido
+010 BB BD230;010;Branco 6001;#F7F7F5;recolorido
+010 BB BD230;1555;Laranja 2411;#D57811;recolorido
+010 BB BD230;1589;Roxo 2531;#6E368C;recolorido
+010 BB BD244;001;Branco;#F7F7F5;original
+010 BB BD244;159;Azul Claro;#8EC5EE;recolorido
+010 BB BD261;010;Branco 6001;#F7F7F5;recolorido
+010 BB BD261;1375;Azul 2229;#2485CE;recolorido
+010 BB BD261;1392;Amarelo 2232;#F3B413;recolorido
+010 BB BD261;1868;Amarelo 2008;#F3CB3C;recolorido
+010 BB BD271;001;Branco;#F7F7F5;original
+010 BB BD271;460;Lilas;#B79CD9;recolorido
+010 BB BD275;1666;Estampa Cogumelos;;ignorado: estampa/sem cor
+010 BB BD275;1673;Estampa Carros (Funndoa.Claro E45424002);;ignorado: estampa/sem cor
+010 BB BD275;1674;Estampa Patinhos (Fundo Ama E34343001);;ignorado: estampa/sem cor
+011 BB CAL121;003;Preto;#1C1C1C;original
+011 BB CAL121;013;Rosa;#F2A2B8;recolorido
+013 BB BLS200;004;Vermelho;#C62828;recolorido
+013 BB BLS200;978;Verde;#2E9E4F;recolorido
+013 BB BLS200;O27;Rosa;#F2A2B8;recolorido
+013 BB CST411;004;Vermelho;#C62828;recolorido
+013 BB CST411;094;Azul Marinho.;#1B2A4E;recolorido
+014 BB CUE016;001;Branco;#F7F7F5;recolorido
+014 BB CUE016;004;Vermelho;#C62828;original
+014 BB CUE016;021;Amarelo;#F6C915;recolorido
+014 BB CUE016;094;Azul Marinho.;#1B2A4E;recolorido
+014 BB CUE016;105;Verde;#2E9E4F;recolorido
+014 BB CUE016;159;Azul Claro;#8EC5EE;recolorido
+014 BB CUE016;193;Cinza;#9E9E9E;recolorido
+014 BB CUE016;808;Bege;#D9C3A0;recolorido
+014 BB MCL075;001;Branco;#F7F7F5;recolorido
+014 BB MCL075;004;Vermelho;#C62828;original
+014 BB MCL075;040;Bege 8006;#D8C0A1;recolorido
+014 BB MCL075;071;Laranja;#F07F1E;recolorido
+014 BB MCL075;076;Branco;#F7F7F5;recolorido
+014 BB MCL075;1536;Amarelo 2428;#F8BC09;recolorido
+014 BB MCL075;1553;Verde 2421;#298547;recolorido
+014 BB MCL075;252;Rosa Claro;#F8CAD6;recolorido
+014 BB MCL076;001;Branco;#F7F7F5;recolorido
+014 BB MCL076;1059;Rosa Lilas 1508;#D89DCD;recolorido
+014 BB MCL076;1378;Laranja 2233;#ED5A17;recolorido
+014 BB MCL076;1552;Rosa 2425;#EB8694;recolorido
+014 BB MCL076;1554;Verde 2430;#2C8B40;recolorido
+014 BB MCL076;2072;Bege 1939;#D7C3A2;recolorido
+014 BB MCL076;2081;Azul Marinho 2137;#243363;recolorido
+016 BB CST295;161;Amarelo;#F6C915;recolorido
+016 BB CST295;306;Rosa Claro;#F8CAD6;recolorido
+016 BB CST295B;004;Vermelho;#C62828;recolorido
+016 BB CST295B;105;Verde;#2E9E4F;recolorido
+016 BB CST295B;161;Amarelo;#F6C915;recolorido
+016 BB CST295B;306;Rosa Claro;#F8CAD6;recolorido
+016 BB CST433;004;Vermelho;#C62828;recolorido
+016 BB CST433;005;Diversas;;ignorado: estampa/sem cor
+016 BB CST433;1019;Laranja Hist;#E8692A;recolorido
+016 BB CST433;105;Verde;#2E9E4F;recolorido
+016 BB CST433;1310;Rosa Neon;#FF4FA0;recolorido
+016 BB CST433;159;Azul Claro;#8EC5EE;recolorido
+016 BB CST433;161;Amarelo;#F6C915;recolorido
+016 BB CST433;1900;Stellar Azul;#2B4C9A;recolorido
+016 BB CST433;306;Rosa Claro;#F8CAD6;recolorido
+016 BB CST433;501;Azul Marinho;#1B2A4E;recolorido
+016 BB CST433;808;Bege;#D9C3A0;recolorido
+016 BB CST433B;004;Vermelho;#C62828;recolorido
+016 BB CST433B;1019;Laranja Hist;#E8692A;recolorido
+016 BB CST433B;105;Verde;#2E9E4F;recolorido
+016 BB CST433B;161;Amarelo;#F6C915;recolorido
+016 BB CST433B;306;Rosa Claro;#F8CAD6;recolorido
+016 BB CST433B;808;Bege;#D9C3A0;recolorido
+016 BB CST623;105;Verde;#2E9E4F;recolorido
+016 BB CST623;1080;Verde;#2E9E4F;recolorido
+016 BB CST623;1163;Neon;;ignorado: estampa/sem cor
+016 BB MAI010;004;Vermelho;#C62828;recolorido
+016 BB MAI010;013;Rosa;#F2A2B8;recolorido
+016 BB MAI010;021;Amarelo;#F6C915;recolorido
+016 BB RP021;002;Azul;#1E63B5;recolorido
+016 BB RP021;159;Azul Claro;#8EC5EE;original
+016 BB RP021;501;Azul Marinho;#1B2A4E;recolorido
+016 BB RP021;808;Bege;#D9C3A0;recolorido
+016 BB RP025;002;Azul;#1E63B5;recolorido
+016 BB RP025;808;Bege;#D9C3A0;recolorido
+016 BB SNG052;002;Azul;#1E63B5;recolorido
+016 BB SNG052;004;Vermelho;#C62828;recolorido
+016 BB SNG052;021;Amarelo;#F6C915;recolorido
+016 BB SNG052;159;Azul Claro;#8EC5EE;recolorido
+016 BB TLA010;286;Pink;#E4407B;recolorido
+016 BB TLA010;932;Off 01;#EFE9DC;original
+018 BB BLS259;021;Amarelo;#F6C915;recolorido
+018 BB BLS259;1644;Marrom 2404;#5C3D28;recolorido
+018 BB BLS259;1646;Rosa 2414;#F5B3CF;recolorido
+018 BB BLS259;2072;Bege 1939;#D7C3A2;recolorido
+018 BB BLS281;021;Amarelo;#F6C915;original
+018 BB BLS281;105;Verde;#2E9E4F;recolorido
+018 BB CST610;021;Amarelo;#F6C915;original
+018 BB CST610;105;Verde;#2E9E4F;recolorido
+020 BB CNJ442;585;Nude;#E8C4A8;recolorido
+020 BB CNJ442;836;Marrom;#6D4C35;original
+023 BB SAI043;017;Vermelho 803;#B42821;original
+023 BB SAI043;049;Preto 6500;#1C1C1C;recolorido
+023 BB SAI043;0686;Vermelho 1812;#C03B24;recolorido
+023 BB SAI043;1327;Vermelho 2118;#DB3731;recolorido
+023 BB SAI043;1436;Laranja 2300;#D18514;recolorido
+023 BB SAI043;1589;Roxo 2531;#6E368C;recolorido
+023 BB SAI043;1646;Rosa 2414;#F5B3CF;recolorido
+023 BB SAI057;001;Branco;#F7F7F5;original
+023 BB SAI057;004;Vermelho;#C62828;recolorido
+023 BB SAI057;1376;Rosa 2234;#EF91A1;recolorido
+023 BB SAI057;1868;Amarelo 2008;#F3CB3C;recolorido
+023 BB SAI060;002;Azul;#1E63B5;recolorido
+023 BB SAI060;003;Preto;#1C1C1C;original
+025 BB CNJ308;096;Off White;#EFE9DC;original
+025 BB CNJ308;O27;Rosa;#F2A2B8;recolorido
+025 BB CNJ351;096;Off White;#EFE9DC;recolorido
+025 BB CNJ351;460;Lilas;#B79CD9;original
+025 BB CNJ384;013;Rosa;#F2A2B8;recolorido
+025 BB CNJ384;808;Bege;#D9C3A0;original
+025 BB CNJ385;002;Azul;#1E63B5;recolorido
+025 BB CNJ385;808;Bege;#D9C3A0;recolorido
+025 BB CNJ451;004;Vermelho;#C62828;recolorido
+025 BB CNJ451;021;Amarelo;#F6C915;recolorido
