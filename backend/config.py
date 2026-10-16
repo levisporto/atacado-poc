@@ -24,6 +24,8 @@ CATALOG_SYNC_SECONDS = int(os.getenv("CATALOG_SYNC_SECONDS", "60"))             
 CATALOG_FULL_REFRESH_HOURS = float(os.getenv("CATALOG_FULL_REFRESH_HOURS", "6"))  # carga completa de segurança
 CATALOG_SNAPSHOT_PATH = os.getenv(  # no Render: apontar para o disco persistente
     "CATALOG_SNAPSHOT_PATH", os.path.join(os.path.dirname(os.path.abspath(__file__)), "cache", "catalog.json"))
+IMAGES_DIR = os.getenv(  # fotos: {referência}/{referência}_{cor}_{n}.jpg
+    "IMAGES_DIR", os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "imagens_ecommerce"))
 TOTVS_CONCURRENCY = int(os.getenv("TOTVS_CONCURRENCY", "4"))   # requisições simultâneas ao TOTVS
 
 # Sem credenciais => modo demonstração com dados fictícios

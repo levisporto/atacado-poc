@@ -10,11 +10,13 @@ atacado-poc/
 │   ├── main.py         rotas /api/config, /api/catalogo, /api/pedido e serve o front
 │   ├── totvs.py        token OAuth2 + /product/v2/balances/search + /prices/search
 │   ├── catalog.py      agrupa SKUs em referência → cor → tamanho; sync incremental + snapshot em disco
+│   ├── images.py       índice das fotos (imagens_ecommerce) por referência → cor
 │   ├── orders.py       re-confere saldo/preço, regras do atacado, monta e envia a mensagem
 │   ├── mock_data.py    estoque fictício (modo demonstração)
 │   ├── config.py       tudo vem do .env
 │   └── .env.example
 ├── frontend/           HTML/CSS/JS puro (sem build)
+├── imagens_ecommerce/  fotos: {ref}/{ref}_{códigoCor}_{n}.jpg, servidas em /img
 ├── build_demo.py       gera dist/atacado-demo.html (página única com dados fictícios)
 └── dist/atacado-demo.html
 ```
@@ -63,6 +65,7 @@ uvicorn main:app --reload
 | `TOTVS_PRICE_CODE_ATACADO` | **código de preço do atacado** — confirmar no TOTVS |
 | `TOTVS_SUBTRACT_SALES_ORDERS` | desconta o que já está reservado em pedidos de venda |
 | `MIN_ORDER_VALUE`, `MIN_QTY_PER_REF` | regras comerciais (padrão R$ 500 e 6 peças/ref.) |
+| `IMAGES_DIR` | pasta das fotos (padrão `imagens_ecommerce/` na raiz); lida na subida |
 | `GLEICE_WHATSAPP` | número da Gleice, só dígitos com 55 + DDD |
 
 Primeiro teste sugerido: suba com as credenciais, abra `http://localhost:8000/api/catalogo`
@@ -73,7 +76,7 @@ e confira se os nomes de campo do seu ambiente batem com os usados em
 ## Próximos passos (fora do POC)
 
 - Login do comprador (lista de CNPJs liberados) e tabela de preço por cliente
-- Fotos dos produtos via `/api/totvsmoda/image/v2`, com cache em disco/CDN
+- Fotos: gerar miniaturas WebP (~400 px) e servir por CDN em vez do JPG de 720 px
 - Gravar o pedido como pedido de venda no TOTVS (`/sales-order/v2`) em vez de só avisar
 - Reserva temporária de estoque entre o envio e a confirmação da Gleice
 - Hospedagem (Render/Hostinger VPS) com HTTPS e `ALLOWED_ORIGINS` restrito

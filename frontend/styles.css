@@ -125,6 +125,7 @@ h1, h2, h3 { font-family: var(--f-display); font-weight: 700; letter-spacing: -.
   color: var(--ink); box-shadow: 0 10px 24px rgba(0, 0, 0, .25);
 }
 .hero-art span svg { width: 44px; height: 44px; stroke-width: 1.5; }
+.hero-art span { overflow: hidden; }
 .hero-art span:nth-child(1) { top: 18px; right: 24px; transform: rotate(8deg); }
 .hero-art span:nth-child(2) { top: 96px; right: 56px; transform: rotate(-10deg); }
 .hero-art span:nth-child(3) { top: 132px; right: -14px; transform: rotate(14deg); }
@@ -165,6 +166,10 @@ h1, h2, h3 { font-family: var(--f-display); font-weight: 700; letter-spacing: -.
   position: relative; aspect-ratio: 1; border-radius: 16px; display: grid; place-items: center; color: var(--ink);
 }
 .card-art svg { width: 46%; height: 46%; stroke-width: 1.3; }
+/* fotos: fundo branco do estúdio, ocupam o quadro todo; o tom da cor fica por trás enquanto carregam */
+.card-art, .line .art { overflow: hidden; }
+.card-art > img, .hero-art img, .line .art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.line .art { position: relative; }
 .in-cart {
   position: absolute; left: 8px; top: 8px; padding: 3px 9px; border-radius: 999px; font-size: .72rem; font-weight: 700;
   background: var(--ok-soft); color: var(--ok);
@@ -195,6 +200,14 @@ body[data-view="product"] .tabbar { display: none; }
   view-transition-name: art; transition: background-color .35s var(--ease-out);
 }
 .pd-art svg { width: 44%; height: 44%; stroke-width: 1.15; }
+.pd-art.photo { overflow: hidden; }
+.pd-art.photo .mark { display: none; }
+.pd-photos { position: absolute; inset: 0; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.pd-photos::-webkit-scrollbar { display: none; }
+.pd-photos img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; scroll-snap-align: center; }
+.pd-dots { position: absolute; left: 0; right: 0; bottom: 12px; display: flex; justify-content: center; gap: 6px; pointer-events: none; }
+.pd-dots i { width: 7px; height: 7px; border-radius: 50%; background: rgba(0, 0, 0, .18); transition: background-color .2s, transform .2s; }
+.pd-dots i.on { background: var(--ink); transform: scale(1.15); }
 .pd-art .mark { position: absolute; left: 20px; bottom: 16px; font-family: var(--f-display); font-weight: 700; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; opacity: .72; }
 .pd-art .stock { position: absolute; right: 14px; top: 14px; padding: 4px 11px; border-radius: 999px; background: var(--surface); font-size: .78rem; font-weight: 600; }
 .pd-info { display: grid; gap: 6px; }

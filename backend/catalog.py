@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Any
 
 import config
+import images
 from mock_data import mock_skus
 from orders import TZ
 from totvs import TotvsClient, sku_available
@@ -58,13 +59,14 @@ def group_catalog(skus: list[dict]) -> list[dict]:
             continue  # sem preço de atacado ou sem saldo: não aparece na vitrine
         ref = refs.setdefault(s["reference"], {
             "reference": s["reference"], "name": s["name"], "group": s["group"],
-            "colors": OrderedDict(), "sizes": set(), "minPrice": s["price"], "maxPrice": s["price"],
+            "colors": OrderedDict(), "colorCodes": {}, "sizes": set(), "minPrice": s["price"], "maxPrice": s["price"],
             "totalAvailable": 0,
         })
         ref["minPrice"] = min(ref["minPrice"], s["price"])
         ref["maxPrice"] = max(ref["maxPrice"], s["price"])
         ref["totalAvailable"] += s["available"]
         ref["sizes"].add(s["size"])
+        ref["colorCodes"].setdefault(s["color"], s.get("colorCode", ""))
         ref["colors"].setdefault(s["color"], []).append({
             "productCode": s["productCode"], "size": s["size"],
             "available": int(s["available"]), "price": s["price"],
@@ -76,8 +78,11 @@ def group_catalog(skus: list[dict]) -> list[dict]:
         colors = []
         for color, items in ref["colors"].items():
             items.sort(key=lambda x: size_key(x["size"]))
-            colors.append({"color": color, "skus": items})
-        out.append({**ref, "sizes": sizes, "colors": colors, "totalAvailable": int(ref["totalAvailable"])})
+            colors.append({"color": color, "skus": items,
+                           "images": images.for_color(ref["reference"], ref["colorCodes"][color])})
+        out.append({**{k: v for k, v in ref.items() if k != "colorCodes"}, "sizes": sizes, "colors": colors,
+                    "image": next((c["images"][0] for c in colors if c["images"]), None) or images.cover(ref["reference"]),
+                    "totalAvailable": int(ref["totalAvailable"])})
     out.sort(key=lambda r: (r["group"], r["name"]))
     return out
 

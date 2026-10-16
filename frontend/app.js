@@ -132,6 +132,18 @@
       : cat === OTHER ? "tee" : cat.icon;
     return svg(ICONS[k]);
   }
+  // fotos da cor (pasta imagens_ecommerce no backend); sem foto dessa cor, a capa da referência
+  function photosOf(p, color) {
+    const c = p.colors.find(x => x.color === color);
+    return c && c.images && c.images.length ? c.images : p.image ? [p.image] : [];
+  }
+  const photo = (src, alt = "", eager = false) =>
+    `<img src="${esc(API + src)}" alt="${esc(alt)}" loading="${eager ? "eager" : "lazy"}" decoding="async">`;
+  // foto quando houver, senão o ícone pelo nome
+  function artFor(p, color) {
+    const [src] = photosOf(p, color);
+    return src ? photo(src) : iconFor(p.name);
+  }
   const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
   const sum = (arr, f) => arr.reduce((a, x) => a + f(x), 0);
 
@@ -204,13 +216,17 @@
   }
   // três peças do catálogo, inclinadas, como vitrine do destaque
   function renderHeroArt() {
+    // com fotos: três peças de categorias diferentes que tenham foto; sem fotos, três ícones diferentes
+    const withPhoto = S.products.filter(p => p.image);
+    const pool = withPhoto.length >= 3 ? withPhoto : S.products;
+    const kind = p => withPhoto.length >= 3 ? categoryOf(p.name) : iconFor(p.name);
     const picks = [];
-    for (const p of S.products) {
-      if (!picks.some(x => iconFor(x.name) === iconFor(p.name))) picks.push(p);
+    for (const p of pool) {
+      if (!picks.some(x => kind(x) === kind(p))) picks.push(p);
       if (picks.length === 3) break;
     }
     $("#heroArt").innerHTML = picks.map(p =>
-      `<span style="background:color-mix(in srgb, ${colorsIn(p.colors[0].color)[0] || NEUTRAL} 45%, #fffaf2)">${iconFor(p.name)}</span>`).join("");
+      `<span style="background:color-mix(in srgb, ${colorsIn(p.colors[0].color)[0] || NEUTRAL} 45%, #fffaf2)">${artFor(p, p.colors[0].color)}</span>`).join("");
   }
   // "Todos" e as categorias fixas; as que não têm peça no estoque de hoje ficam apagadas
   function renderGroups() {
@@ -240,7 +256,7 @@
   function productCard(p, i) {
     const q = refPieces(p.reference);
     return `<a class="card${S.firstPaint ? " enter" : ""}" style="--i:${Math.min(i, 10)}" href="#/p/${encodeURIComponent(p.reference)}" data-ref="${esc(p.reference)}">
-      <span class="card-art" style="background:${tintFor(p.colors[0].color)}">${iconFor(p.name)}
+      <span class="card-art" style="background:${tintFor(p.colors[0].color)}">${artFor(p, p.colors[0].color)}
         <span class="in-cart">${q ? `${q} no pedido` : ""}</span></span>
       <span class="card-body">
         <span class="card-name">${esc(p.name)}</span>
@@ -286,9 +302,7 @@
     $("#pdTitle").textContent = `ref. ${p.reference}`;
     const sizes = p.sizes.length > 1 ? `${p.sizes[0]} a ${p.sizes[p.sizes.length - 1]}` : p.sizes[0];
     $("#pd").innerHTML = `
-      <div class="pd-art" id="pdArt" style="background:${tintFor(c.color)}">${iconFor(p.name)}
-        <span class="stock ${p.totalAvailable < 40 ? "low" : ""}">${p.totalAvailable} em estoque</span>
-        <span class="mark">Bebêtenkitê</span></div>
+      <div class="pd-art" id="pdArt"></div>
       <div class="pd-info">
         <h1>${esc(p.name)}</h1>
         <span class="pd-price">${priceOf(p)} <small>/ peça</small></span>
@@ -305,7 +319,20 @@
         <div class="sizes" id="sizes"></div>
       </div>
       <div class="pd-sum" id="pdSum"></div>`;
-    renderColors(); renderSizes(false); renderCommit();
+    renderArt(); renderColors(); renderSizes(false); renderCommit();
+  }
+  // fotos da cor escolhida, deslizando para o lado quando há mais de uma; sem foto, o ícone
+  function renderArt() {
+    const p = productBy(S.ref), el = $("#pdArt");
+    const pics = photosOf(p, S.color);
+    el.style.background = tintFor(S.color);
+    el.classList.toggle("photo", pics.length > 0);
+    el.innerHTML = (pics.length
+      ? `<div class="pd-photos">${pics.map((src, i) => photo(src, `${p.name}, ${S.color}`, i === 0)).join("")}</div>` +
+        (pics.length > 1 ? `<span class="pd-dots" aria-hidden="true">${pics.map((_, i) => `<i${i ? "" : ' class="on"'}></i>`).join("")}</span>` : "")
+      : iconFor(p.name)) +
+      `<span class="stock ${p.totalAvailable < 40 ? "low" : ""}">${p.totalAvailable} em estoque</span>
+       <span class="mark">Bebêtenkitê</span>`;
   }
   function renderColors() {
     const p = productBy(S.ref);
@@ -431,7 +458,8 @@
       body.innerHTML = groupLines(lines).map(g => {
         const sub = sum(g.items, l => l.subtotal);
         const grade = g.items.map(i => `${i.size}×${i.quantity}`).join(" · ");
-        return `<div class="line"><span class="art" style="background:${tintFor(g.color)}">${iconFor(g.name)}</span>
+        const p = productBy(g.reference);
+        return `<div class="line"><span class="art" style="background:${tintFor(g.color)}">${p ? artFor(p, g.color) : iconFor(g.name)}</span>
           <b>${esc(g.name)} · ${esc(g.color)}</b><span class="v">${brl(sub)}</span>
           <span class="g">${esc(grade)}</span>
           <span class="acts"><a href="#/p/${encodeURIComponent(g.reference)}">editar</a>
@@ -624,6 +652,12 @@
     if (e.target.matches(".qty")) setDraft(Number(e.target.dataset.code), e.target.value);
     if (e.target.id === "search") { S.q = e.target.value; renderList(); }
   });
+  // bolinhas da galeria do produto acompanham a foto visível
+  document.addEventListener("scroll", e => {
+    const g = e.target; if (!g.classList || !g.classList.contains("pd-photos")) return;
+    const i = Math.round(g.scrollLeft / g.clientWidth);
+    g.parentElement.querySelectorAll(".pd-dots i").forEach((d, k) => d.classList.toggle("on", k === i));
+  }, true);
   document.addEventListener("click", e => {
     const t = e.target.closest("button"); if (!t) return;
     if (t.dataset.group) {
@@ -634,7 +668,7 @@
     else if (t.dataset.color) {
       S.color = t.dataset.color;
       $("#colorName").textContent = S.color;
-      $("#pdArt").style.background = tintFor(S.color);
+      renderArt();
       document.querySelectorAll("#colors button").forEach(b => b.setAttribute("aria-pressed", b === t));
       renderSizes();
     }

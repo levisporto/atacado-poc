@@ -16,6 +16,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 import config
+import images
 from catalog import CatalogService
 from orders import OrderIn, TZ, build_message, deliver, validate
 
@@ -83,6 +84,7 @@ async def place_order(order: OrderIn):
 
 @app.on_event("startup")
 async def _startup():
+    images.load()
     service.start()  # snapshot em disco na hora + sincronização com o TOTVS em segundo plano
 
 
@@ -95,4 +97,15 @@ async def _shutdown():
 async def index():
     return FileResponse(FRONT / "index.html")
 
+class CachedImages(StaticFiles):
+    """Fotos mudam raramente: o navegador guarda por 1 dia (e revalida pelo ETag depois)."""
+    async def get_response(self, path, scope):
+        resp = await super().get_response(path, scope)
+        if resp.status_code == 200:
+            resp.headers["Cache-Control"] = "public, max-age=86400"
+        return resp
+
+
+if Path(config.IMAGES_DIR).is_dir():
+    app.mount(images.URL_PREFIX, CachedImages(directory=config.IMAGES_DIR), name="img")
 app.mount("/", StaticFiles(directory=FRONT), name="front")
