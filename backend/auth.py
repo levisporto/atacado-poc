@@ -98,8 +98,12 @@ def check_admin(name: str, password: str) -> bool:
 
 
 # ------------------------------------------------------------ limite de tentativas de login
+# Por conta (CNPJ ou admin): 5 erros em 10 min. As chaves "todos" somam qualquer conta, para quem
+# tenta muitas contas ou troca de IP a cada tentativa. IP não é chave confiável: o X-Forwarded-For
+# vem do próprio visitante, então ele só soma, nunca é a única proteção.
 _fails: dict[str, deque] = defaultdict(deque)
 WINDOW, MAX_FAILS = 600, 5
+LIMITS = {"admin-all": 20, "client-all": 200}
 
 
 def throttle(*keys: str) -> None:
@@ -108,7 +112,7 @@ def throttle(*keys: str) -> None:
         d = _fails[k]
         while d and d[0] < now - WINDOW:
             d.popleft()
-        if len(d) >= MAX_FAILS:
+        if len(d) >= LIMITS.get(k, MAX_FAILS):
             raise HTTPException(429, "Muitas tentativas. Espere alguns minutos e tente de novo.")
 
 
@@ -118,5 +122,5 @@ def failed(*keys: str) -> None:
 
 
 def client_ip(request: Request) -> str:
-    # no Render o IP real vem no X-Forwarded-For
+    # no Render o IP vem no X-Forwarded-For, que o visitante pode forjar: serve só como chave extra
     return (request.headers.get("x-forwarded-for") or (request.client.host if request.client else "")).split(",")[0].strip()

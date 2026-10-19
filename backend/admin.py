@@ -29,7 +29,7 @@ class OrderStatus(BaseModel):
 
 @router.post("/login")
 async def login(body: AdminLogin, request: Request, response: Response):
-    keys = (f"admin:{auth.client_ip(request)}",)
+    keys = (f"admin:{body.name.strip().lower()}", "admin-all", f"admin-ip:{auth.client_ip(request)}")
     auth.throttle(*keys)
     if not auth.check_admin(body.name, body.password):
         auth.failed(*keys)

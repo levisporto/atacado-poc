@@ -92,7 +92,7 @@ async def signup(body: Signup):
 @app.post("/api/login")
 async def login(body: Login, request: Request, response: Response):
     doc = re.sub(r"\D", "", body.document)
-    keys = (f"doc:{doc}", f"ip:{auth.client_ip(request)}")
+    keys = (f"doc:{doc}", "client-all", f"ip:{auth.client_ip(request)}")
     auth.throttle(*keys)
     c = db.client_by_document(doc)
     if not c or not auth.check_password(body.password, c["password_hash"]):
