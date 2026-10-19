@@ -16,8 +16,9 @@ TOTVS_CLIENT_SECRET = os.getenv("TOTVS_CLIENT_SECRET", "")
 TOTVS_USERNAME = os.getenv("TOTVS_USERNAME", "")
 TOTVS_PASSWORD = os.getenv("TOTVS_PASSWORD", "")
 
-BRANCH_CODE = int(os.getenv("TOTVS_BRANCH_CODE", "1"))          # filial do estoque do atacado
-STOCK_CODES = _list_int("TOTVS_STOCK_CODES", "1")               # tipos de saldo considerados
+BRANCH_CODE = int(os.getenv("TOTVS_BRANCH_CODE", "1"))          # filial do cadastro e da tabela de preço
+STOCK_BRANCH_CODES = _list_int("TOTVS_STOCK_BRANCH_CODES", "1,2")  # filiais cujo saldo é somado na vitrine
+STOCK_CODES = _list_int("TOTVS_STOCK_CODES", "1")               # tipos de saldo considerados (1 = FISICO)
 PRICE_CODE = int(os.getenv("TOTVS_PRICE_CODE_ATACADO", "3"))    # tabela/código de preço do atacado (3 = ATACADO)
 RETAIL_PRICE_CODE = int(os.getenv("TOTVS_PRICE_CODE_VAREJO", "1"))  # preço de venda ao consumidor (1 = VAREJO), só exibido
 SUBTRACT_SALES_ORDERS = os.getenv("TOTVS_SUBTRACT_SALES_ORDERS", "true").lower() == "true"
@@ -38,8 +39,7 @@ MOCK_MODE = os.getenv("MOCK_MODE", "").lower() == "true" or not (
 MIN_ORDER_VALUE = float(os.getenv("MIN_ORDER_VALUE", "500"))    # pedido mínimo em R$
 MIN_QTY_PER_REF = int(os.getenv("MIN_QTY_PER_REF", "6"))        # peças mínimas por referência
 
-# --- Envio do pedido para a Gleice ---
-GLEICE_NAME = os.getenv("GLEICE_NAME", "Gleice")
+# --- Envio do pedido para a equipe do atacado ---
 GLEICE_WHATSAPP = os.getenv("GLEICE_WHATSAPP", "5585999999999")  # DDI+DDD+número, só dígitos
 
 # Opção A: Evolution API (envio automático)
@@ -52,5 +52,15 @@ N8N_WEBHOOK_URL = os.getenv("N8N_WEBHOOK_URL", "")
 
 # Se nenhuma das duas estiver configurada, o backend devolve um link wa.me
 # pré-preenchido e o comprador envia pelo próprio WhatsApp.
+
+# --- Cadastro de clientes e painel /admin ---
+DB_PATH = os.getenv(  # no Render: apontar para o disco persistente
+    "DB_PATH", os.path.join(os.path.dirname(os.path.abspath(__file__)), "cache", "atacado.db"))
+# administradores fixos: "admin:senha,levi:senha"
+ADMIN_USERS = {n.strip().lower(): p for n, _, p in
+               (x.partition(":") for x in os.getenv("ADMIN_USERS", "").split(",") if ":" in x) if n.strip() and p}
+SESSION_DAYS = int(os.getenv("SESSION_DAYS", "30"))
+COOKIE_SECURE = os.getenv("COOKIE_SECURE", "true").lower() == "true"  # false só para testar em http fora do localhost
+NOTIFY_NEW_SIGNUPS = os.getenv("NOTIFY_NEW_SIGNUPS", "true").lower() == "true"  # avisa a equipe no WhatsApp
 
 ALLOWED_ORIGINS = [o.strip() for o in os.getenv("ALLOWED_ORIGINS", "*").split(",")]

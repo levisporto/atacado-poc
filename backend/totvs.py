@@ -116,18 +116,16 @@ class TotvsClient:
             ch: dict[str, Any] = {"startDate": start.strftime("%Y-%m-%dT%H:%M:%S"),
                                   "endDate": end.strftime("%Y-%m-%dT%H:%M:%S")}
             if kind == "stock":
-                ch.update(inStock=True, branchStockCodeList=[config.BRANCH_CODE], stockCodeList=config.STOCK_CODES)
+                ch.update(inStock=True, branchStockCodeList=config.STOCK_BRANCH_CODES, stockCodeList=config.STOCK_CODES)
             else:
                 ch.update(inPrice=True, branchPriceCodeList=[config.BRANCH_CODE],
                           priceCodeList=[config.PRICE_CODE, config.RETAIL_PRICE_CODE])
             flt["change"] = ch
-        balance_opt: dict[str, Any] = {
-            "branchCode": config.BRANCH_CODE,
-            "stockCodeList": config.STOCK_CODES,
-        }
-        if config.SUBTRACT_SALES_ORDERS:
-            balance_opt["isSalesOrder"] = True  # traz quantidade já comprometida em pedidos
-        body = {"filter": flt, "option": {"balances": [balance_opt]}}
+        # um saldo por filial de estoque; sku_available soma todos
+        balance_opts = [{"branchCode": b, "stockCodeList": config.STOCK_CODES,
+                         **({"isSalesOrder": True} if config.SUBTRACT_SALES_ORDERS else {})}  # qtd. já em pedidos
+                        for b in config.STOCK_BRANCH_CODES]
+        body = {"filter": flt, "option": {"balances": balance_opts}}
         return await self._all_pages(f"{PRODUCT}/balances/search", body)
 
     # ------------------------------------------------------------------ preços
@@ -161,9 +159,13 @@ class TotvsClient:
 
 
 def sku_available(item: dict) -> float:
-    """Saldo vendável de um item de /balances/search."""
-    bal = (item.get("balances") or [{}])[0]
-    stock = float(bal.get("stock") or 0)
-    if config.SUBTRACT_SALES_ORDERS:
-        stock -= float(bal.get("salesOrder") or 0)
-    return max(stock, 0)
+    """Saldo vendável de um item de /balances/search, somando as filiais de estoque."""
+    total = 0.0
+    for bal in item.get("balances") or []:
+        if bal.get("branchCode") not in config.STOCK_BRANCH_CODES or bal.get("stockCode") not in config.STOCK_CODES:
+            continue
+        stock = float(bal.get("stock") or 0)
+        if config.SUBTRACT_SALES_ORDERS:
+            stock -= float(bal.get("salesOrder") or 0)
+        total += max(stock, 0)  # reserva maior que o saldo numa filial não come o saldo da outra
+    return total

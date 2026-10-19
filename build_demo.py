@@ -24,7 +24,7 @@ fonts = re.search(r'<link rel="stylesheet" href="(https://fonts[^"]+)">', html).
 demo = {
     "config": {
         "mock": True, "minOrderValue": config.MIN_ORDER_VALUE, "minQtyPerRef": config.MIN_QTY_PER_REF,
-        "sellerName": config.GLEICE_NAME, "sellerPhone": config.GLEICE_WHATSAPP,
+        "sellerPhone": config.GLEICE_WHATSAPP,
     },
     "updatedAt": datetime.now(ZoneInfo("America/Fortaleza")).isoformat(),
     "products": group_catalog(mock_skus()),

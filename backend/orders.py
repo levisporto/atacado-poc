@@ -1,4 +1,4 @@
-"""Validação do pedido e envio para a Gleice (WhatsApp)."""
+"""Validação do pedido e envio para a equipe do atacado (WhatsApp)."""
 from __future__ import annotations
 
 import logging
@@ -17,13 +17,12 @@ log = logging.getLogger("atacado.orders")
 TZ = ZoneInfo("America/Fortaleza")
 
 
-class Buyer(BaseModel):
+class ClientData(BaseModel):
     name: str = Field(min_length=2, max_length=120)
     company: str = Field(min_length=2, max_length=160)
     document: str = Field(description="CNPJ ou CPF")
     phone: str
     city: str = Field(min_length=2, max_length=120)
-    notes: str = Field(default="", max_length=1000)
 
     @field_validator("document")
     @classmethod
@@ -42,14 +41,24 @@ class Buyer(BaseModel):
         return d
 
 
+class Signup(ClientData):
+    email: str = Field(default="", max_length=160)
+    password: str = Field(min_length=6, max_length=200)
+
+
+class Buyer(ClientData):
+    notes: str = Field(default="", max_length=1000)
+
+
 class CartItem(BaseModel):
     productCode: int
     quantity: int = Field(gt=0, le=10000)
 
 
 class OrderIn(BaseModel):
-    buyer: Buyer
+    """O comprador vem da sessão (cliente aprovado); o navegador manda só itens e observações."""
     items: list[CartItem] = Field(min_length=1)
+    notes: str = Field(default="", max_length=1000)
 
 
 def brl(v: float) -> str:
@@ -60,6 +69,15 @@ def fmt_doc(d: str) -> str:
     if len(d) == 14:
         return f"{d[:2]}.{d[2:5]}.{d[5:8]}/{d[8:12]}-{d[12:]}"
     return f"{d[:3]}.{d[3:6]}.{d[6:9]}-{d[9:]}"
+
+
+def signup_message(c: Signup) -> str:
+    return "\n".join([
+        "🆕 *NOVO CADASTRO NO ATACADO*",
+        f"*Cliente:* {c.name}", f"*Empresa:* {c.company}", f"*CNPJ/CPF:* {fmt_doc(c.document)}",
+        f"*WhatsApp:* {c.phone}", f"*Cidade:* {c.city}", "",
+        "_Aprove ou recuse no painel /admin._",
+    ])
 
 
 def validate(order: OrderIn, fresh: dict[int, dict]) -> tuple[list[dict], list[str]]:
@@ -137,7 +155,7 @@ def build_message(order_id: str, buyer: Buyer, lines: list[dict]) -> str:
 
 
 async def deliver(message: str, order_payload: dict) -> dict:
-    """Envia para a Gleice. Retorna como foi entregue."""
+    """Envia para a equipe do atacado. Retorna como foi entregue."""
     if config.EVOLUTION_URL and config.EVOLUTION_INSTANCE and config.EVOLUTION_API_KEY:
         async with httpx.AsyncClient(timeout=20) as http:
             r = await http.post(

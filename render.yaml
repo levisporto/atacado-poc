@@ -18,6 +18,10 @@ services:
         value: 3.12.7
       - key: CATALOG_SNAPSHOT_PATH
         value: /var/data/catalog.json
+      - key: DB_PATH
+        value: /var/data/atacado.db
+      - key: ADMIN_USERS
+        sync: false
       - key: TOTVS_BASE_URL
         value: https://apitotvsmoda.bhan.com.br
       - key: TOTVS_CLIENT_ID
@@ -30,6 +34,8 @@ services:
         sync: false
       - key: TOTVS_BRANCH_CODE
         value: "1"
+      - key: TOTVS_STOCK_BRANCH_CODES
+        value: "1,2"
       - key: TOTVS_STOCK_CODES
         value: "1"
       - key: TOTVS_PRICE_CODE_ATACADO
@@ -48,8 +54,6 @@ services:
         value: "500"
       - key: MIN_QTY_PER_REF
         value: "6"
-      - key: GLEICE_NAME
-        value: Gleice
       - key: GLEICE_WHATSAPP
         sync: false
       - key: EVOLUTION_URL

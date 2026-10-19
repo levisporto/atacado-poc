@@ -1,5 +1,5 @@
 /* Bebêtenkitê Atacado — front-end (vanilla JS).
- * Modo API: conversa com o backend FastAPI (/api/config, /api/catalogo, /api/pedido).
+ * Modo API: conversa com o backend FastAPI (/api/config, /api/catalogo, /api/pedido, cadastro e login).
  * Modo demo: se window.ATACADO_DEMO existir, usa os dados embutidos e monta o pedido no navegador.
  */
 (() => {
@@ -9,12 +9,13 @@
   const $ = (s, el = document) => el.querySelector(s);
 
   const S = {
-    config: { minOrderValue: 500, minQtyPerRef: 6, sellerName: "Gleice", mock: true },
+    config: { minOrderValue: 500, minQtyPerRef: 6, mock: true },
     products: [], index: new Map(), updatedAt: null,
     cart: new Map(), cat: "Todos", q: "", step: "cart",
     view: "home", ref: null, color: null, draft: new Map(), homeScroll: 0, fromApp: false, routed: false,
     buyer: { name: "", company: "", document: "", phone: "", city: "", notes: "" },
     problems: [], result: null, sending: false,
+    me: null, auth: "login", busy: false, myOrders: null, // myOrders: null = ainda não carregou // cliente logado (aprovado); aba do quadro de acesso: login | signup | sent
     firstPaint: true,
   };
 
@@ -211,12 +212,33 @@
       if (!r.ok) throw new Error((await r.json()).detail || "Falha ao carregar o estoque");
       return r.json();
     },
+    async post(path, body) {
+      const r = await fetch(`${API}${path}`, {
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body || {}),
+      });
+      return { r, data: await r.json().catch(() => ({})) };
+    },
+    async me() {
+      if (DEMO) return null;
+      const r = await fetch(`${API}/api/me`);
+      return r.ok ? r.json() : null;
+    },
+    async myOrders() {
+      const r = await fetch(`${API}/api/meus-pedidos`);
+      if (r.status === 401) { S.me = null; return null; }
+      if (!r.ok) throw new Error("Não foi possível carregar seus pedidos.");
+      return r.json();
+    },
+    async auth(path, body) {
+      const { r, data } = await api.post(path, body);
+      if (r.status === 422) throw new Error(data.detail.map(d => d.msg.replace(/^Value error, /, "")).join(" "));
+      if (!r.ok) throw new Error(typeof data.detail === "string" ? data.detail : "Não foi possível continuar. Tente de novo.");
+      return data;
+    },
     async order(payload) {
       if (DEMO) return demoOrder(payload);
-      const r = await fetch(`${API}/api/pedido`, {
-        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload),
-      });
-      const data = await r.json();
+      const { r, data } = await api.post("/api/pedido", payload);
+      if (r.status === 401) { S.me = null; throw new Error(data.detail); }
       if (r.status === 409) return { problems: data.detail.problems };
       if (r.status === 422) return { problems: data.detail.map(d => `${d.loc.slice(-1)[0]}: ${d.msg}`) };
       if (!r.ok) throw new Error(typeof data.detail === "string" ? data.detail : "Falha ao enviar o pedido");
@@ -531,6 +553,26 @@
       return;
     }
 
+    if (S.step === "buyer" && !DEMO && !S.me) {
+      $("#cartTitle").textContent = "Entre para enviar";
+      body.innerHTML = `<p class="note">Os pedidos são liberados para lojistas cadastrados. Entre com seu CNPJ/CPF e senha
+        ou peça seu cadastro: seu pedido fica guardado aqui.</p>${authPanel()}`;
+      foot.innerHTML = `<button class="ghost" type="button" id="backCart">Voltar aos itens</button>`;
+      return;
+    }
+    if (S.step === "buyer" && !DEMO) {
+      $("#cartTitle").textContent = "Confirmar pedido";
+      body.innerHTML = `<form class="buyer" id="buyerForm" novalidate>
+        ${meCard()}
+        <div class="field"><label for="b-notes">Observações (opcional)</label>
+          <textarea id="b-notes" name="notes" placeholder="Prazo, transportadora preferida, forma de pagamento…">${esc(S.buyer.notes || "")}</textarea></div>
+        ${S.problems.length ? `<div class="problems"><b>O estoque mudou:</b><ul>${S.problems.map(p => `<li>${esc(p)}</li>`).join("")}</ul></div>` : ""}
+      </form>`;
+      foot.innerHTML = `<div class="totals"><div class="big"><span>${pieces} peças</span><span>${brl(total)}</span></div></div>
+        <button class="primary" type="submit" form="buyerForm" id="send" ${S.sending ? "disabled" : ""}>${S.sending ? `<span class="spin" aria-hidden="true"></span>Conferindo estoque…` : "Enviar pedido"}</button>
+        <button class="ghost" type="button" id="backCart">Voltar aos itens</button>`;
+      return;
+    }
     if (S.step === "buyer") {
       $("#cartTitle").textContent = "Seus dados";
       const b = S.buyer;
@@ -541,7 +583,7 @@
         ${S.problems.length ? `<div class="problems"><b>O estoque mudou:</b><ul>${S.problems.map(p => `<li>${esc(p)}</li>`).join("")}</ul></div>` : ""}
       </form>`;
       foot.innerHTML = `<div class="totals"><div class="big"><span>${pieces} peças</span><span>${brl(total)}</span></div></div>
-        <button class="primary" type="submit" form="buyerForm" id="send" ${S.sending ? "disabled" : ""}>${S.sending ? `<span class="spin" aria-hidden="true"></span>Conferindo estoque…` : `Enviar pedido para ${esc(S.config.sellerName)}`}</button>
+        <button class="primary" type="submit" form="buyerForm" id="send" ${S.sending ? "disabled" : ""}>${S.sending ? `<span class="spin" aria-hidden="true"></span>Conferindo estoque…` : "Enviar pedido"}</button>
         <button class="ghost" type="button" id="backCart">Voltar aos itens</button>`;
       return;
     }
@@ -549,11 +591,13 @@
     const r = S.result;
     $("#cartTitle").textContent = "Pedido pronto";
     body.innerHTML = `<div class="done"><div class="tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
-      <h3>${r.sent ? `Pedido enviado para ${esc(S.config.sellerName)}` : "Falta só um toque"}</h3>
+      <h3>Pedido enviado</h3>
       <p class="note">${esc(r.orderId)} · ${brl(r.total)}</p>
       <p class="note">${r.sent
-        ? `${esc(S.config.sellerName)} recebeu o pedido no WhatsApp e vai falar com você para confirmar frete e pagamento.`
-        : `Abra o WhatsApp pelo botão abaixo e envie a mensagem que já vai preenchida para ${esc(S.config.sellerName)}. Se o botão não abrir, copie o texto e mande para <b>${esc(r.sellerPhone || "")}</b>.`}</p>
+        ? "Recebemos seu pedido no WhatsApp e vamos falar com você para confirmar frete e pagamento."
+        : r.channel === "falhou"
+        ? "Seu pedido já chegou para a nossa equipe e vamos falar com você para confirmar frete e pagamento. Não precisa enviar de novo."
+        : "Abra o WhatsApp pelo botão abaixo e envie a mensagem que já vai preenchida."}</p>
       <pre class="msg" id="msg">${esc(r.message)}</pre></div>`;
     foot.innerHTML = (r.whatsappUrl ? `<a class="wa" href="${esc(r.whatsappUrl)}" target="_blank" rel="noopener">Abrir WhatsApp com o pedido</a>` : "") +
       `<button class="ghost" type="button" id="copyMsg">Copiar mensagem</button>
@@ -561,9 +605,106 @@
   }
 
   // ---------- render: perfil ----------
+  // ---------- acesso: entrar / cadastrar ----------
+  const fmtDoc = d => d.length === 14 ? d.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5")
+    : d.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+  const meCard = () => `<div class="me-card"><b>${esc(S.me.company)}</b>
+    <span>${esc(S.me.name)} · ${esc(fmtDoc(S.me.document))}</span>
+    <span>${esc(S.me.city)} · WhatsApp ${esc(S.me.phone)}</span></div>`;
+  function authPanel() {
+    if (S.auth === "sent") return `<div class="auth"><div class="done"><div class="tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <h3>Cadastro enviado</h3>
+      <p class="note">Vamos conferir seus dados e liberar seu acesso. Depois é só entrar com seu CNPJ/CPF e a senha que você criou.</p>
+      <button class="ghost" type="button" data-auth="login">Já fui liberado: entrar</button></div></div>`;
+    const tabs = `<div class="auth-tabs" role="tablist">
+      <button type="button" role="tab" data-auth="login" aria-selected="${S.auth === "login"}">Entrar</button>
+      <button type="button" role="tab" data-auth="signup" aria-selected="${S.auth === "signup"}">Quero me cadastrar</button></div>`;
+    const wait = S.busy ? `<span class="spin" aria-hidden="true"></span>` : "";
+    if (S.auth === "login") return `<div class="auth">${tabs}<form class="buyer" id="loginForm" novalidate>
+        ${field(S.buyer, "document", "CNPJ ou CPF", 'inputmode="numeric" autocomplete="username" required')}
+        ${field({}, "password", "Senha", 'type="password" autocomplete="current-password" required')}
+        <span class="err" data-err="form" role="alert"></span>
+        <button class="primary" type="submit" ${S.busy ? "disabled" : ""}>${wait}Entrar</button>
+        <p class="note">Esqueceu a senha? Peça uma nova pelo WhatsApp.</p></form></div>`;
+    return `<div class="auth">${tabs}<form class="buyer" id="signupForm" novalidate>
+        ${buyerFields(S.buyer)}
+        ${field(S.buyer, "email", "E-mail (opcional)", 'type="email" autocomplete="email"')}
+        <div class="row2">${field({}, "password", "Crie uma senha", 'type="password" autocomplete="new-password" minlength="6" required')}
+        ${field({}, "password2", "Repita a senha", 'type="password" autocomplete="new-password" required')}</div>
+        <span class="err" data-err="form" role="alert"></span>
+        <button class="primary" type="submit" ${S.busy ? "disabled" : ""}>${wait}Pedir cadastro</button></form></div>`;
+  }
+  function renderAuthSpots() {
+    if (S.view === "profile") renderProfile();
+    if (S.view === "cart") renderCart();
+  }
+  function formError(id, msg) { const e = document.querySelector(`#${id} [data-err="form"]`); if (e) e.textContent = msg; }
+  async function submitLogin(form) {
+    const f = Object.fromEntries(new FormData(form));
+    if (!digits(f.document) || !f.password) return formError("loginForm", "Informe CNPJ/CPF e senha.");
+    S.buyer.document = f.document;
+    S.busy = true; renderAuthSpots();
+    let err = "";
+    try {
+      S.me = await api.auth("/api/login", { document: digits(f.document), password: f.password }); S.myOrders = null;
+      S.buyer = { ...S.buyer, ...S.me }; store.set("atc-buyer", S.buyer); renderHello();
+      toast(`Bem-vindo, ${S.me.name.split(" ")[0]}`);
+    } catch (e) { err = e.message; }
+    S.busy = false; renderAuthSpots();
+    if (err) formError("loginForm", err);
+  }
+  async function submitSignup(form) {
+    const { b, ok } = validateBuyer(form, ["name", "company", "document", "phone", "city", "password", "password2"]);
+    const { password, password2, ...data } = b;
+    S.buyer = { ...S.buyer, ...data }; store.set("atc-buyer", S.buyer); renderHello();
+    if (!ok) return;
+    S.busy = true; renderAuthSpots();
+    let err = "";
+    try {
+      await api.auth("/api/cadastro", { name: b.name, company: b.company, document: digits(b.document), phone: digits(b.phone),
+        city: b.city, email: b.email || "", password });
+      S.auth = "sent";
+    } catch (e) { err = e.message; }
+    S.busy = false; renderAuthSpots();
+    if (err) formError("signupForm", err);
+  }
+
+  // ---------- meus pedidos (cliente logado) ----------
+  const STATUS_CLIENT = { novo: "Recebido", separando: "Em separação", faturado: "Faturado", cancelado: "Cancelado" };
+  const when = t => new Date(t * 1000).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+  function myOrdersBlock() {
+    if (S.myOrders === null) { loadMyOrders(); return `<section class="my-orders"><h3 class="sec-title">Meus pedidos</h3><p class="note">Carregando…</p></section>`; }
+    if (S.myOrders.error) return `<section class="my-orders"><h3 class="sec-title">Meus pedidos</h3><p class="note">${esc(S.myOrders.error)}</p></section>`;
+    if (!S.myOrders.length) return `<section class="my-orders"><h3 class="sec-title">Meus pedidos</h3><p class="note">Você ainda não fez pedidos pelo site.</p></section>`;
+    return `<section class="my-orders"><h3 class="sec-title">Meus pedidos</h3>${S.myOrders.map(o => {
+      const groups = groupLines(o.lines.map(l => ({ ...l, name: displayName(l.name, [l.color]) })));
+      return `<details class="my-order"><summary>
+          <span class="mo-top"><b>${esc(o.id)}</b><span class="st ${o.status}">${STATUS_CLIENT[o.status] || esc(o.status)}</span></span>
+          <span class="mo-sub"><span>${when(o.created_at)} · ${o.pieces} peças</span><b>${brl(o.total)}</b></span></summary>
+        <div class="mo-body">${groups.map(g => `<div class="mo-line"><span><b>${esc(g.name)}</b> · ${esc(g.color)}
+            <small>ref. ${esc(g.reference)} · ${esc(g.items.map(i => `${i.size}×${i.quantity}`).join(" · "))}</small></span>
+            <span>${brl(sum(g.items, i => i.subtotal))}</span></div>`).join("")}
+          ${o.notes ? `<p class="note">Obs.: ${esc(o.notes)}</p>` : ""}</div></details>`;
+    }).join("")}</section>`;
+  }
+  let loadingOrders = false;
+  async function loadMyOrders() {
+    if (loadingOrders) return;
+    loadingOrders = true;
+    try { S.myOrders = (await api.myOrders()) || []; }
+    catch (e) { S.myOrders = { error: e.message }; }
+    finally { loadingOrders = false; }
+    if (S.view === "profile") renderProfile();
+  }
+
   function renderProfile() {
-    $("#profile").innerHTML = `<form class="buyer" id="profileForm" novalidate>${buyerFields(S.buyer)}
-        <button class="primary" type="submit">Salvar dados</button></form>
+    $("#profileNote").textContent = DEMO ? "Esses dados preenchem seus pedidos automaticamente."
+      : S.me ? "Seu acesso está liberado para enviar pedidos." : "Entre para enviar pedidos. Catálogo e preços ficam abertos a todos.";
+    $("#profile").innerHTML = (DEMO ? `<form class="buyer" id="profileForm" novalidate>${buyerFields(S.buyer)}
+        <button class="primary" type="submit">Salvar dados</button></form>`
+      : S.me ? `${meCard()}${myOrdersBlock()}<p class="note">Para mudar esses dados, fale com a gente pelo WhatsApp.</p>
+        <button class="ghost" type="button" id="logout">Sair</button>`
+      : authPanel()) + `
       <div class="facts">
         <div><span>Pedido mínimo</span><b>${brl(S.config.minOrderValue)}</b></div>
         <div><span>Mínimo por referência</span><b>${S.config.minQtyPerRef} peças</b></div>
@@ -667,6 +808,10 @@
     if (![11, 14].includes(digits(b.document).length)) errs.document = "CNPJ com 14 dígitos ou CPF com 11.";
     if (digits(b.phone).length < 10) errs.phone = "WhatsApp com DDD.";
     if ((b.city || "").trim().length < 2) errs.city = "Informe a cidade.";
+    if (keys.includes("password")) {
+      if ((b.password || "").length < 6) errs.password = "Mínimo de 6 caracteres.";
+      else if (b.password !== b.password2) errs.password2 = "As senhas não conferem.";
+    }
     for (const k of keys) {
       const e = form.querySelector(`[data-err="${k}"]`); if (e) e.textContent = errs[k] || "";
       const i = form.querySelector(`[name="${k}"]`); if (i) i.setAttribute("aria-invalid", errs[k] ? "true" : "false");
@@ -676,19 +821,24 @@
   }
 
   async function submitOrder(form) {
-    const { b, ok } = validateBuyer(form);
-    S.buyer = { ...S.buyer, ...b }; store.set("atc-buyer", S.buyer); renderHello();
-    if (!ok || S.sending) return;
+    const items = [...S.cart].map(([productCode, quantity]) => ({ productCode, quantity }));
+    let payload;
+    if (DEMO) {
+      const { b, ok } = validateBuyer(form);
+      S.buyer = { ...S.buyer, ...b }; store.set("atc-buyer", S.buyer); renderHello();
+      if (!ok) return;
+      payload = { buyer: { ...S.buyer, document: digits(S.buyer.document), phone: digits(S.buyer.phone) }, items };
+    } else {
+      S.buyer.notes = new FormData(form).get("notes") || "";
+      payload = { items, notes: S.buyer.notes };
+    }
+    if (S.sending) return;
     S.sending = true; S.problems = []; renderCart();
     try {
-      const payload = {
-        buyer: { ...S.buyer, document: digits(S.buyer.document), phone: digits(S.buyer.phone) },
-        items: [...S.cart].map(([productCode, quantity]) => ({ productCode, quantity })),
-      };
       const res = await api.order(payload);
       if (res.problems) { S.problems = res.problems; await reloadCatalog(true); }
       else {
-        S.result = { ...res, sellerPhone: DEMO ? DEMO.config.sellerPhone : "" };
+        S.result = res; S.myOrders = null;
         S.cart.clear(); store.set("atc-cart", []); renderList(); renderTabs(); S.step = "done";
       }
     } catch (e) { toast(e.message || "Não foi possível enviar. Tente de novo."); }
@@ -761,12 +911,18 @@
         const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); toast("Texto selecionado: copie com Ctrl+C");
       });
     }
-    else if (t.id === "newOrder") { S.step = "cart"; S.result = null; location.hash = "#/"; }
+    else if (t.id === "newOrder") { S.step = "cart"; S.result = null; S.buyer.notes = ""; location.hash = "#/"; }
+    else if (t.dataset.auth) { S.auth = t.dataset.auth; renderAuthSpots(); }
+    else if (t.id === "logout") {
+      api.post("/api/logout").finally(() => { S.me = null; S.myOrders = null; S.auth = "login"; renderProfile(); toast("Você saiu"); });
+    }
   });
   document.addEventListener("keydown", e => { if (e.key === "Escape" && S.view === "product") $("#back").click(); });
   document.addEventListener("submit", e => {
     e.preventDefault();
     if (e.target.id === "buyerForm") submitOrder(e.target);
+    if (e.target.id === "loginForm") submitLogin(e.target);
+    if (e.target.id === "signupForm") submitSignup(e.target);
     if (e.target.id === "profileForm") {
       const { b, ok } = validateBuyer(e.target);
       if (!ok) return;
@@ -782,7 +938,10 @@
     S.buyer = { ...S.buyer, ...store.get("atc-buyer", {}) };
     renderHello();
     try {
-      S.config = { ...S.config, ...(await api.config()) };
+      const [cfg, me] = await Promise.all([api.config(), api.me().catch(() => null)]);
+      S.config = { ...S.config, ...cfg };
+      S.me = me;
+      if (me) { S.buyer = { ...S.buyer, ...me }; renderHello(); }
       renderRules();
       await reloadCatalog();
       route();
