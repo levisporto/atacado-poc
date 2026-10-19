@@ -167,6 +167,9 @@ h1, h2, h3 { font-family: var(--f-display); font-weight: 700; letter-spacing: -.
 }
 .card-price { font-weight: 700; font-size: .95rem; }
 .card-price small, .pd-price small { color: var(--muted); font-weight: 400; font-size: .8rem; }
+.card-price .tag, .pd-price .tag { font-weight: 600; text-transform: uppercase; letter-spacing: .04em; font-size: .68rem; }
+.card-retail, .pd-retail { color: var(--muted); font-size: .8rem; }
+.pd-retail { font-size: .92rem; }
 .card-meta { display: flex; align-items: center; gap: 8px; font-size: .76rem; color: var(--muted); }
 .low { color: var(--warn); font-weight: 600; }
 .dots { display: inline-flex; }

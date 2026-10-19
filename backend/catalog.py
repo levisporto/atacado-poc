@@ -32,12 +32,16 @@ SIZE_ORDER = ["RN", "PP", "P", "M", "G", "GG", "XG",
               "1", "2", "3", "4", "5", "6", "8", "10", "12", "14", "16"]
 
 
+# Referência com menos que isso no total (somando cores e tamanhos) fica fora da vitrine.
+MIN_REF_AVAILABLE = 2
+
+
 def size_key(s: str) -> tuple[int, str]:
     s = (s or "").strip().upper()
     return (SIZE_ORDER.index(s), s) if s in SIZE_ORDER else (len(SIZE_ORDER), s)
 
 
-def normalize_sku(item: dict, price: float | None) -> dict[str, Any]:
+def normalize_sku(item: dict, prices: dict[int, float]) -> dict[str, Any]:
     """Converte um item do /balances/search no formato interno."""
     return {
         "productCode": int(item["productCode"]),
@@ -47,7 +51,8 @@ def normalize_sku(item: dict, price: float | None) -> dict[str, Any]:
         "colorCode": str(item.get("colorCode") or ""),
         "size": (item.get("sizeName") or item.get("productSize") or "U").strip().upper(),
         "available": sku_available(item),
-        "price": price,
+        "price": prices.get(config.PRICE_CODE),
+        "retailPrice": prices.get(config.RETAIL_PRICE_CODE),
         "group": (item.get("groupName") or item.get("classificationName") or "").strip(),
     }
 
@@ -60,27 +65,34 @@ def group_catalog(skus: list[dict]) -> list[dict]:
         ref = refs.setdefault(s["reference"], {
             "reference": s["reference"], "name": s["name"], "group": s["group"],
             "colors": OrderedDict(), "colorCodes": {}, "sizes": set(), "minPrice": s["price"], "maxPrice": s["price"],
-            "totalAvailable": 0,
+            "totalAvailable": 0, "retailPrices": [],
         })
         ref["minPrice"] = min(ref["minPrice"], s["price"])
         ref["maxPrice"] = max(ref["maxPrice"], s["price"])
+        if s.get("retailPrice"):
+            ref["retailPrices"].append(s["retailPrice"])
         ref["totalAvailable"] += s["available"]
         ref["sizes"].add(s["size"])
         ref["colorCodes"].setdefault(s["color"], s.get("colorCode", ""))
         ref["colors"].setdefault(s["color"], []).append({
             "productCode": s["productCode"], "size": s["size"],
-            "available": int(s["available"]), "price": s["price"],
+            "available": int(s["available"]), "price": s["price"], "retailPrice": s.get("retailPrice"),
         })
 
     out = []
     for ref in refs.values():
+        if ref["totalAvailable"] < MIN_REF_AVAILABLE:
+            continue  # sobra de uma peça só não vale vitrine de atacado
         sizes = sorted(ref["sizes"], key=size_key)
         colors = []
         for color, items in ref["colors"].items():
             items.sort(key=lambda x: size_key(x["size"]))
             colors.append({"color": color, "skus": items,
                            "images": images.for_color(ref["reference"], ref["colorCodes"][color])})
-        out.append({**{k: v for k, v in ref.items() if k != "colorCodes"}, "sizes": sizes, "colors": colors,
+        retail = ref["retailPrices"]
+        out.append({**{k: v for k, v in ref.items() if k not in ("colorCodes", "retailPrices")},
+                    "sizes": sizes, "colors": colors,
+                    "minRetailPrice": min(retail, default=None), "maxRetailPrice": max(retail, default=None),
                     "image": next((c["images"][0] for c in colors if c["images"]), None) or images.cover(ref["reference"]),
                     "totalAvailable": int(ref["totalAvailable"])})
     out.sort(key=lambda r: (r["group"], r["name"]))
@@ -121,7 +133,7 @@ class CatalogService:
             raw = [i for i in raw if sku_available(i) > 0]  # sem saldo não vai pra vitrine: nem busca preço
         live = [int(i["productCode"]) for i in raw if sku_available(i) > 0]
         prices = await self.client.prices(live) if live else {}
-        return [normalize_sku(i, prices.get(int(i["productCode"]))) for i in raw]
+        return [normalize_sku(i, prices.get(int(i["productCode"]), {})) for i in raw]
 
     async def _full_load(self) -> None:
         started = _totvs_now()
@@ -190,6 +202,8 @@ class CatalogService:
             self._skus = {s["productCode"]: s for s in data["skus"]}
             self._updated_at, self._full_at = float(data["updatedAt"]), float(data["fullAt"])
             self._synced_at = datetime.fromisoformat(data["syncedAt"])
+            if any("retailPrice" not in s for s in self._skus.values()):
+                self._full_at = 0.0  # snapshot anterior ao preço de varejo: recarrega tudo já
         except FileNotFoundError:
             return
         except Exception as e:

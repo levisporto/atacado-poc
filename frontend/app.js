@@ -302,7 +302,11 @@
       (S.cat === "Todos" || categoryOf(p.name).name === S.cat) &&
       (!q || p.name.toLowerCase().includes(q) || p.reference.toLowerCase().includes(q)));
   }
-  const priceOf = p => p.minPrice === p.maxPrice ? brl(p.minPrice) : `${brl(p.minPrice)} – ${brl(p.maxPrice)}`;
+  const range = (a, b) => a === b ? brl(a) : `${brl(a)} – ${brl(b)}`;
+  const priceOf = p => range(p.minPrice, p.maxPrice);
+  // preço de venda ao consumidor (varejo), só de referência para o lojista
+  const retailOf = (p, cls) => p.minRetailPrice
+    ? `<span class="${cls}">Venda ${range(p.minRetailPrice, p.maxRetailPrice)}</span>` : "";
   const refPieces = ref => sum(cartLines().filter(l => l.reference === ref), l => l.quantity);
 
   function productCard(p, i) {
@@ -312,7 +316,8 @@
         <span class="in-cart">${q ? `${q} no pedido` : ""}</span></span>
       <span class="card-body">
         <span class="card-name">${esc(p.name)}</span>
-        <span class="card-price">${priceOf(p)} <small>/ peça</small></span>
+        <span class="card-price"><small class="tag">Atacado</small> ${priceOf(p)} <small>/ peça</small></span>
+        ${retailOf(p, "card-retail")}
         <span class="card-meta"><span class="dots">${p.colors.slice(0, 5).map(c => `<span class="sw" title="${esc(c.color)}" style="background:${swatchBg(c.color)}"></span>`).join("")}${p.colors.length > 5 ? `<span class="more">+${p.colors.length - 5}</span>` : ""}</span>
           <span class="${p.totalAvailable < 40 ? "low" : ""}">${p.totalAvailable} em estoque</span></span>
       </span></a>`;
@@ -357,7 +362,8 @@
       <div class="pd-art" id="pdArt"></div>
       <div class="pd-info">
         <h1>${esc(p.name)}</h1>
-        <span class="pd-price">${priceOf(p)} <small>/ peça</small></span>
+        <span class="pd-price"><small class="tag">Atacado</small> ${priceOf(p)} <small>/ peça</small></span>
+        ${retailOf(p, "pd-retail")}
         <p class="pd-desc">${esc(p.group || "Linha")} em ${p.colors.length} ${p.colors.length > 1 ? "cores" : "cor"}, tamanhos ${esc(sizes)}.
           Escolha a cor e preencha quantas peças quer de cada tamanho; o mínimo é de ${S.config.minQtyPerRef} peças nesta referência.</p>
       </div>

@@ -19,6 +19,7 @@ TOTVS_PASSWORD = os.getenv("TOTVS_PASSWORD", "")
 BRANCH_CODE = int(os.getenv("TOTVS_BRANCH_CODE", "1"))          # filial do estoque do atacado
 STOCK_CODES = _list_int("TOTVS_STOCK_CODES", "1")               # tipos de saldo considerados
 PRICE_CODE = int(os.getenv("TOTVS_PRICE_CODE_ATACADO", "3"))    # tabela/código de preço do atacado (3 = ATACADO)
+RETAIL_PRICE_CODE = int(os.getenv("TOTVS_PRICE_CODE_VAREJO", "1"))  # preço de venda ao consumidor (1 = VAREJO), só exibido
 SUBTRACT_SALES_ORDERS = os.getenv("TOTVS_SUBTRACT_SALES_ORDERS", "true").lower() == "true"
 CATALOG_SYNC_SECONDS = int(os.getenv("CATALOG_SYNC_SECONDS", "60"))              # busca só o que mudou
 CATALOG_FULL_REFRESH_HOURS = float(os.getenv("CATALOG_FULL_REFRESH_HOURS", "6"))  # carga completa de segurança

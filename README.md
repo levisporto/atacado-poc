@@ -63,6 +63,7 @@ uvicorn main:app --reload
 | `TOTVS_BRANCH_CODE` | filial cujo estoque abastece o atacado |
 | `TOTVS_STOCK_CODES` | tipos de saldo considerados (padrão `1`) |
 | `TOTVS_PRICE_CODE_ATACADO` | **código de preço do atacado** — confirmar no TOTVS |
+| `TOTVS_PRICE_CODE_VAREJO` | código de preço de venda ao consumidor (1 = VAREJO), só exibido ao lado do atacado |
 | `TOTVS_SUBTRACT_SALES_ORDERS` | desconta o que já está reservado em pedidos de venda |
 | `MIN_ORDER_VALUE`, `MIN_QTY_PER_REF` | regras comerciais (padrão R$ 500 e 6 peças/ref.) |
 | `IMAGES_DIR` | pasta das fotos (padrão `imagens_ecommerce/` na raiz); lida na subida |

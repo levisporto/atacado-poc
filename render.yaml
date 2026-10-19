@@ -34,6 +34,8 @@ services:
         value: "1"
       - key: TOTVS_PRICE_CODE_ATACADO
         value: "3"
+      - key: TOTVS_PRICE_CODE_VAREJO
+        value: "1"
       - key: TOTVS_SUBTRACT_SALES_ORDERS
         value: "true"
       - key: TOTVS_CONCURRENCY

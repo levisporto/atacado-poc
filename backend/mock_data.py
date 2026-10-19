@@ -32,5 +32,6 @@ def mock_skus() -> list[dict]:
                 out.append({
                     "productCode": code, "reference": ref, "name": name, "color": color,
                     "colorCode": "", "size": size, "available": available, "price": price, "group": group,
+                    "retailPrice": round(price * 1.67, 1) - 0.01,  # varejo ~ atacado + 67%, como no TOTVS
                 })
     return out

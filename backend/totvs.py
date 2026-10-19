@@ -118,7 +118,8 @@ class TotvsClient:
             if kind == "stock":
                 ch.update(inStock=True, branchStockCodeList=[config.BRANCH_CODE], stockCodeList=config.STOCK_CODES)
             else:
-                ch.update(inPrice=True, branchPriceCodeList=[config.BRANCH_CODE], priceCodeList=[config.PRICE_CODE])
+                ch.update(inPrice=True, branchPriceCodeList=[config.BRANCH_CODE],
+                          priceCodeList=[config.PRICE_CODE, config.RETAIL_PRICE_CODE])
             flt["change"] = ch
         balance_opt: dict[str, Any] = {
             "branchCode": config.BRANCH_CODE,
@@ -130,9 +131,9 @@ class TotvsClient:
         return await self._all_pages(f"{PRODUCT}/balances/search", body)
 
     # ------------------------------------------------------------------ preços
-    async def prices(self, product_codes: list[int]) -> dict[int, float]:
-        """Retorna {productCode: preço atacado}. Busca em lotes."""
-        out: dict[int, float] = {}
+    async def prices(self, product_codes: list[int]) -> dict[int, dict[int, float]]:
+        """Retorna {productCode: {código de preço: valor}} do atacado e do varejo. Busca em lotes."""
+        out: dict[int, dict[int, float]] = {}
         sem = asyncio.Semaphore(config.TOTVS_CONCURRENCY)
 
         async def fetch(chunk: list[int]) -> list[dict]:
@@ -140,7 +141,7 @@ class TotvsClient:
                 "filter": {"productCodeList": chunk},
                 "option": {"prices": [{
                     "branchCode": config.BRANCH_CODE,
-                    "priceCodeList": [config.PRICE_CODE],
+                    "priceCodeList": [config.PRICE_CODE, config.RETAIL_PRICE_CODE],
                 }]},
             }
             async with sem:
@@ -149,12 +150,10 @@ class TotvsClient:
         chunks = [product_codes[i:i + 500] for i in range(0, len(product_codes), 500)]
         for items in await asyncio.gather(*(fetch(c) for c in chunks)):
             for item in items:
-                prices = item.get("prices") or []
-                if prices:
-                    p = prices[0]
+                for p in item.get("prices") or []:
                     value = p.get("promotionalPrice") or p.get("price")
                     if value:
-                        out[int(item["productCode"])] = float(value)
+                        out.setdefault(int(item["productCode"]), {})[int(p["priceCode"])] = float(value)
         return out
 
     async def close(self) -> None:
