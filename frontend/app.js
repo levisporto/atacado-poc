@@ -102,6 +102,58 @@
   const ALL = svg('<rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/>');
   const plain = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
+  // Nome da referência no TOTVS = descrição (às vezes cortada) + cor + tamanho, em caixa alta
+  // ("VESTIDO BEBETENKITE LUNA VERDE G", "... LARANJA 2411", "... TACTEL PRANCHESTAMPA PRANCHAS G");
+  // a vitrine mostra só "Vestido Bebetenkite Luna".
+  // Números soltos no fim são tamanho (2, 10) ou código da cor (803, 2411).
+  const SIZE_RE = /^(rn|pp|p|m|g|gg|xg|xgg|eg|egg|u|un|unico|unica|tu|\d+|\d{1,2}[am])$/;
+  const GENERIC_RE = /^(divers|diversas?|diversos?|colorid[oa]s?)$/;
+  const LOWER_WORDS = new Set(["de", "da", "do", "das", "dos", "e", "com", "em", "na", "no", "nas", "nos", "para", "sem"]);
+  const UPPER_WORDS = new Set(["uv"]);
+  // sem acento e minúsculo letra a letra, para as posições baterem com o nome original
+  const flat = s => [...s].map(plain).join("");
+  // a cor como aparece no nome: com e sem o código no fim ("Laranja 2410", "Estampa Lacos E12840001")
+  const colorKeys = c => {
+    const k = flat(c).replace(/\s+/g, " ").replace(/[\s\/\-+,.]+$/, "");
+    return [k, k.replace(/\s*\d+$/, "")];
+  };
+  function displayName(name, colors = []) {
+    const keys = [...new Set(colors.flatMap(colorKeys))].filter(Boolean).sort((a, b) => b.length - a.length);
+    let s = name.replace(/\s+/g, " ").trim(), ownColor = false;
+    for (;;) {
+      s = s.replace(/[\s\/\-+,.]+$/, "");
+      const words = s.split(" ");
+      if (words.length <= 2) break;
+      if (SIZE_RE.test(flat(words[words.length - 1])) || GENERIC_RE.test(flat(words[words.length - 1]))) {
+        s = words.slice(0, -1).join(" "); continue;
+      }
+      // a cor da própria referência, uma vez só ("BERMUDA POR DO SOL POR DO SOL" perde só a última).
+      // Colada numa palavra cortada, o pedaço curto que sobra sai junto ("CRDIVERSAS", "20DIVERSAS")
+      const k = !ownColor && keys.find(k => flat(s).endsWith(k) && k.length < s.length);
+      if (k) {
+        ownColor = true;
+        let rest = s.slice(0, -k.length);
+        const glued = !/[\s\/(]$/.test(rest);
+        if (!glued || k.length >= 4) {
+          const frag = rest.match(/\S*$/)[0];
+          if (glued && frag.length < 4) rest = rest.slice(0, -frag.length);
+          if (rest.trim().split(" ").length >= 2) { s = rest; continue; }
+        }
+      }
+      // cor conhecida no fim, preferindo a expressão mais longa ("azul marinho" antes de "marinho")
+      const n = [3, 2, 1].find(k => words.length - k >= 2 && COLOR_HEX[flat(words.slice(-k).join(" "))]);
+      if (!n) break;
+      s = words.slice(0, -n).join(" ");
+    }
+    // descrição cortada no meio da marca ("CONJUNTO BEBETENKITESTAMPA BOLINHAS")
+    return s.split(" ").map(w => (flat(w) === "bebetenkit" ? "bebetenkite" : w)).map((w, i) => {
+      const lw = w.toLocaleLowerCase("pt-BR");
+      if (UPPER_WORDS.has(plain(w))) return w.toUpperCase();
+      if (i > 0 && LOWER_WORDS.has(lw)) return lw;
+      return lw.replace(/^\p{L}/u, c => c.toLocaleUpperCase("pt-BR"));
+    }).join(" ");
+  }
+
   // Categorias da vitrine, tiradas do nome da referência. A ordem importa: a primeira que casar vence
   // ("Bermuda Moletom" é bermuda, não casaco; "Saída de Praia" é moda praia; "Calçados" não é calça).
   const CATEGORIES = [
@@ -640,7 +692,7 @@
   async function reloadCatalog(refresh = false) {
     const data = await api.catalog(refresh);
     // mais estoque primeiro; empate por nome
-    S.products = [...data.products].sort((a, b) =>
+    S.products = data.products.map(p => ({ ...p, name: displayName(p.name, p.colors.map(c => c.color)) })).sort((a, b) =>
       b.totalAvailable - a.totalAvailable || a.name.localeCompare(b.name, "pt-BR"));
     S.updatedAt = data.updatedAt; indexProducts(S.products);
     for (const code of [...S.cart.keys()]) if (!S.index.has(code)) S.cart.delete(code);
