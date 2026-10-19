@@ -43,7 +43,8 @@ def load() -> None:
         m = _NAME.match(f.stem)
         if f.suffix.lower() not in EXTS or not m:
             continue
-        url = f"{URL_PREFIX}/{quote(f.parent.name)}/{quote(f.name)}"
+        # ?v= muda quando a foto é trocada com o mesmo nome (ex.: recolorida): fura o cache de 1 dia do navegador
+        url = f"{URL_PREFIX}/{quote(f.parent.name)}/{quote(f.name)}?v={int(f.stat().st_mtime)}"
         found.setdefault(_ref_key(f.parent.name), {}).setdefault(_color_key(m["color"]), []).append((int(m["n"] or 0), url))
     _index.clear()
     for ref, colors in found.items():
