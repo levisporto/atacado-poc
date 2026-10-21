@@ -11,8 +11,8 @@
   const S = {
     config: { minOrderValue: 500, minQtyPerRef: 6, mock: true },
     products: [], index: new Map(), updatedAt: null,
-    cart: new Map(), cat: "Todos", q: "", step: "cart",
-    view: "home", ref: null, color: null, draft: new Map(), homeScroll: 0, fromApp: false, routed: false,
+    cart: new Map(), cat: null, q: "", step: "cart", // cat null = início com os cartões das categorias
+    view: "home", ref: null, color: null, draft: new Map(), scrolls: {}, fromApp: false, routed: false,
     buyer: { name: "", company: "", document: "", phone: "", city: "", notes: "" },
     problems: [], result: null, sending: false,
     me: null, auth: "login", busy: false, myOrders: null, // myOrders: null = ainda não carregou // cliente logado (aprovado); aba do quadro de acesso: login | signup | sent
@@ -325,14 +325,55 @@
   function renderStamp() {
     if (!S.updatedAt) return;
     const d = new Date(S.updatedAt);
-    $("#stamp").innerHTML = `${S.products.length} referências · estoque das ${d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}` +
-      (DEMO ? "" : ` <button type="button" id="refresh">atualizar</button>`);
+    const html = `${S.products.length} referências · estoque das ${d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}` +
+      (DEMO ? "" : ` <button type="button" data-act="refresh">atualizar</button>`);
+    document.querySelectorAll(".stamp").forEach(el => (el.innerHTML = html));
+  }
+
+  // cartões do início: um por categoria com peça no estoque de hoje, na ordem da faixa; "Todos" por último
+  const CAT_TINTS = ["#c4dff5", "#fbd5ad", "#c3e6d4", "#f7c6bb", "#ddd2f3", "#f4e3a6", "#d2e8bb", "#f3c9dd", "#bfe3ea", "#ead8c2", "#d7dbf1", "#f0d0b8"];
+  const catHref = name => `#/c/${encodeURIComponent(name)}`;
+  const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+  function renderCatCards() {
+    const byCat = new Map();
+    for (const p of S.products) {
+      const k = categoryOf(p.name).name;
+      byCat.has(k) ? byCat.get(k).push(p) : byCat.set(k, [p]);
+    }
+    // duas peças com foto (as de mais estoque, que já vêm primeiro); sem foto, o ícone da categoria
+    const art = (list, icon) => {
+      const pics = list.filter(p => p.image).slice(0, 2);
+      // eager: são poucas miniaturas e ficam logo no topo do início
+      return pics.length ? pics.map(p => photo(photosOf(p, p.colors[0].color)[0], "", true)).join("") : icon;
+    };
+    const cats = [...CAT_ORDER, OTHER].filter(c => byCat.has(c.name));
+    // "Todos": uma foto de cada uma das duas primeiras categorias
+    const allPicks = cats.map(c => byCat.get(c.name).find(p => p.image)).filter(Boolean);
+    const card = (name, list, cls, style, artHtml, i) =>
+      `<a class="cat-card${cls}${S.catsPainted ? "" : " enter"}" href="${catHref(name)}" style="--i:${Math.min(i, 10)};${style}">
+        <span class="cat-text"><b>${esc(name)}</b><small>${plural(list.length, "referência", "referências")}</small></span>
+        <span class="cat-art" aria-hidden="true">${artHtml}</span></a>`;
+    $("#catGrid").innerHTML = cats.map((c, i) => card(c.name, byCat.get(c.name), "",
+      `--tint:${CAT_TINTS[i % CAT_TINTS.length]}`, art(byCat.get(c.name), svg(ICONS[c.icon])), i)).join("") +
+      card("Todos", S.products, " all", "", art(allPicks, ALL), cats.length);
+    if (S.products.length) S.catsPainted = true;
+  }
+  // início (cartões) ou lista: de uma categoria, de todas, ou o resultado da busca feita no início
+  function renderHome() {
+    const listing = Boolean(S.cat || S.q.trim());
+    $("#shopCats").hidden = listing;
+    $("#listArea").hidden = !listing;
+    $("#hero").hidden = Boolean(S.cat);
+    $("#backCats").hidden = $("#groups").hidden = !S.cat;
+    $("#listTitle").textContent = !S.cat ? "Resultado da busca" : S.cat === "Todos" ? "Todas as referências" : S.cat;
+    document.querySelectorAll("#groups button").forEach(b => b.setAttribute("aria-pressed", b.dataset.group === (S.cat || "Todos")));
+    if (listing) renderList(); else renderCatCards();
   }
 
   function visibleProducts() {
     const q = S.q.trim().toLowerCase();
     return S.products.filter(p =>
-      (S.cat === "Todos" || categoryOf(p.name).name === S.cat) &&
+      (!S.cat || S.cat === "Todos" || categoryOf(p.name).name === S.cat) &&
       (!q || p.name.toLowerCase().includes(q) || p.reference.toLowerCase().includes(q)));
   }
   const range = (a, b) => a === b ? brl(a) : `${brl(a)} – ${brl(b)}`;
@@ -765,26 +806,35 @@
     if (h.startsWith("/p/")) return { view: "product", ref: decodeURIComponent(h.slice(3)) };
     if (h === "/pedido") return { view: "cart" };
     if (h === "/perfil") return { view: "profile" };
-    return { view: "home" };
+    if (h.startsWith("/c/")) return { view: "home", cat: decodeURIComponent(h.slice(3)) };
+    return { view: "home", cat: null };
   }
+  const isCat = name => name === "Todos" || name === OTHER.name || CAT_ORDER.some(c => c.name === name);
+  const homeKey = () => `home:${S.cat || ""}`; // cada lista guarda a própria rolagem
   function route() {
     if (!S.products.length) return;
-    const r = parseHash(), prev = S.view;
+    const r = parseHash(), prev = S.view, prevKey = homeKey();
     if (r.view === "product" && !productBy(r.ref)) { location.replace("#/"); return; }
-    if (prev === "home") S.homeScroll = scrollY;
+    if (r.view === "home" && r.cat && !isCat(r.cat)) { location.replace("#/"); return; }
+    if (prev === "home") S.scrolls[prevKey] = scrollY;
     if (prev === "cart" && S.step === "done" && r.view !== "cart") { S.step = "cart"; S.result = null; }
     if (r.view === "product") S.fromApp = S.routed; // aberto por link direto: voltar leva ao início
     S.routed = true;
     if (prev === "product" && r.view !== "product") S.draft = new Map();
 
     const swap = () => {
+      if (r.view === "home" && r.cat !== S.cat) {
+        S.cat = r.cat;
+        if (S.cat) { S.q = ""; $("#search").value = ""; } // a busca do início não continua dentro da categoria
+        renderHome();
+      }
       if (r.view === "product") openProduct(productBy(r.ref));
       if (r.view === "cart") renderCart();
       if (r.view === "profile") renderProfile();
       document.querySelectorAll(".view").forEach(v => (v.hidden = v.dataset.view !== r.view));
       document.body.dataset.view = S.view = r.view;
       renderTabs();
-      scrollTo(0, r.view === "home" ? S.homeScroll : 0);
+      scrollTo(0, r.view === "home" ? S.scrolls[homeKey()] || 0 : 0);
     };
     // cartão ↔ produto: o quadro da peça cresce até a tela do produto e volta ao lugar
     const pair = (prev === "home" && r.view === "product") || (prev === "product" && r.view === "home");
@@ -796,9 +846,11 @@
       return;
     }
     swap();
-    if (prev !== r.view && !reduced()) {
+    // cartões ↔ lista da categoria também desliza, como uma tela nova
+    const intoList = prev === "home" && r.view === "home" && prevKey !== homeKey();
+    if ((prev !== r.view || intoList) && !reduced()) {
       const v = document.querySelector(`.view[data-view="${r.view}"]`);
-      v.classList.remove("in", "in-r"); void v.offsetWidth; v.classList.add(r.view === "product" ? "in-r" : "in");
+      v.classList.remove("in", "in-r"); void v.offsetWidth; v.classList.add(r.view === "product" || (intoList && S.cat) ? "in-r" : "in");
     }
   }
 
@@ -863,13 +915,13 @@
       b.totalAvailable - a.totalAvailable || a.name.localeCompare(b.name, "pt-BR"));
     S.updatedAt = data.updatedAt; indexProducts(S.products);
     for (const code of [...S.cart.keys()]) if (!S.index.has(code)) S.cart.delete(code);
-    renderGroups(); renderStamp(); renderHeroArt(); renderList(); renderTabs();
+    renderGroups(); renderStamp(); renderHeroArt(); renderHome(); renderTabs();
   }
 
   // ---------- eventos ----------
   document.addEventListener("input", e => {
     if (e.target.matches(".qty")) setDraft(Number(e.target.dataset.code), e.target.value);
-    if (e.target.id === "search") { S.q = e.target.value; renderList(); }
+    if (e.target.id === "search") { S.q = e.target.value; renderHome(); }
   });
   // bolinhas da galeria do produto acompanham a foto visível
   document.addEventListener("scroll", e => {
@@ -907,11 +959,8 @@
   document.addEventListener("pointercancel", endDrag);
   document.addEventListener("click", e => {
     const t = e.target.closest("button"); if (!t) return;
-    if (t.dataset.group) {
-      S.cat = t.dataset.group;
-      document.querySelectorAll("#groups button").forEach(b => b.setAttribute("aria-pressed", b === t));
-      renderList();
-    }
+    // faixa de categorias dentro da lista: troca de categoria sem empilhar histórico (voltar leva aos cartões)
+    if (t.dataset.group) location.replace(catHref(t.dataset.group));
     else if (t.dataset.color) {
       S.color = t.dataset.color;
       $("#colorName").textContent = S.color;
@@ -931,10 +980,10 @@
       if (p && draftDirty(p) && !confirm("Sair sem adicionar a grade ao pedido?")) return;
       leaveProduct();
     }
-    else if (t.id === "toList") $("#listHead").scrollIntoView({ behavior: reduced() ? "auto" : "smooth" });
+    else if (t.id === "toList") $(S.cat || S.q.trim() ? "#listHead" : "#shopCats").scrollIntoView({ behavior: reduced() ? "auto" : "smooth" });
     else if (t.id === "toBuyer") { S.problems = []; goCart("buyer"); }
     else if (t.id === "backCart") goCart("cart");
-    else if (t.id === "refresh") reloadCatalog(true).then(() => toast("Estoque atualizado"));
+    else if (t.dataset.act === "refresh") reloadCatalog(true).then(() => toast("Estoque atualizado"));
     else if (t.dataset.remove) {
       const [ref, color] = t.dataset.remove.split("|");
       t.closest(".line").classList.add("leaving");
@@ -985,8 +1034,8 @@
       await reloadCatalog();
       route();
     } catch (e) {
-      $("#stamp").textContent = "";
-      $("#list").innerHTML = `<div class="empty">Não foi possível carregar o estoque agora. ${esc(e.message || "")}<br>Recarregue a página em alguns minutos.</div>`;
+      document.querySelectorAll(".stamp").forEach(el => (el.textContent = ""));
+      $("#catGrid").innerHTML = `<div class="empty">Não foi possível carregar o estoque agora. ${esc(e.message || "")}<br>Recarregue a página em alguns minutos.</div>`;
     }
   })();
 })();

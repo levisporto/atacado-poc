@@ -28,7 +28,7 @@
       <input id="search" type="search" placeholder="Buscar por nome ou referência" aria-label="Buscar produtos">
     </label>
 
-    <section class="hero" aria-labelledby="heroTitle">
+    <section class="hero" id="hero" aria-labelledby="heroTitle">
       <div class="hero-text">
         <span class="demo" id="demoTag" title="Estoque fictício" hidden>Demonstração</span>
         <h1 id="heroTitle">Atacado com o estoque de hoje</h1>
@@ -38,13 +38,26 @@
       <div class="hero-art" id="heroArt" aria-hidden="true"></div>
     </section>
 
-    <nav class="cats" id="groups" aria-label="Categorias"></nav>
+    <!-- início: cartões das categorias; ao abrir um, a lista daquela categoria (#/c/nome) -->
+    <section class="shop-cats" id="shopCats" aria-labelledby="catsTitle">
+      <div class="list-head">
+        <h2 id="catsTitle">Categorias</h2>
+        <div class="stamp">Carregando estoque…</div>
+      </div>
+      <div class="cat-grid" id="catGrid"></div>
+    </section>
 
-    <div class="list-head" id="listHead">
-      <h2>Referências</h2>
-      <div class="stamp" id="stamp">Carregando estoque…</div>
+    <div id="listArea" hidden>
+      <a class="back-link" id="backCats" href="#/">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Categorias</a>
+      <nav class="cats" id="groups" aria-label="Categorias"></nav>
+
+      <div class="list-head" id="listHead">
+        <h2 id="listTitle">Referências</h2>
+        <div class="stamp">Carregando estoque…</div>
+      </div>
+      <section class="grid" id="list" aria-live="polite"></section>
     </div>
-    <section class="grid" id="list" aria-live="polite"></section>
   </div>
 </section>
 
