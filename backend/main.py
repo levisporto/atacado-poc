@@ -182,14 +182,28 @@ async def _shutdown():
     db.close()
 
 
+# Página, JS e CSS: o navegador sempre confere com o servidor (304 pelo ETag quando nada mudou).
+# Sem isso, depois de um deploy ele podia juntar o index.html novo com um app.js velho do cache e travar.
+NO_CACHE = {"Cache-Control": "no-cache"}
+
+
 @app.get("/")
 async def index():
-    return FileResponse(FRONT / "index.html")
+    return FileResponse(FRONT / "index.html", headers=NO_CACHE)
 
 
 @app.get("/admin")
 async def admin_page():
-    return FileResponse(FRONT / "admin.html")
+    return FileResponse(FRONT / "admin.html", headers=NO_CACHE)
+
+
+class FrontFiles(StaticFiles):
+    async def get_response(self, path, scope):
+        resp = await super().get_response(path, scope)
+        if resp.status_code in (200, 304):
+            resp.headers.update(NO_CACHE)
+        return resp
+
 
 class CachedImages(StaticFiles):
     """Fotos mudam raramente: o navegador guarda por 1 dia (e revalida pelo ETag depois)."""
@@ -202,4 +216,4 @@ class CachedImages(StaticFiles):
 
 if Path(config.IMAGES_DIR).is_dir():
     app.mount(images.URL_PREFIX, CachedImages(directory=config.IMAGES_DIR), name="img")
-app.mount("/", StaticFiles(directory=FRONT), name="front")
+app.mount("/", FrontFiles(directory=FRONT), name="front")
