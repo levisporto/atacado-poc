@@ -186,16 +186,27 @@
     return svg(ICONS[k]);
   }
   // fotos da cor (pasta imagens_ecommerce no backend); sem foto dessa cor, a capa da referência
+  // cada foto vem com a miniatura de 360 px (thumbs[i] de images[i]); sem miniatura, a própria foto
   function photosOf(p, color) {
     const c = p.colors.find(x => x.color === color);
-    return c && c.images && c.images.length ? c.images : p.image ? [p.image] : [];
+    if (c && c.images && c.images.length) return c.images.map((src, i) => ({ src, thumb: (c.thumbs && c.thumbs[i]) || src }));
+    return p.image ? [{ src: p.image, thumb: p.thumb || p.image }] : [];
   }
-  const photo = (src, alt = "", eager = false) =>
-    `<img src="${esc(API + src)}" alt="${esc(alt)}" loading="${eager ? "eager" : "lazy"}" decoding="async">`;
+  // sizes = largura em que a foto aparece: o navegador escolhe entre a miniatura e a foto inteira.
+  // Sem sizes (lugares pequenos: destaque, linhas do pedido), vai sempre a miniatura.
+  // width/height: as fotos são quadradas; reserva o espaço antes de a imagem chegar.
+  const photo = ({ src, thumb }, alt = "", eager = false, sizes = "") => {
+    const pick = sizes && thumb !== src
+      ? `src="${esc(API + src)}" srcset="${esc(API + thumb)} 360w, ${esc(API + src)} 720w" sizes="${sizes}"`
+      : `src="${esc(API + (sizes ? src : thumb))}"`;
+    return `<img ${pick} width="720" height="720" alt="${esc(alt)}" loading="${eager ? "eager" : "lazy"}" decoding="async">`;
+  };
+  const CARD_SIZES = "(max-width: 559px) 50vw, 280px";
+  const DETAIL_SIZES = "(min-width: 900px) 600px, 100vw";
   // foto quando houver, senão o ícone pelo nome
-  function artFor(p, color) {
-    const [src] = photosOf(p, color);
-    return src ? photo(src) : iconFor(p.name);
+  function artFor(p, color, sizes) {
+    const [pic] = photosOf(p, color);
+    return pic ? photo(pic, "", false, sizes) : iconFor(p.name);
   }
   const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
   const sum = (arr, f) => arr.reduce((a, x) => a + f(x), 0);
@@ -334,7 +345,7 @@
   function productCard(p, i) {
     const q = refPieces(p.reference);
     return `<a class="card${S.firstPaint ? " enter" : ""}" style="--i:${Math.min(i, 10)}" href="#/p/${encodeURIComponent(p.reference)}" data-ref="${esc(p.reference)}">
-      <span class="card-art" style="background:${tintFor(p.colors[0].color)}">${artFor(p, p.colors[0].color)}
+      <span class="card-art" style="background:${tintFor(p.colors[0].color)}">${artFor(p, p.colors[0].color, CARD_SIZES)}
         <span class="in-cart">${q ? `${q} no pedido` : ""}</span></span>
       <span class="card-body">
         <span class="card-name">${esc(p.name)}</span>
@@ -408,7 +419,7 @@
     el.style.background = tintFor(S.color);
     el.classList.toggle("photo", pics.length > 0);
     el.innerHTML = (pics.length
-      ? `<div class="pd-photos">${pics.map((src, i) => photo(src, `${p.name}, ${S.color}`, i === 0)).join("")}</div>` +
+      ? `<div class="pd-photos">${pics.map((pic, i) => photo(pic, `${p.name}, ${S.color}`, i === 0, DETAIL_SIZES)).join("")}</div>` +
         (pics.length > 1 ? `<span class="pd-dots" aria-hidden="true">${pics.map((_, i) => `<i${i ? "" : ' class="on"'}></i>`).join("")}</span>` : "")
       : iconFor(p.name)) +
       `<span class="stock ${p.totalAvailable < 40 ? "low" : ""}">${p.totalAvailable} em estoque</span>

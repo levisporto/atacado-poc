@@ -34,6 +34,8 @@ SIZE_ORDER = ["RN", "PP", "P", "M", "G", "GG", "XG",
 
 # Referência com menos que isso no total (somando cores e tamanhos) fica fora da vitrine.
 MIN_REF_AVAILABLE = 2
+# Produtos cujo nome começa com isso (sem diferenciar maiúsculas) ficam fora da vitrine.
+HIDDEN_PREFIXES = ("promocional", "brinde", "bazar")
 
 
 def size_key(s: str) -> tuple[int, str]:
@@ -62,6 +64,8 @@ def group_catalog(skus: list[dict]) -> list[dict]:
     for s in skus:
         if s["price"] is None or s["available"] <= 0:
             continue  # sem preço de atacado ou sem saldo: não aparece na vitrine
+        if s["name"].strip().lower().startswith(HIDDEN_PREFIXES):
+            continue  # brindes, bazar e material promocional não são vendidos no atacado
         ref = refs.setdefault(s["reference"], {
             "reference": s["reference"], "name": s["name"], "group": s["group"],
             "colors": OrderedDict(), "colorCodes": {}, "sizes": set(), "minPrice": s["price"], "maxPrice": s["price"],
@@ -87,13 +91,15 @@ def group_catalog(skus: list[dict]) -> list[dict]:
         colors = []
         for color, items in ref["colors"].items():
             items.sort(key=lambda x: size_key(x["size"]))
+            pics = images.for_color(ref["reference"], ref["colorCodes"][color])
             colors.append({"color": color, "skus": items,
-                           "images": images.for_color(ref["reference"], ref["colorCodes"][color])})
+                           "images": pics, "thumbs": [images.thumb(u) for u in pics]})  # thumbs[i] é a miniatura de images[i]
         retail = ref["retailPrices"]
+        image = next((c["images"][0] for c in colors if c["images"]), None) or images.cover(ref["reference"])
         out.append({**{k: v for k, v in ref.items() if k not in ("colorCodes", "retailPrices")},
                     "sizes": sizes, "colors": colors,
                     "minRetailPrice": min(retail, default=None), "maxRetailPrice": max(retail, default=None),
-                    "image": next((c["images"][0] for c in colors if c["images"]), None) or images.cover(ref["reference"]),
+                    "image": image, "thumb": images.thumb(image),
                     "totalAvailable": int(ref["totalAvailable"])})
     out.sort(key=lambda r: (r["group"], r["name"]))
     return out
