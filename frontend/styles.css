@@ -192,6 +192,7 @@ body[data-view="product"] .tabbar { display: none; }
 .pd-art.photo .mark { display: none; }
 .pd-photos { position: absolute; inset: 0; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
 .pd-photos::-webkit-scrollbar { display: none; }
+@media (hover: hover) and (pointer: fine) { .pd-photos:has(img + img) { cursor: grab; user-select: none; } }
 .pd-photos img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; scroll-snap-align: center; }
 .pd-dots { position: absolute; left: 0; right: 0; bottom: 12px; display: flex; justify-content: center; gap: 6px; pointer-events: none; }
 .pd-dots i { width: 7px; height: 7px; border-radius: 50%; background: rgba(0, 0, 0, .18); transition: background-color .2s, transform .2s; }

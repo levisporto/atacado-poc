@@ -866,6 +866,34 @@
     const i = Math.round(g.scrollLeft / g.clientWidth);
     g.parentElement.querySelectorAll(".pd-dots i").forEach((d, k) => d.classList.toggle("on", k === i));
   }, true);
+  // no computador: clicar e arrastar a foto para o lado mostra a próxima (no celular o dedo já desliza)
+  let drag = null;
+  document.addEventListener("pointerdown", e => {
+    const g = e.pointerType === "mouse" && e.button === 0 && e.target.closest(".pd-photos");
+    if (!g || g.children.length < 2) return;
+    drag = { g, x: e.clientX, left: g.scrollLeft, i: Math.round(g.scrollLeft / g.clientWidth) };
+    g.style.scrollSnapType = "none";  // senão o snap puxa a foto de volta a cada pixel
+    g.style.cursor = "grabbing";
+    g.setPointerCapture(e.pointerId);
+    e.preventDefault();               // não arrasta a imagem como arquivo nem seleciona texto
+  });
+  document.addEventListener("pointermove", e => {
+    if (drag) drag.g.scrollLeft = drag.left - (e.clientX - drag.x);
+  });
+  const endDrag = e => {
+    if (!drag) return;
+    const { g, x, i } = drag, dx = e.clientX - x;
+    drag = null;
+    g.style.cursor = "";
+    // passou de 40px: vai para a foto vizinha naquela direção; menos que isso, volta
+    const to = Math.max(0, Math.min(g.children.length - 1, i + (dx < -40 ? 1 : dx > 40 ? -1 : 0)));
+    g.scrollTo({ left: to * g.clientWidth, behavior: reduced() ? "auto" : "smooth" });
+    const snap = () => { g.style.scrollSnapType = ""; };
+    g.addEventListener("scrollend", snap, { once: true });
+    setTimeout(snap, 500);  // scrollend não dispara se a foto já estava no lugar (ou em navegador sem suporte)
+  };
+  document.addEventListener("pointerup", endDrag);
+  document.addEventListener("pointercancel", endDrag);
   document.addEventListener("click", e => {
     const t = e.target.closest("button"); if (!t) return;
     if (t.dataset.group) {
