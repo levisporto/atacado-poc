@@ -36,6 +36,20 @@ SIZE_ORDER = ["RN", "PP", "P", "M", "G", "GG", "XG",
 MIN_REF_AVAILABLE = 2
 # Produtos cujo nome começa com isso (sem diferenciar maiúsculas) ficam fora da vitrine.
 HIDDEN_PREFIXES = ("promocional", "brinde", "bazar")
+# Referências que ficam fora da vitrine mesmo com saldo e preço.
+HIDDEN_REFERENCES = {
+    "002 BB ACE658",  # embalagem maternidades
+    "026 BB ACE451",  # saco de organza pequeno
+    "002 BB ACE761",  # máscara super-herói Hulk
+    "002 BB ACE759",  # carnaval Frozen
+    "002 BB ACE757",  # carnaval borboleta
+    "002 BB ACE626",  # jogo americano
+    "002 BB ACE760",  # máscara super-herói homem
+    "002 BB ACE758",  # carnaval joaninha
+    "010 BB ACE657",  # elfo de Natal (institucional)
+    "002 BB ACE637",  # sacochila
+    "002 BB ACE717",  # óculos infantil unissex
+}
 
 
 def size_key(s: str) -> tuple[int, str]:
@@ -64,8 +78,8 @@ def group_catalog(skus: list[dict]) -> list[dict]:
     for s in skus:
         if s["price"] is None or s["available"] <= 0:
             continue  # sem preço de atacado ou sem saldo: não aparece na vitrine
-        if s["name"].strip().lower().startswith(HIDDEN_PREFIXES):
-            continue  # brindes, bazar e material promocional não são vendidos no atacado
+        if s["name"].strip().lower().startswith(HIDDEN_PREFIXES) or s["reference"].strip() in HIDDEN_REFERENCES:
+            continue  # brindes, bazar, material promocional e referências escondidas não são vendidos no atacado
         ref = refs.setdefault(s["reference"], {
             "reference": s["reference"], "name": s["name"], "group": s["group"],
             "colors": OrderedDict(), "colorCodes": {}, "sizes": set(), "minPrice": s["price"], "maxPrice": s["price"],
