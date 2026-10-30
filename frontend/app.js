@@ -73,9 +73,11 @@
     colorCache.set(name, found);
     return found;
   }
-  // fundo da bolinha: 1 cor, meio a meio se o nome tiver 2 (listras, "Vermelho Branco"), ou arco-íris
-  function swatchBg(name) {
-    const [a, b] = colorsIn(name);
+  // fundo da bolinha: a cor lida da foto (c.swatch, do cores_fotos.json) quando há; senão pelo nome:
+  // 1 cor, meio a meio se o nome tiver 2 (listras, "Vermelho Branco"), ou arco-íris
+  function swatchBg(c) {
+    if (c.swatch) return c.swatch;
+    const [a, b] = colorsIn(c.color);
     return !a ? MULTI : b ? `linear-gradient(135deg, ${a} 50%, ${b} 50%)` : a;
   }
   // fundo do ícone da peça: a primeira cor reconhecida misturada ao creme
@@ -392,7 +394,7 @@
         <span class="card-name">${esc(p.name)}</span>
         <span class="card-price"><small class="tag">Atacado</small> ${priceOf(p)} <small>/ peça</small></span>
         ${retailOf(p, "card-retail")}
-        <span class="card-meta"><span class="dots">${p.colors.slice(0, 5).map(c => `<span class="sw" title="${esc(c.color)}" style="background:${swatchBg(c.color)}"></span>`).join("")}${p.colors.length > 5 ? `<span class="more">+${p.colors.length - 5}</span>` : ""}</span>
+        <span class="card-meta"><span class="dots">${p.colors.slice(0, 5).map(c => `<span class="sw" title="${esc(c.color)}" style="background:${swatchBg(c)}"></span>`).join("")}${p.colors.length > 5 ? `<span class="more">+${p.colors.length - 5}</span>` : ""}</span>
           <span class="${p.totalAvailable < 40 ? "low" : ""}">${p.totalAvailable} em estoque</span></span>
       </span></a>`;
   }
@@ -471,7 +473,7 @@
     $("#colors").innerHTML = p.colors.map(c => {
       const q = sum(c.skus, s => S.draft.get(s.productCode) || 0);
       return `<button type="button" aria-pressed="${c.color === S.color}" data-color="${esc(c.color)}" title="${esc(c.color)}" aria-label="${esc(c.color)}${q ? `, ${q} peças` : ""}">
-        <span class="dot" style="background:${swatchBg(c.color)}">${q ? `<span class="count">${q}</span>` : ""}</span>
+        <span class="dot" style="background:${swatchBg(c)}">${q ? `<span class="count">${q}</span>` : ""}</span>
         <span class="lbl">${esc(c.color)}</span></button>`;
     }).join("");
   }

@@ -6,6 +6,7 @@ incluir fotos novas basta reiniciar o servidor.
 """
 from __future__ import annotations
 
+import json
 import logging
 import re
 from pathlib import Path
@@ -18,12 +19,15 @@ log = logging.getLogger("atacado.images")
 URL_PREFIX = "/img"
 EXTS = {".jpg", ".jpeg", ".png", ".webp"}
 THUMB = ".thumb"  # {foto}.thumb.webp de 360 px ao lado da foto, gerada pelo converter_webp.py
+SWATCHES = "cores_fotos.json"  # cor da bolinha lida das fotos, gerada pelo atacado-images/cores_das_fotos.py
 _NAME = re.compile(r"^(?P<ref>.+)_(?P<color>[^_]*)_(?P<n>\d*)$")
 
 # referência -> código da cor -> URLs em ordem (_1, _2, ...)
 _index: dict[str, dict[str, list[str]]] = {}
 # URL da foto -> URL da miniatura (só as que têm)
 _thumbs: dict[str, str] = {}
+# referência -> código da cor -> "#rrggbb" (só cores lisas; estampas seguem pelo nome)
+_swatches: dict[str, dict[str, str]] = {}
 
 
 def _url(f: Path) -> str:
@@ -64,13 +68,31 @@ def load() -> None:
         _index[ref] = {c: [u for _, u in sorted(v)] for c, v in sorted(colors.items())}
     _thumbs.clear()
     _thumbs.update(thumbs)
+    _swatches.clear()
+    try:
+        raw = json.loads((root / SWATCHES).read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        raw = {}
+    except (OSError, ValueError) as e:
+        log.warning("%s ilegível (%s): bolinhas seguem pelo nome da cor", SWATCHES, e)
+        raw = {}
+    for ref, colors in raw.items():
+        for code, sw in colors.items():
+            if re.fullmatch(r"#[0-9a-fA-F]{6}", str(sw.get("hex"))) and not sw.get("multi"):
+                _swatches.setdefault(_ref_key(ref), {})[_color_key(code)] = sw["hex"]
     total = sum(len(v) for c in _index.values() for v in c.values())
-    log.info("Fotos: %d referências, %d arquivos, %d com miniatura", len(_index), total, len(_thumbs))
+    log.info("Fotos: %d referências, %d arquivos, %d com miniatura, %d cores lidas das fotos",
+             len(_index), total, len(_thumbs), sum(len(c) for c in _swatches.values()))
 
 
 def for_color(reference: str, color_code: str) -> list[str]:
     """Fotos daquela cor (pode vir vazio: o front usa a capa da referência)."""
     return _index.get(_ref_key(reference), {}).get(_color_key(color_code), [])
+
+
+def swatch(reference: str, color_code: str) -> str | None:
+    """Cor da bolinha tirada da foto ("#rrggbb"); None = o front adivinha pelo nome."""
+    return _swatches.get(_ref_key(reference), {}).get(_color_key(color_code))
 
 
 def thumb(url: str | None) -> str | None:

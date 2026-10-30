@@ -107,6 +107,7 @@ def group_catalog(skus: list[dict]) -> list[dict]:
             items.sort(key=lambda x: size_key(x["size"]))
             pics = images.for_color(ref["reference"], ref["colorCodes"][color])
             colors.append({"color": color, "skus": items,
+                           "swatch": images.swatch(ref["reference"], ref["colorCodes"][color]),
                            "images": pics, "thumbs": [images.thumb(u) for u in pics]})  # thumbs[i] é a miniatura de images[i]
         retail = ref["retailPrices"]
         image = next((c["images"][0] for c in colors if c["images"]), None) or images.cover(ref["reference"])

@@ -1,0 +1,1227 @@
+{
+ "001-BB-TIA212": {
+  "770": {
+   "fonte": "foto",
+   "fotos": [
+    "001-BB-TIA212_0770_1.webp",
+    "001-BB-TIA212_0770_2.webp",
+    "001-BB-TIA212_0770_3.webp"
+   ],
+   "hex": "#c07d99",
+   "multi": true,
+   "nome": "Branco/ Poa Azul",
+   "paleta": [
+    [
+     "#c07d99",
+     0.23
+    ],
+    [
+     "#d4abb6",
+     0.21
+    ],
+    [
+     "#704c5d",
+     0.19
+    ],
+    [
+     "#697d95",
+     0.15
+    ],
+    [
+     "#e7e3e3",
+     0.13
+    ],
+    [
+     "#9da8ae",
+     0.08
+    ]
+   ]
+  }
+ },
+ "002-BB-ACE626": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "002-BB-ACE626_005_1.webp"
+   ],
+   "hex": "#c7c5c3",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#c7c5c3",
+     0.24
+    ],
+    [
+     "#43684e",
+     0.22
+    ],
+    [
+     "#4e413e",
+     0.19
+    ],
+    [
+     "#b2ad95",
+     0.14
+    ],
+    [
+     "#7b7566",
+     0.12
+    ],
+    [
+     "#e2e1de",
+     0.1
+    ]
+   ]
+  }
+ },
+ "002-BB-ACE640": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "002-BB-ACE640_005_1.webp",
+    "002-BB-ACE640_005_2.webp"
+   ],
+   "hex": "#b9d1b0",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#b9d1b0",
+     0.36
+    ],
+    [
+     "#a7a49b",
+     0.35
+    ],
+    [
+     "#84867a",
+     0.17
+    ],
+    [
+     "#dbe3d7",
+     0.12
+    ]
+   ]
+  }
+ },
+ "002-BB-ACE647": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "002-BB-ACE647_005_1.webp"
+   ],
+   "hex": "#8e713e",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#8e713e",
+     0.57
+    ],
+    [
+     "#b6a560",
+     0.15
+    ],
+    [
+     "#614d31",
+     0.15
+    ],
+    [
+     "#d2cebf",
+     0.12
+    ]
+   ]
+  }
+ },
+ "002-BB-ACE662": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "002-BB-ACE662_005_1.webp"
+   ],
+   "hex": "#73685a",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#73685a",
+     0.39
+    ],
+    [
+     "#e9e9e8",
+     0.33
+    ],
+    [
+     "#c8c6c2",
+     0.15
+    ],
+    [
+     "#8e877c",
+     0.13
+    ]
+   ]
+  }
+ },
+ "002-BB-ACE710": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "002-BB-ACE710_005_1.webp"
+   ],
+   "hex": "#96634a",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#96634a",
+     0.4
+    ],
+    [
+     "#bb9777",
+     0.19
+    ],
+    [
+     "#efeded",
+     0.27
+    ],
+    [
+     "#703626",
+     0.14
+    ]
+   ]
+  }
+ },
+ "002-BB-ACE717": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "002-BB-ACE717_005_1.webp"
+   ],
+   "hex": "#43474b",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#43474b",
+     0.26
+    ],
+    [
+     "#252325",
+     0.52
+    ],
+    [
+     "#e5e5e5",
+     0.15
+    ],
+    [
+     "#868789",
+     0.08
+    ]
+   ]
+  }
+ },
+ "002-BB-ACE757": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "002-BB-ACE757_005_1.webp"
+   ],
+   "hex": "#f197ca",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#f197ca",
+     0.54
+    ],
+    [
+     "#f474bb",
+     0.22
+    ],
+    [
+     "#ede9eb",
+     0.14
+    ],
+    [
+     "#f1c6de",
+     0.1
+    ]
+   ]
+  }
+ },
+ "002-BB-ACE758": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "002-BB-ACE758_005_1.webp"
+   ],
+   "hex": "#ec7b8f",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#ec7b8f",
+     0.28
+    ],
+    [
+     "#3b1418",
+     0.23
+    ],
+    [
+     "#bb0d24",
+     0.16
+    ],
+    [
+     "#ebe8e8",
+     0.15
+    ],
+    [
+     "#d9455a",
+     0.1
+    ],
+    [
+     "#e2adb7",
+     0.08
+    ]
+   ]
+  }
+ },
+ "002-BB-ACE759": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "002-BB-ACE759_005_1.webp"
+   ],
+   "hex": "#6abadf",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#6abadf",
+     0.32
+    ],
+    [
+     "#efefed",
+     0.32
+    ],
+    [
+     "#becfd2",
+     0.28
+    ],
+    [
+     "#779fae",
+     0.08
+    ]
+   ]
+  }
+ },
+ "002-BB-ACE760": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "002-BB-ACE760_005_1.webp"
+   ],
+   "hex": "#111111",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#111111",
+     0.54
+    ],
+    [
+     "#333538",
+     0.19
+    ],
+    [
+     "#585958",
+     0.16
+    ],
+    [
+     "#c7c8c7",
+     0.11
+    ]
+   ]
+  }
+ },
+ "002-BB-ACE761": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "002-BB-ACE761_005_1.webp"
+   ],
+   "hex": "#3c990f",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#3c990f",
+     0.53
+    ],
+    [
+     "#2d770f",
+     0.19
+    ],
+    [
+     "#57ba27",
+     0.18
+    ],
+    [
+     "#c2d5b8",
+     0.11
+    ]
+   ]
+  }
+ },
+ "002-BB-BLS271": {
+  "96": {
+   "fonte": "nome",
+   "fotos": [
+    "002-BB-BLS271_096_1.webp",
+    "002-BB-BLS271_096_2.webp"
+   ],
+   "hex": "#f3efe6",
+   "multi": false,
+   "nome": "Off White",
+   "paleta": []
+  }
+ },
+ "002-BB-BLS284": {
+  "2171": {
+   "fonte": "foto",
+   "fotos": [
+    "002-BB-BLS284_2171_1.webp",
+    "002-BB-BLS284_2171_2.webp"
+   ],
+   "hex": "#b5b5b6",
+   "multi": true,
+   "nome": "Estampa Cereja",
+   "paleta": [
+    [
+     "#b5b5b6",
+     0.75
+    ],
+    [
+     "#908889",
+     0.18
+    ],
+    [
+     "#dcdedd",
+     0.07
+    ]
+   ]
+  }
+ },
+ "003-BB-CAL108": {
+  "1": {
+   "fonte": "nome",
+   "fotos": [
+    "003-BB-CAL108_001_1.webp",
+    "003-BB-CAL108_001_2.webp"
+   ],
+   "hex": "#ffffff",
+   "multi": false,
+   "nome": "Branco",
+   "paleta": []
+  }
+ },
+ "003-BB-CST564": {
+  "193": {
+   "fonte": "foto",
+   "fotos": [
+    "003-BB-CST564_193_1.webp",
+    "003-BB-CST564_193_2.webp"
+   ],
+   "hex": "#acab9d",
+   "multi": false,
+   "nome": "Cinza",
+   "paleta": [
+    [
+     "#acab9d",
+     0.56
+    ],
+    [
+     "#8f8e80",
+     0.19
+    ],
+    [
+     "#72726a",
+     0.17
+    ],
+    [
+     "#cecdc6",
+     0.08
+    ]
+   ]
+  }
+ },
+ "003-BB-CST627": {
+  "1": {
+   "fonte": "nome",
+   "fotos": [
+    "003-BB-CST627_001_1.webp",
+    "003-BB-CST627_001_2.webp"
+   ],
+   "hex": "#ffffff",
+   "multi": false,
+   "nome": "Branco",
+   "paleta": []
+  }
+ },
+ "005-BB-MCF293": {
+  "4": {
+   "fonte": "foto",
+   "fotos": [
+    "005-BB-MCF293_004_1.webp",
+    "005-BB-MCF293_004_2.webp"
+   ],
+   "hex": "#a50614",
+   "multi": false,
+   "nome": "Vermelho",
+   "paleta": [
+    [
+     "#a50614",
+     0.9
+    ],
+    [
+     "#cc999b",
+     0.1
+    ]
+   ]
+  }
+ },
+ "006-BB-ACE581": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "006-BB-ACE581_005_1.webp"
+   ],
+   "hex": "#b76678",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#b76678",
+     0.19
+    ],
+    [
+     "#eeeeed",
+     0.19
+    ],
+    [
+     "#45a0aa",
+     0.18
+    ],
+    [
+     "#c1a093",
+     0.18
+    ],
+    [
+     "#b1cdc2",
+     0.14
+    ],
+    [
+     "#edd1cb",
+     0.13
+    ]
+   ]
+  }
+ },
+ "006-BB-PJM050": {
+  "13": {
+   "fonte": "foto",
+   "fotos": [
+    "006-BB-PJM050_013_1.webp",
+    "006-BB-PJM050_013_2.webp"
+   ],
+   "hex": "#98162a",
+   "multi": false,
+   "nome": "Rosa",
+   "paleta": [
+    [
+     "#98162a",
+     0.86
+    ],
+    [
+     "#d7c0c3",
+     0.14
+    ]
+   ]
+  }
+ },
+ "006-BB-PJM064": {
+  "2156": {
+   "fonte": "foto",
+   "fotos": [
+    "006-BB-PJM064_2156_1.webp",
+    "006-BB-PJM064_2156_2.webp"
+   ],
+   "hex": "#bbbab3",
+   "multi": true,
+   "nome": "Fundo Pto/Estampa Galaxia",
+   "paleta": [
+    [
+     "#bbbab3",
+     0.9
+    ],
+    [
+     "#dedfdc",
+     0.1
+    ]
+   ]
+  }
+ },
+ "008-BB-VST424": {
+  "1566": {
+   "fonte": "foto",
+   "fotos": [
+    "008-BB-VST424_1566_1.webp",
+    "008-BB-VST424_1566_2.webp"
+   ],
+   "hex": "#b6b2b1",
+   "multi": true,
+   "nome": "Estampa Flores",
+   "paleta": [
+    [
+     "#b6b2b1",
+     0.71
+    ],
+    [
+     "#918d90",
+     0.19
+    ],
+    [
+     "#dddcdc",
+     0.1
+    ]
+   ]
+  }
+ },
+ "008-BB-VST427": {
+  "1": {
+   "fonte": "nome",
+   "fotos": [
+    "008-BB-VST427_001_1.webp",
+    "008-BB-VST427_001_2.webp"
+   ],
+   "hex": "#ffffff",
+   "multi": false,
+   "nome": "Branco",
+   "paleta": []
+  }
+ },
+ "009-BB-ACE651": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "009-BB-ACE651_005_1.webp"
+   ],
+   "hex": "#6e7348",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#6e7348",
+     0.24
+    ],
+    [
+     "#5a3e4b",
+     0.22
+    ],
+    [
+     "#aaa693",
+     0.31
+    ],
+    [
+     "#ececec",
+     0.15
+    ],
+    [
+     "#cbc8bf",
+     0.09
+    ]
+   ]
+  }
+ },
+ "010-BB-ACE657": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "010-BB-ACE657_005_1.webp"
+   ],
+   "hex": "#830a07",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#830a07",
+     0.38
+    ],
+    [
+     "#bc9d84",
+     0.21
+    ],
+    [
+     "#d6ccc2",
+     0.15
+    ],
+    [
+     "#eae9e8",
+     0.14
+    ],
+    [
+     "#915b4a",
+     0.12
+    ]
+   ]
+  }
+ },
+ "011-BB-ACE679": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "011-BB-ACE679_005_1.webp"
+   ],
+   "hex": "#7b2a28",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#7b2a28",
+     0.22
+    ],
+    [
+     "#51634d",
+     0.17
+    ],
+    [
+     "#9d6250",
+     0.17
+    ],
+    [
+     "#b5b3a7",
+     0.17
+    ],
+    [
+     "#8b8d79",
+     0.16
+    ],
+    [
+     "#dbd9d5",
+     0.11
+    ]
+   ]
+  }
+ },
+ "011-BB-ACE688": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "011-BB-ACE688_005_1.webp"
+   ],
+   "hex": "#f52804",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#f52804",
+     0.53
+    ],
+    [
+     "#c9e802",
+     0.21
+    ],
+    [
+     "#e8e9d5",
+     0.16
+    ],
+    [
+     "#d4a649",
+     0.1
+    ]
+   ]
+  }
+ },
+ "011-BB-ACE689": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "011-BB-ACE689_005_1.webp"
+   ],
+   "hex": "#204356",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#204356",
+     0.34
+    ],
+    [
+     "#aaabad",
+     0.19
+    ],
+    [
+     "#697986",
+     0.13
+    ],
+    [
+     "#e3e3e4",
+     0.12
+    ],
+    [
+     "#6e374f",
+     0.12
+    ],
+    [
+     "#585166",
+     0.1
+    ]
+   ]
+  }
+ },
+ "011-BB-ACE691": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "011-BB-ACE691_005_1.webp"
+   ],
+   "hex": "#acaca9",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#acaca9",
+     0.7
+    ],
+    [
+     "#836d5e",
+     0.19
+    ],
+    [
+     "#d7d8d7",
+     0.1
+    ]
+   ]
+  }
+ },
+ "011-BB-ACE696": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "011-BB-ACE696_005_1.webp",
+    "011-BB-ACE696_005_2.webp"
+   ],
+   "hex": "#4d3e42",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#4d3e42",
+     0.25
+    ],
+    [
+     "#db8fa6",
+     0.2
+    ],
+    [
+     "#9b707c",
+     0.18
+    ],
+    [
+     "#ececec",
+     0.16
+    ],
+    [
+     "#a39896",
+     0.11
+    ],
+    [
+     "#d2cccb",
+     0.09
+    ]
+   ]
+  }
+ },
+ "011-BB-ACE720": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "011-BB-ACE720_005_1.webp"
+   ],
+   "hex": "#e0e0e0",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#e0e0e0",
+     1.0
+    ]
+   ]
+  }
+ },
+ "011-BB-ACE772": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "011-BB-ACE772_005_1.webp"
+   ],
+   "hex": "#a59a76",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#a59a76",
+     0.28
+    ],
+    [
+     "#3c3331",
+     0.21
+    ],
+    [
+     "#ccd9da",
+     0.31
+    ],
+    [
+     "#cac2a6",
+     0.2
+    ]
+   ]
+  }
+ },
+ "011-BB-ACE778": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "011-BB-ACE778_005_1.webp"
+   ],
+   "hex": "#7a8fa9",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#7a8fa9",
+     0.52
+    ],
+    [
+     "#a8abaa",
+     0.39
+    ],
+    [
+     "#d9d9d7",
+     0.1
+    ]
+   ]
+  }
+ },
+ "011-BB-ACE785": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "011-BB-ACE785_005_1.webp"
+   ],
+   "hex": "#5aafcd",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#5aafcd",
+     0.28
+    ],
+    [
+     "#c6d1d2",
+     0.2
+    ],
+    [
+     "#3f789d",
+     0.17
+    ],
+    [
+     "#edefef",
+     0.28
+    ],
+    [
+     "#79c7db",
+     0.07
+    ]
+   ]
+  }
+ },
+ "011-BB-ACE791": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "011-BB-ACE791_005_1.webp"
+   ],
+   "hex": "#ae84a4",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#ae84a4",
+     0.55
+    ],
+    [
+     "#8f7288",
+     0.19
+    ],
+    [
+     "#a7b9a6",
+     0.15
+    ],
+    [
+     "#dad4cc",
+     0.11
+    ]
+   ]
+  }
+ },
+ "023-BB-SAI061": {
+  "1": {
+   "fonte": "nome",
+   "fotos": [
+    "023-BB-SAI061_001_1.webp",
+    "023-BB-SAI061_001_2.webp"
+   ],
+   "hex": "#ffffff",
+   "multi": false,
+   "nome": "Branco",
+   "paleta": []
+  }
+ },
+ "025-BB-CNJ258": {
+  "4": {
+   "fonte": "foto",
+   "fotos": [
+    "025-BB-CNJ258_004_1.webp",
+    "025-BB-CNJ258_004_2.webp"
+   ],
+   "hex": "#cc0f5b",
+   "multi": false,
+   "nome": "Vermelho",
+   "paleta": [
+    [
+     "#cc0f5b",
+     0.86
+    ],
+    [
+     "#e1c5d2",
+     0.14
+    ]
+   ]
+  }
+ },
+ "025-BB-CNJ320": {
+  "173": {
+   "fonte": "foto",
+   "fotos": [
+    "025-BB-CNJ320_173_1.webp",
+    "025-BB-CNJ320_173_2.webp"
+   ],
+   "hex": "#c19370",
+   "multi": false,
+   "nome": "Laranja",
+   "paleta": [
+    [
+     "#c19370",
+     0.61
+    ],
+    [
+     "#a1a4a1",
+     0.29
+    ],
+    [
+     "#d5d3d1",
+     0.1
+    ]
+   ]
+  }
+ },
+ "025-BB-CNJ353": {
+  "836": {
+   "fonte": "foto",
+   "fotos": [
+    "025-BB-CNJ353_836_1.webp",
+    "025-BB-CNJ353_836_2.webp"
+   ],
+   "hex": "#4f4139",
+   "multi": false,
+   "nome": "Marrom",
+   "paleta": [
+    [
+     "#4f4139",
+     0.51
+    ],
+    [
+     "#a8b0a0",
+     0.21
+    ],
+    [
+     "#838f77",
+     0.2
+    ],
+    [
+     "#d2d6d1",
+     0.09
+    ]
+   ]
+  }
+ },
+ "025-BB-CNJ375": {
+  "173": {
+   "fonte": "foto",
+   "fotos": [
+    "025-BB-CNJ375_173_1.webp",
+    "025-BB-CNJ375_173_2.webp"
+   ],
+   "hex": "#e96409",
+   "multi": false,
+   "nome": "Laranja",
+   "paleta": [
+    [
+     "#e96409",
+     0.49
+    ],
+    [
+     "#dbbfa6",
+     0.14
+    ],
+    [
+     "#c4926e",
+     0.14
+    ],
+    [
+     "#eae2d7",
+     0.13
+    ],
+    [
+     "#d37031",
+     0.1
+    ]
+   ]
+  }
+ },
+ "025-BB-CNJ397": {
+  "13": {
+   "fonte": "foto",
+   "fotos": [
+    "025-BB-CNJ397_013_1.webp",
+    "025-BB-CNJ397_013_2.webp"
+   ],
+   "hex": "#ba8478",
+   "multi": false,
+   "nome": "Rosa",
+   "paleta": [
+    [
+     "#ba8478",
+     0.46
+    ],
+    [
+     "#90655b",
+     0.25
+    ],
+    [
+     "#993d3d",
+     0.16
+    ],
+    [
+     "#e4dfdc",
+     0.13
+    ]
+   ]
+  }
+ },
+ "025-BB-CNJ459": {
+  "283": {
+   "fonte": "foto",
+   "fotos": [
+    "025-BB-CNJ459_0283_1.webp",
+    "025-BB-CNJ459_0283_2.webp"
+   ],
+   "hex": "#a2a7a8",
+   "multi": true,
+   "nome": "Listras Verde/Bege",
+   "paleta": [
+    [
+     "#a2a7a8",
+     0.73
+    ],
+    [
+     "#8a8e90",
+     0.16
+    ],
+    [
+     "#d7d8d7",
+     0.11
+    ]
+   ]
+  }
+ },
+ "025-BB-CNJ465": {
+  "840": {
+   "fonte": "foto",
+   "fotos": [
+    "025-BB-CNJ465_840_1.webp",
+    "025-BB-CNJ465_840_2.webp"
+   ],
+   "hex": "#787169",
+   "multi": true,
+   "nome": "Dino",
+   "paleta": [
+    [
+     "#787169",
+     0.39
+    ],
+    [
+     "#b2b6ad",
+     0.4
+    ],
+    [
+     "#8a8b83",
+     0.1
+    ],
+    [
+     "#dfe1db",
+     0.1
+    ]
+   ]
+  }
+ },
+ "029-BB-ACE755": {
+  "5": {
+   "fonte": "foto",
+   "fotos": [
+    "029-BB-ACE755_005_1.webp"
+   ],
+   "hex": "#907e80",
+   "multi": true,
+   "nome": "Diversas",
+   "paleta": [
+    [
+     "#907e80",
+     0.24
+    ],
+    [
+     "#665d65",
+     0.2
+    ],
+    [
+     "#a0b8c4",
+     0.17
+    ],
+    [
+     "#929aa0",
+     0.17
+    ],
+    [
+     "#567d99",
+     0.11
+    ],
+    [
+     "#d1d4d2",
+     0.11
+    ]
+   ]
+  }
+ }
+}
