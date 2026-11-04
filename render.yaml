@@ -35,9 +35,9 @@ services:
       - key: TOTVS_BRANCH_CODE
         value: "1"
       - key: TOTVS_STOCK_BRANCH_CODES
-        value: "1,2"
+        value: "2"
       - key: TOTVS_STOCK_CODES
-        value: "1"
+        value: "8"
       - key: TOTVS_PRICE_CODE_ATACADO
         value: "3"
       - key: TOTVS_PRICE_CODE_VAREJO

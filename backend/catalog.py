@@ -214,6 +214,7 @@ class CatalogService:
         tmp.write_text(json.dumps({
             "updatedAt": self._updated_at, "fullAt": self._full_at,
             "syncedAt": self._synced_at.isoformat(), "stockBranches": config.STOCK_BRANCH_CODES,
+            "stockCodes": config.STOCK_CODES,
             "skus": list(self._skus.values()),
         }, ensure_ascii=False), encoding="utf-8")
         os.replace(tmp, SNAPSHOT)  # troca atômica: quem lê nunca pega arquivo pela metade
@@ -225,8 +226,9 @@ class CatalogService:
             self._updated_at, self._full_at = float(data["updatedAt"]), float(data["fullAt"])
             self._synced_at = datetime.fromisoformat(data["syncedAt"])
             if (data.get("stockBranches") != config.STOCK_BRANCH_CODES
+                    or data.get("stockCodes") != config.STOCK_CODES
                     or any("retailPrice" not in s for s in self._skus.values())):
-                self._full_at = 0.0  # snapshot de outras filiais ou sem preço de varejo: recarrega tudo já
+                self._full_at = 0.0  # snapshot de outro estoque ou sem preço de varejo: recarrega tudo já
         except FileNotFoundError:
             return
         except Exception as e:

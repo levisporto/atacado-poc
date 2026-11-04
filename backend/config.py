@@ -17,8 +17,8 @@ TOTVS_USERNAME = os.getenv("TOTVS_USERNAME", "")
 TOTVS_PASSWORD = os.getenv("TOTVS_PASSWORD", "")
 
 BRANCH_CODE = int(os.getenv("TOTVS_BRANCH_CODE", "1"))          # filial do cadastro e da tabela de preço
-STOCK_BRANCH_CODES = _list_int("TOTVS_STOCK_BRANCH_CODES", "1,2")  # filiais cujo saldo é somado na vitrine
-STOCK_CODES = _list_int("TOTVS_STOCK_CODES", "1")               # tipos de saldo considerados (1 = FISICO)
+STOCK_BRANCH_CODES = _list_int("TOTVS_STOCK_BRANCH_CODES", "2")  # filiais cujo saldo é somado na vitrine (2 = fábrica)
+STOCK_CODES = _list_int("TOTVS_STOCK_CODES", "8")               # tipos de saldo considerados (8 = ATACADO, entrada da transferência 652)
 PRICE_CODE = int(os.getenv("TOTVS_PRICE_CODE_ATACADO", "3"))    # tabela/código de preço do atacado (3 = ATACADO)
 RETAIL_PRICE_CODE = int(os.getenv("TOTVS_PRICE_CODE_VAREJO", "1"))  # preço de venda ao consumidor (1 = VAREJO), só exibido
 SUBTRACT_SALES_ORDERS = os.getenv("TOTVS_SUBTRACT_SALES_ORDERS", "true").lower() == "true"

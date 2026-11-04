@@ -79,8 +79,8 @@ uvicorn main:app --reload
 |---|---|
 | `TOTVS_CLIENT_ID/SECRET/USERNAME/PASSWORD` | o mesmo usuário de API que você já usa |
 | `TOTVS_BRANCH_CODE` | filial do cadastro e da tabela de preço |
-| `TOTVS_STOCK_BRANCH_CODES` | filiais cujo saldo físico é somado na vitrine (ex.: `1,2`) |
-| `TOTVS_STOCK_CODES` | tipos de saldo considerados (padrão `1`) |
+| `TOTVS_STOCK_BRANCH_CODES` | filiais cujo saldo é somado na vitrine (padrão `2`, fábrica) |
+| `TOTVS_STOCK_CODES` | tipos de saldo considerados (padrão `8`, ATACADO, abastecido pela transferência 652) |
 | `TOTVS_PRICE_CODE_ATACADO` | **código de preço do atacado** — confirmar no TOTVS |
 | `TOTVS_PRICE_CODE_VAREJO` | código de preço de venda ao consumidor (1 = VAREJO), só exibido ao lado do atacado |
 | `TOTVS_SUBTRACT_SALES_ORDERS` | desconta o que já está reservado em pedidos de venda |
