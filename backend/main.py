@@ -42,8 +42,6 @@ FRONT = Path(__file__).resolve().parent.parent / "frontend"
 async def get_config():
     return {
         "mock": config.MOCK_MODE,
-        "minOrderValue": config.MIN_ORDER_VALUE,
-        "minQtyPerRef": config.MIN_QTY_PER_REF,
     }
 
 

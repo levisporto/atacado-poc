@@ -14,7 +14,7 @@ atacado-poc/
 │   ├── totvs.py        token OAuth2 + /product/v2/balances/search + /prices/search
 │   ├── catalog.py      agrupa SKUs em referência → cor → tamanho; sync incremental + snapshot em disco
 │   ├── images.py       índice das fotos (imagens_ecommerce) por referência → cor
-│   ├── orders.py       re-confere saldo/preço, regras do atacado, monta e envia a mensagem
+│   ├── orders.py       re-confere saldo/preço, monta e envia a mensagem
 │   ├── mock_data.py    estoque fictício (modo demonstração)
 │   ├── config.py       tudo vem do .env
 │   └── .env.example
@@ -62,8 +62,7 @@ uvicorn main:app --reload
    - cada sincronização grava `backend/cache/catalog.json`; ao reiniciar o servidor o
      catálogo sai desse arquivo na hora. Só a primeiríssima subida espera a carga completa.
    - `?refresh=true` (botão "atualizar") roda a sincronização incremental na hora.
-2. Comprador preenche a grade. O front já avisa: estoque excedido, mínimo de peças por
-   referência e pedido mínimo.
+2. Comprador preenche a grade. O front já avisa quando a quantidade passa do estoque.
 3. `POST /api/pedido` → o backend **reconsulta saldo e preço só dos SKUs do carrinho, sem
    cache**, e ignora qualquer preço vindo do navegador. Se algo mudou, devolve 409 com a lista
    de problemas e o front recarrega o catálogo.
@@ -84,7 +83,6 @@ uvicorn main:app --reload
 | `TOTVS_PRICE_CODE_ATACADO` | **código de preço do atacado** — confirmar no TOTVS |
 | `TOTVS_PRICE_CODE_VAREJO` | código de preço de venda ao consumidor (1 = VAREJO), só exibido ao lado do atacado |
 | `TOTVS_SUBTRACT_SALES_ORDERS` | desconta o que já está reservado em pedidos de venda |
-| `MIN_ORDER_VALUE`, `MIN_QTY_PER_REF` | regras comerciais (padrão R$ 500 e 6 peças/ref.) |
 | `IMAGES_DIR` | pasta das fotos (padrão `imagens_ecommerce/` na raiz); lida na subida |
 | `GLEICE_WHATSAPP` | WhatsApp que recebe os pedidos, só dígitos com 55 + DDD |
 | `ADMIN_USERS` | quem entra no painel `/admin`: `admin:senha,levi:senha` |

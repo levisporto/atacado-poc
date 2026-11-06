@@ -100,17 +100,6 @@ def validate(order: OrderIn, fresh: dict[int, dict]) -> tuple[list[dict], list[s
             continue
         lines.append({**sku, "quantity": q, "subtotal": round(q * sku["price"], 2)})
 
-    # Regras comerciais
-    per_ref: dict[str, int] = {}
-    for l in lines:
-        per_ref[l["reference"]] = per_ref.get(l["reference"], 0) + l["quantity"]
-    for ref, q in per_ref.items():
-        if q < config.MIN_QTY_PER_REF:
-            name = next(l["name"] for l in lines if l["reference"] == ref)
-            problems.append(f"{name} (ref. {ref}): mínimo de {config.MIN_QTY_PER_REF} peças por referência.")
-    total = sum(l["subtotal"] for l in lines)
-    if lines and total < config.MIN_ORDER_VALUE:
-        problems.append(f"Pedido mínimo de {brl(config.MIN_ORDER_VALUE)} (atual: {brl(total)}).")
     return lines, problems
 
 

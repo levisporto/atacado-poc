@@ -9,7 +9,7 @@
   const $ = (s, el = document) => el.querySelector(s);
 
   const S = {
-    config: { minOrderValue: 500, minQtyPerRef: 6, mock: true },
+    config: { mock: true },
     products: [], index: new Map(), updatedAt: null,
     cart: new Map(), cat: null, q: "", step: "cart", // cat null = início com os cartões das categorias
     view: "home", ref: null, color: null, draft: new Map(), scrolls: {}, fromApp: false, routed: false,
@@ -266,7 +266,7 @@
     }
   }
 
-  // ---------- regras (espelho do backend, só para feedback imediato) ----------
+  // ---------- conferência de estoque (espelho do backend, só para feedback imediato) ----------
   function cartLines() {
     const lines = [];
     for (const [code, qty] of S.cart) {
@@ -277,16 +277,8 @@
   }
   function cartProblems(lines) {
     const out = [];
-    const perRef = new Map();
-    for (const l of lines) {
+    for (const l of lines)
       if (l.quantity > l.available) out.push(`${l.name} ${l.color} ${l.size}: pediu ${l.quantity}, disponível ${l.available}.`);
-      perRef.set(l.reference, (perRef.get(l.reference) || { q: 0, name: l.name })); perRef.get(l.reference).q += l.quantity;
-    }
-    for (const [ref, v] of perRef) if (v.q < S.config.minQtyPerRef)
-      out.push(`${v.name} (ref. ${ref}): mínimo de ${S.config.minQtyPerRef} peças por referência.`);
-    const total = lines.reduce((a, l) => a + l.subtotal, 0);
-    if (lines.length && total < S.config.minOrderValue)
-      out.push(`Pedido mínimo de ${brl(S.config.minOrderValue)} (faltam ${brl(S.config.minOrderValue - total)}).`);
     return out;
   }
 
@@ -296,10 +288,8 @@
     $("#hi").textContent = first ? `Olá, ${first}` : "Olá, lojista";
     $("#avatar").textContent = (first || S.buyer.company || "B")[0].toUpperCase();
   }
-  function renderRules() {
+  function renderDemoTag() {
     $("#demoTag").hidden = !(S.config.mock || DEMO);
-    $("#heroRules").textContent = `Pedido mínimo de ${brl(S.config.minOrderValue)} e ${S.config.minQtyPerRef} peças por referência. ` +
-      "Monte a grade de cada peça e envie pelo WhatsApp.";
   }
   // três peças do catálogo, inclinadas, como vitrine do destaque
   function renderHeroArt() {
@@ -441,7 +431,7 @@
         <span class="pd-price"><small class="tag">Atacado</small> ${priceOf(p)} <small>/ peça</small></span>
         ${retailOf(p, "pd-retail")}
         <p class="pd-desc">${esc(p.group || "Linha")} em ${p.colors.length} ${p.colors.length > 1 ? "cores" : "cor"}, tamanhos ${esc(sizes)}.
-          Escolha a cor e preencha quantas peças quer de cada tamanho; o mínimo é de ${S.config.minQtyPerRef} peças nesta referência.</p>
+          Escolha a cor e preencha quantas peças quer de cada tamanho.</p>
       </div>
       <div>
         <h3 class="sec-title">Cor <span id="colorName">${esc(c.color)}</span></h3>
@@ -505,10 +495,9 @@
   function renderCommit() {
     const p = productBy(S.ref); if (!p) return;
     const t = draftTotals(p), inCart = refPieces(p.reference) > 0, dirty = draftDirty(p);
-    const min = S.config.minQtyPerRef;
     $("#pdSum").innerHTML = t.q
       ? `<span><b>${t.q}</b> ${t.q === 1 ? "peça" : "peças"} · <b>${brl(t.v)}</b></span>` +
-        (t.over ? `<span class="warnline">Há tamanhos acima do estoque</span>` : t.q < min ? `<span class="warnline">Faltam ${min - t.q} para o mínimo de ${min}</span>` : "")
+        (t.over ? `<span class="warnline">Há tamanhos acima do estoque</span>` : "")
       : "";
     const btn = $("#commit");
     btn.disabled = t.over || (!t.q && !inCart);
@@ -599,10 +588,8 @@
           <span class="acts"><a href="#/p/${encodeURIComponent(g.reference)}">editar</a>
             <button class="rm" type="button" data-remove="${esc(g.reference)}|${esc(g.color)}">remover</button></span></div>`;
       }).join("") + (probs.length ? `<div class="problems"><b>Antes de continuar:</b><ul>${probs.map(p => `<li>${esc(p)}</li>`).join("")}</ul></div>` : "");
-      const pct = Math.min(100, (total / S.config.minOrderValue) * 100);
-      foot.innerHTML = `<div class="totals"><div><span>${pieces} peças · ${lines.length} SKUs</span><span>mínimo ${brl(S.config.minOrderValue)}</span></div>
+      foot.innerHTML = `<div class="totals"><div><span>${pieces} peças · ${lines.length} SKUs</span></div>
         <div class="big"><span>Total</span><span>${brl(total)}</span></div></div>
-        <div class="meter" role="progressbar" aria-label="Progresso até o pedido mínimo" aria-valuenow="${Math.round(pct)}" aria-valuemin="0" aria-valuemax="100"><i class="${pct >= 100 ? "full" : ""}" style="width:${pct}%"></i></div>
         <button class="primary" type="button" id="toBuyer" ${probs.length ? "disabled" : ""}>Continuar para seus dados</button>`;
       return;
     }
@@ -760,8 +747,6 @@
         <button class="ghost" type="button" id="logout">Sair</button>`
       : authPanel()) + `
       <div class="facts">
-        <div><span>Pedido mínimo</span><b>${brl(S.config.minOrderValue)}</b></div>
-        <div><span>Mínimo por referência</span><b>${S.config.minQtyPerRef} peças</b></div>
         <div><span>Atendimento</span><b>WhatsApp</b></div>
       </div>`;
   }
@@ -1032,7 +1017,7 @@
       S.config = { ...S.config, ...cfg };
       S.me = me;
       if (me) { S.buyer = { ...S.buyer, ...me }; renderHello(); }
-      renderRules();
+      renderDemoTag();
       await reloadCatalog();
       route();
     } catch (e) {

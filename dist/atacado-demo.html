@@ -1,5 +1,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Bebêtenkitê Atacado</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐵</text></svg>">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Baloo+2:wght@600;700&display=swap">
 <style>
@@ -137,6 +138,42 @@ h1, h2, h3 { font-family: var(--f-display); font-weight: 700; letter-spacing: -.
 .cats button:disabled { opacity: .4; cursor: default; }
 .cats button:disabled .ico { transform: none; }
 .cats button[aria-pressed="true"] .ico { background: var(--brand); color: var(--on-brand); box-shadow: none; }
+
+/* cartões das categorias no início: fundo em dois tons cortado na diagonal, nome à esquerda, duas peças à direita */
+.cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.cat-card {
+  --tint: var(--tile); position: relative; display: flex; align-items: center; min-height: 104px; padding: 14px;
+  border-radius: 20px; overflow: hidden; text-decoration: none; color: var(--ink); box-shadow: var(--shadow);
+  background: linear-gradient(115deg, var(--tint), color-mix(in srgb, var(--tint) 78%, #fff));
+  transition: transform .18s var(--spring);
+}
+.cat-card::before {
+  content: ""; position: absolute; inset: 0 0 0 42%; background: rgba(255, 255, 255, .38);
+  clip-path: polygon(34% 0, 100% 0, 100% 100%, 0 100%);
+}
+.cat-card:active { transform: scale(.97); }
+.cat-card.enter { animation: rise .45s var(--ease-out) both; animation-delay: calc(var(--i, 0) * 40ms); }
+.cat-text { position: relative; z-index: 1; display: grid; gap: 2px; max-width: 54%; }
+.cat-text b { font-family: var(--f-display); font-size: 1.08rem; line-height: 1.1; overflow-wrap: anywhere; }
+.cat-text small { font-size: .74rem; color: var(--ink-2); }
+.cat-art { position: absolute; z-index: 1; top: 8px; right: 8px; bottom: 8px; width: 46%; display: grid; place-items: center; }
+.cat-art > svg { width: 44px; height: 44px; stroke-width: 1.3; opacity: .8; }
+.cat-art img {
+  position: absolute; width: 64%; height: auto; aspect-ratio: 1; object-fit: cover; border-radius: 12px;
+  background: #fff; box-shadow: 0 6px 16px rgba(40, 25, 10, .18);
+}
+.cat-art img:first-child { right: 0; bottom: 0; transform: rotate(6deg); }
+.cat-art img + img { left: 0; top: 0; transform: rotate(-8deg); }
+.cat-art img:only-child { inset: auto; width: 78%; transform: rotate(4deg); }
+.cat-card.all { background: var(--brand); color: var(--on-brand); }
+.cat-card.all::before { background: rgba(255, 255, 255, .14); }
+.cat-card.all small { color: inherit; opacity: .85; }
+
+.back-link {
+  display: inline-flex; align-items: center; gap: 6px; margin: 16px 0 0; padding: 6px 12px 6px 8px; border-radius: 999px;
+  background: var(--surface); box-shadow: var(--shadow); font-size: .85rem; font-weight: 600; text-decoration: none;
+}
+.back-link svg { width: 18px; height: 18px; }
 
 .list-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; padding: 24px 2px 12px; scroll-margin-top: 12px; }
 .list-head h2 { margin: 0 auto 0 0; font-size: 1.45rem; line-height: 1.1; }
@@ -293,9 +330,6 @@ body[data-view="product"] .tabbar { display: none; }
 .totals div { display: flex; justify-content: space-between; align-items: baseline; color: var(--muted); font-size: .88rem; }
 .totals .big { color: var(--ink); font-size: 1.25rem; font-weight: 700; }
 .totals .big span:last-child { font-variant-numeric: tabular-nums; }
-.meter { height: 6px; border-radius: 999px; background: var(--bg-2); overflow: hidden; }
-.meter i { display: block; height: 100%; border-radius: 999px; background: var(--accent); transition: width .4s var(--ease-out); }
-.meter i.full { background: var(--ok); }
 .note { font-size: .88rem; color: var(--muted); margin: 0; }
 .problems { background: var(--danger-soft); color: var(--danger); border-radius: 18px; padding: 12px 16px; font-size: .86rem; }
 .problems ul { margin: 4px 0 0; padding-left: 18px; }
@@ -416,6 +450,9 @@ pre.msg {
 @media (min-width: 560px) {
   .row2 { grid-template-columns: 1fr 1fr; }
   .grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+  .cat-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+  .cat-card { min-height: 128px; padding: 18px 20px; }
+  .cat-text b { font-size: 1.25rem; }
   .cats { margin-inline: 0; padding-inline: 0; }
   .cats button { flex: 0 0 84px; }
 }
@@ -468,23 +505,36 @@ pre.msg {
       <input id="search" type="search" placeholder="Buscar por nome ou referência" aria-label="Buscar produtos">
     </label>
 
-    <section class="hero" aria-labelledby="heroTitle">
+    <section class="hero" id="hero" aria-labelledby="heroTitle">
       <div class="hero-text">
         <span class="demo" id="demoTag" title="Estoque fictício" hidden>Demonstração</span>
         <h1 id="heroTitle">Atacado com o estoque de hoje</h1>
-        <p id="heroRules">Monte a grade de cada peça e envie pelo WhatsApp.</p>
+        <p>Monte a grade de cada peça e envie pelo WhatsApp.</p>
         <button class="hero-cta" type="button" id="toList">Ver referências</button>
       </div>
       <div class="hero-art" id="heroArt" aria-hidden="true"></div>
     </section>
 
-    <nav class="cats" id="groups" aria-label="Categorias"></nav>
+    <!-- início: cartões das categorias; ao abrir um, a lista daquela categoria (#/c/nome) -->
+    <section class="shop-cats" id="shopCats" aria-labelledby="catsTitle">
+      <div class="list-head">
+        <h2 id="catsTitle">Categorias</h2>
+        <div class="stamp">Carregando estoque…</div>
+      </div>
+      <div class="cat-grid" id="catGrid"></div>
+    </section>
 
-    <div class="list-head" id="listHead">
-      <h2>Referências</h2>
-      <div class="stamp" id="stamp">Carregando estoque…</div>
+    <div id="listArea" hidden>
+      <a class="back-link" id="backCats" href="#/">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Categorias</a>
+      <nav class="cats" id="groups" aria-label="Categorias"></nav>
+
+      <div class="list-head" id="listHead">
+        <h2 id="listTitle">Referências</h2>
+        <div class="stamp">Carregando estoque…</div>
+      </div>
+      <section class="grid" id="list" aria-live="polite"></section>
     </div>
-    <section class="grid" id="list" aria-live="polite"></section>
   </div>
 </section>
 
@@ -537,7 +587,7 @@ pre.msg {
 </nav>
 <div class="toast" id="toast" role="status" hidden></div>
 
-<script>window.ATACADO_DEMO = {"config": {"mock": true, "minOrderValue": 50.0, "minQtyPerRef": 2, "sellerPhone": "5585999999999"}, "updatedAt": "2026-10-21T09:08:15.460010-03:00", "products": [{"reference": "10421", "name": "Body Manga Curta Canelado", "group": "Bebê", "colors": [{"color": "Off White", "skus": [{"productCode": 100001, "size": "RN", "available": 60, "price": 24.9, "retailPrice": 41.59}, {"productCode": 100004, "size": "G", "available": 8, "price": 24.9, "retailPrice": 41.59}], "images": []}, {"color": "Rosa Bebê", "skus": [{"productCode": 100005, "size": "RN", "available": 5, "price": 24.9, "retailPrice": 41.59}, {"productCode": 100006, "size": "P", "available": 5, "price": 24.9, "retailPrice": 41.59}, {"productCode": 100007, "size": "M", "available": 3, "price": 24.9, "retailPrice": 41.59}], "images": []}, {"color": "Azul Névoa", "skus": [{"productCode": 100009, "size": "RN", "available": 60, "price": 24.9, "retailPrice": 41.59}, {"productCode": 100010, "size": "P", "available": 36, "price": 24.9, "retailPrice": 41.59}, {"productCode": 100012, "size": "G", "available": 48, "price": 24.9, "retailPrice": 41.59}], "images": []}], "sizes": ["RN", "P", "M", "G"], "minPrice": 24.9, "maxPrice": 24.9, "totalAvailable": 225, "minRetailPrice": 41.59, "maxRetailPrice": 41.59, "image": null}, {"reference": "10422", "name": "Body Manga Longa Suedine", "group": "Bebê", "colors": [{"color": "Mescla", "skus": [{"productCode": 100013, "size": "RN", "available": 18, "price": 29.9, "retailPrice": 49.89}], "images": []}, {"color": "Verde Sálvia", "skus": [{"productCode": 100017, "size": "RN", "available": 5, "price": 29.9, "retailPrice": 49.89}, {"productCode": 100018, "size": "P", "available": 5, "price": 29.9, "retailPrice": 49.89}, {"productCode": 100019, "size": "M", "available": 36, "price": 29.9, "retailPrice": 49.89}, {"productCode": 100020, "size": "G", "available": 48, "price": 29.9, "retailPrice": 49.89}], "images": []}, {"color": "Off White", "skus": [{"productCode": 100022, "size": "P", "available": 36, "price": 29.9, "retailPrice": 49.89}, {"productCode": 100023, "size": "M", "available": 5, "price": 29.9, "retailPrice": 49.89}, {"productCode": 100024, "size": "G", "available": 60, "price": 29.9, "retailPrice": 49.89}], "images": []}], "sizes": ["RN", "P", "M", "G"], "minPrice": 29.9, "maxPrice": 29.9, "totalAvailable": 213, "minRetailPrice": 49.89, "maxRetailPrice": 49.89, "image": null}, {"reference": "10470", "name": "Kit 3 Culotes Suedine", "group": "Bebê", "colors": [{"color": "Neutros", "skus": [{"productCode": 100033, "size": "P", "available": 18, "price": 39.9, "retailPrice": 66.58999999999999}, {"productCode": 100034, "size": "M", "available": 12, "price": 39.9, "retailPrice": 66.58999999999999}, {"productCode": 100035, "size": "G", "available": 8, "price": 39.9, "retailPrice": 66.58999999999999}], "images": []}, {"color": "Coloridos", "skus": [{"productCode": 100036, "size": "P", "available": 3, "price": 39.9, "retailPrice": 66.58999999999999}, {"productCode": 100037, "size": "M", "available": 5, "price": 39.9, "retailPrice": 66.58999999999999}, {"productCode": 100038, "size": "G", "available": 12, "price": 39.9, "retailPrice": 66.58999999999999}], "images": []}], "sizes": ["P", "M", "G"], "minPrice": 39.9, "maxPrice": 39.9, "totalAvailable": 58, "minRetailPrice": 66.58999999999999, "maxRetailPrice": 66.58999999999999, "image": null}, {"reference": "10455", "name": "Macacão Plush com Pezinho", "group": "Bebê", "colors": [{"color": "Bege", "skus": [{"productCode": 100025, "size": "RN", "available": 36, "price": 54.9, "retailPrice": 91.69}, {"productCode": 100026, "size": "P", "available": 18, "price": 54.9, "retailPrice": 91.69}, {"productCode": 100027, "size": "M", "available": 5, "price": 54.9, "retailPrice": 91.69}, {"productCode": 100028, "size": "G", "available": 24, "price": 54.9, "retailPrice": 91.69}], "images": []}, {"color": "Rosa Bebê", "skus": [{"productCode": 100029, "size": "RN", "available": 48, "price": 54.9, "retailPrice": 91.69}, {"productCode": 100030, "size": "P", "available": 8, "price": 54.9, "retailPrice": 91.69}, {"productCode": 100032, "size": "G", "available": 3, "price": 54.9, "retailPrice": 91.69}], "images": []}], "sizes": ["RN", "P", "M", "G"], "minPrice": 54.9, "maxPrice": 54.9, "totalAvailable": 142, "minRetailPrice": 91.69, "maxRetailPrice": 91.69, "image": null}, {"reference": "20171", "name": "Bermuda Moletom", "group": "Infantil", "colors": [{"color": "Marinho", "skus": [{"productCode": 100093, "size": "2", "available": 5, "price": 36.9, "retailPrice": 61.59}, {"productCode": 100094, "size": "4", "available": 60, "price": 36.9, "retailPrice": 61.59}, {"productCode": 100095, "size": "6", "available": 12, "price": 36.9, "retailPrice": 61.59}, {"productCode": 100097, "size": "10", "available": 5, "price": 36.9, "retailPrice": 61.59}], "images": []}, {"color": "Mescla", "skus": [{"productCode": 100099, "size": "4", "available": 12, "price": 36.9, "retailPrice": 61.59}, {"productCode": 100100, "size": "6", "available": 18, "price": 36.9, "retailPrice": 61.59}, {"productCode": 100101, "size": "8", "available": 8, "price": 36.9, "retailPrice": 61.59}], "images": []}, {"color": "Preto", "skus": [{"productCode": 100103, "size": "2", "available": 5, "price": 36.9, "retailPrice": 61.59}, {"productCode": 100104, "size": "4", "available": 48, "price": 36.9, "retailPrice": 61.59}, {"productCode": 100105, "size": "6", "available": 12, "price": 36.9, "retailPrice": 61.59}, {"productCode": 100106, "size": "8", "available": 5, "price": 36.9, "retailPrice": 61.59}, {"productCode": 100107, "size": "10", "available": 60, "price": 36.9, "retailPrice": 61.59}], "images": []}], "sizes": ["2", "4", "6", "8", "10"], "minPrice": 36.9, "maxPrice": 36.9, "totalAvailable": 250, "minRetailPrice": 61.59, "maxRetailPrice": 61.59, "image": null}, {"reference": "20166", "name": "Camiseta Estampada Dino", "group": "Infantil", "colors": [{"color": "Verde", "skus": [{"productCode": 100083, "size": "2", "available": 60, "price": 32.9, "retailPrice": 54.89}, {"productCode": 100084, "size": "4", "available": 3, "price": 32.9, "retailPrice": 54.89}, {"productCode": 100085, "size": "6", "available": 36, "price": 32.9, "retailPrice": 54.89}, {"productCode": 100086, "size": "8", "available": 5, "price": 32.9, "retailPrice": 54.89}, {"productCode": 100087, "size": "10", "available": 3, "price": 32.9, "retailPrice": 54.89}], "images": []}, {"color": "Cinza Mescla", "skus": [{"productCode": 100088, "size": "2", "available": 24, "price": 32.9, "retailPrice": 54.89}, {"productCode": 100089, "size": "4", "available": 18, "price": 32.9, "retailPrice": 54.89}, {"productCode": 100090, "size": "6", "available": 8, "price": 32.9, "retailPrice": 54.89}, {"productCode": 100091, "size": "8", "available": 60, "price": 32.9, "retailPrice": 54.89}, {"productCode": 100092, "size": "10", "available": 36, "price": 32.9, "retailPrice": 54.89}], "images": []}], "sizes": ["2", "4", "6", "8", "10"], "minPrice": 32.9, "maxPrice": 32.9, "totalAvailable": 253, "minRetailPrice": 54.89, "maxRetailPrice": 54.89, "image": null}, {"reference": "20110", "name": "Conjunto Moletinho Urso", "group": "Infantil", "colors": [{"color": "Caramelo", "skus": [{"productCode": 100041, "size": "3", "available": 18, "price": 69.9, "retailPrice": 116.69}], "images": []}, {"color": "Marinho", "skus": [{"productCode": 100043, "size": "1", "available": 12, "price": 69.9, "retailPrice": 116.69}, {"productCode": 100044, "size": "2", "available": 12, "price": 69.9, "retailPrice": 116.69}, {"productCode": 100045, "size": "3", "available": 48, "price": 69.9, "retailPrice": 116.69}, {"productCode": 100046, "size": "4", "available": 8, "price": 69.9, "retailPrice": 116.69}], "images": []}], "sizes": ["1", "2", "3", "4"], "minPrice": 69.9, "maxPrice": 69.9, "totalAvailable": 98, "minRetailPrice": 116.69, "maxRetailPrice": 116.69, "image": null}, {"reference": "20118", "name": "Conjunto Verão Linho", "group": "Infantil", "colors": [{"color": "Areia", "skus": [{"productCode": 100048, "size": "2", "available": 24, "price": 74.9, "retailPrice": 125.08999999999999}, {"productCode": 100049, "size": "3", "available": 36, "price": 74.9, "retailPrice": 125.08999999999999}, {"productCode": 100051, "size": "6", "available": 18, "price": 74.9, "retailPrice": 125.08999999999999}], "images": []}, {"color": "Terracota", "skus": [{"productCode": 100053, "size": "2", "available": 36, "price": 74.9, "retailPrice": 125.08999999999999}, {"productCode": 100054, "size": "3", "available": 8, "price": 74.9, "retailPrice": 125.08999999999999}, {"productCode": 100055, "size": "4", "available": 60, "price": 74.9, "retailPrice": 125.08999999999999}, {"productCode": 100056, "size": "6", "available": 48, "price": 74.9, "retailPrice": 125.08999999999999}], "images": []}], "sizes": ["2", "3", "4", "6"], "minPrice": 74.9, "maxPrice": 74.9, "totalAvailable": 230, "minRetailPrice": 125.08999999999999, "maxRetailPrice": 125.08999999999999, "image": null}, {"reference": "20152", "name": "Jardineira Sarja", "group": "Infantil", "colors": [{"color": "Jeans Claro", "skus": [{"productCode": 100075, "size": "1", "available": 12, "price": 84.9, "retailPrice": 141.79000000000002}, {"productCode": 100076, "size": "2", "available": 5, "price": 84.9, "retailPrice": 141.79000000000002}, {"productCode": 100077, "size": "3", "available": 60, "price": 84.9, "retailPrice": 141.79000000000002}, {"productCode": 100078, "size": "4", "available": 8, "price": 84.9, "retailPrice": 141.79000000000002}], "images": []}, {"color": "Caqui", "skus": [{"productCode": 100079, "size": "1", "available": 60, "price": 84.9, "retailPrice": 141.79000000000002}, {"productCode": 100080, "size": "2", "available": 60, "price": 84.9, "retailPrice": 141.79000000000002}, {"productCode": 100082, "size": "4", "available": 48, "price": 84.9, "retailPrice": 141.79000000000002}], "images": []}], "sizes": ["1", "2", "3", "4"], "minPrice": 84.9, "maxPrice": 84.9, "totalAvailable": 253, "minRetailPrice": 141.79000000000002, "maxRetailPrice": 141.79000000000002, "image": null}, {"reference": "20190", "name": "Pijama Malha Estrelinhas", "group": "Infantil", "colors": [{"color": "Azul", "skus": [{"productCode": 100108, "size": "1", "available": 24, "price": 49.9, "retailPrice": 83.28999999999999}, {"productCode": 100109, "size": "2", "available": 18, "price": 49.9, "retailPrice": 83.28999999999999}, {"productCode": 100110, "size": "4", "available": 60, "price": 49.9, "retailPrice": 83.28999999999999}, {"productCode": 100111, "size": "6", "available": 24, "price": 49.9, "retailPrice": 83.28999999999999}, {"productCode": 100112, "size": "8", "available": 3, "price": 49.9, "retailPrice": 83.28999999999999}], "images": []}, {"color": "Rosa", "skus": [{"productCode": 100113, "size": "1", "available": 8, "price": 49.9, "retailPrice": 83.28999999999999}, {"productCode": 100114, "size": "2", "available": 3, "price": 49.9, "retailPrice": 83.28999999999999}, {"productCode": 100115, "size": "4", "available": 5, "price": 49.9, "retailPrice": 83.28999999999999}, {"productCode": 100116, "size": "6", "available": 36, "price": 49.9, "retailPrice": 83.28999999999999}, {"productCode": 100117, "size": "8", "available": 36, "price": 49.9, "retailPrice": 83.28999999999999}], "images": []}], "sizes": ["1", "2", "4", "6", "8"], "minPrice": 49.9, "maxPrice": 49.9, "totalAvailable": 217, "minRetailPrice": 83.28999999999999, "maxRetailPrice": 83.28999999999999, "image": null}, {"reference": "20140", "name": "Vestido Lese Babado", "group": "Infantil", "colors": [{"color": "Branco", "skus": [{"productCode": 100057, "size": "1", "available": 12, "price": 79.9, "retailPrice": 133.39000000000001}, {"productCode": 100058, "size": "2", "available": 48, "price": 79.9, "retailPrice": 133.39000000000001}, {"productCode": 100059, "size": "3", "available": 5, "price": 79.9, "retailPrice": 133.39000000000001}, {"productCode": 100062, "size": "8", "available": 60, "price": 79.9, "retailPrice": 133.39000000000001}], "images": []}, {"color": "Lavanda", "skus": [{"productCode": 100063, "size": "1", "available": 5, "price": 79.9, "retailPrice": 133.39000000000001}, {"productCode": 100064, "size": "2", "available": 8, "price": 79.9, "retailPrice": 133.39000000000001}, {"productCode": 100066, "size": "4", "available": 5, "price": 79.9, "retailPrice": 133.39000000000001}, {"productCode": 100068, "size": "8", "available": 18, "price": 79.9, "retailPrice": 133.39000000000001}], "images": []}, {"color": "Amarelo Manteiga", "skus": [{"productCode": 100069, "size": "1", "available": 8, "price": 79.9, "retailPrice": 133.39000000000001}, {"productCode": 100070, "size": "2", "available": 24, "price": 79.9, "retailPrice": 133.39000000000001}, {"productCode": 100071, "size": "3", "available": 60, "price": 79.9, "retailPrice": 133.39000000000001}, {"productCode": 100072, "size": "4", "available": 12, "price": 79.9, "retailPrice": 133.39000000000001}, {"productCode": 100073, "size": "6", "available": 3, "price": 79.9, "retailPrice": 133.39000000000001}, {"productCode": 100074, "size": "8", "available": 12, "price": 79.9, "retailPrice": 133.39000000000001}], "images": []}], "sizes": ["1", "2", "3", "4", "6", "8"], "minPrice": 79.9, "maxPrice": 79.9, "totalAvailable": 280, "minRetailPrice": 133.39000000000001, "maxRetailPrice": 133.39000000000001, "image": null}, {"reference": "30031", "name": "Kit Touca + Luva + Meia", "group": "Maternidade", "colors": [{"color": "Branco", "skus": [{"productCode": 100123, "size": "RN", "available": 12, "price": 27.9, "retailPrice": 46.59}, {"productCode": 100124, "size": "P", "available": 5, "price": 27.9, "retailPrice": 46.59}], "images": []}, {"color": "Azul", "skus": [{"productCode": 100125, "size": "RN", "available": 3, "price": 27.9, "retailPrice": 46.59}, {"productCode": 100126, "size": "P", "available": 36, "price": 27.9, "retailPrice": 46.59}], "images": []}, {"color": "Rosa", "skus": [{"productCode": 100127, "size": "RN", "available": 24, "price": 27.9, "retailPrice": 46.59}], "images": []}], "sizes": ["RN", "P"], "minPrice": 27.9, "maxPrice": 27.9, "totalAvailable": 80, "minRetailPrice": 46.59, "maxRetailPrice": 46.59, "image": null}, {"reference": "30020", "name": "Manta Soft Bordada", "group": "Maternidade", "colors": [{"color": "Cinza", "skus": [{"productCode": 100120, "size": "U", "available": 18, "price": 64.9, "retailPrice": 108.39}], "images": []}, {"color": "Bege", "skus": [{"productCode": 100121, "size": "U", "available": 48, "price": 64.9, "retailPrice": 108.39}], "images": []}, {"color": "Rosa", "skus": [{"productCode": 100122, "size": "U", "available": 18, "price": 64.9, "retailPrice": 108.39}], "images": []}], "sizes": ["U"], "minPrice": 64.9, "maxPrice": 64.9, "totalAvailable": 84, "minRetailPrice": 108.39, "maxRetailPrice": 108.39, "image": null}, {"reference": "30012", "name": "Saída de Maternidade Tricô", "group": "Maternidade", "colors": [{"color": "Off White", "skus": [{"productCode": 100118, "size": "RN", "available": 8, "price": 119.9, "retailPrice": 200.19}], "images": []}, {"color": "Cru", "skus": [{"productCode": 100119, "size": "RN", "available": 48, "price": 119.9, "retailPrice": 200.19}], "images": []}], "sizes": ["RN"], "minPrice": 119.9, "maxPrice": 119.9, "totalAvailable": 56, "minRetailPrice": 200.19, "maxRetailPrice": 200.19, "image": null}]};</script>
+<script>window.ATACADO_DEMO = {"config": {"mock": true, "sellerPhone": "5585999999999"}, "updatedAt": "2026-11-06T14:50:15.814046-03:00", "products": [{"reference": "10421", "name": "Body Manga Curta Canelado", "group": "Bebê", "colors": [{"color": "Off White", "skus": [{"productCode": 100001, "size": "RN", "available": 60, "price": 24.9, "retailPrice": 41.59}, {"productCode": 100004, "size": "G", "available": 8, "price": 24.9, "retailPrice": 41.59}], "swatch": null, "images": [], "thumbs": []}, {"color": "Rosa Bebê", "skus": [{"productCode": 100005, "size": "RN", "available": 5, "price": 24.9, "retailPrice": 41.59}, {"productCode": 100006, "size": "P", "available": 5, "price": 24.9, "retailPrice": 41.59}, {"productCode": 100007, "size": "M", "available": 3, "price": 24.9, "retailPrice": 41.59}], "swatch": null, "images": [], "thumbs": []}, {"color": "Azul Névoa", "skus": [{"productCode": 100009, "size": "RN", "available": 60, "price": 24.9, "retailPrice": 41.59}, {"productCode": 100010, "size": "P", "available": 36, "price": 24.9, "retailPrice": 41.59}, {"productCode": 100012, "size": "G", "available": 48, "price": 24.9, "retailPrice": 41.59}], "swatch": null, "images": [], "thumbs": []}], "sizes": ["RN", "P", "M", "G"], "minPrice": 24.9, "maxPrice": 24.9, "totalAvailable": 225, "minRetailPrice": 41.59, "maxRetailPrice": 41.59, "image": null, "thumb": null}, {"reference": "10422", "name": "Body Manga Longa Suedine", "group": "Bebê", "colors": [{"color": "Mescla", "skus": [{"productCode": 100013, "size": "RN", "available": 18, "price": 29.9, "retailPrice": 49.89}], "swatch": null, "images": [], "thumbs": []}, {"color": "Verde Sálvia", "skus": [{"productCode": 100017, "size": "RN", "available": 5, "price": 29.9, "retailPrice": 49.89}, {"productCode": 100018, "size": "P", "available": 5, "price": 29.9, "retailPrice": 49.89}, {"productCode": 100019, "size": "M", "available": 36, "price": 29.9, "retailPrice": 49.89}, {"productCode": 100020, "size": "G", "available": 48, "price": 29.9, "retailPrice": 49.89}], "swatch": null, "images": [], "thumbs": []}, {"color": "Off White", "skus": [{"productCode": 100022, "size": "P", "available": 36, "price": 29.9, "retailPrice": 49.89}, {"productCode": 100023, "size": "M", "available": 5, "price": 29.9, "retailPrice": 49.89}, {"productCode": 100024, "size": "G", "available": 60, "price": 29.9, "retailPrice": 49.89}], "swatch": null, "images": [], "thumbs": []}], "sizes": ["RN", "P", "M", "G"], "minPrice": 29.9, "maxPrice": 29.9, "totalAvailable": 213, "minRetailPrice": 49.89, "maxRetailPrice": 49.89, "image": null, "thumb": null}, {"reference": "10470", "name": "Kit 3 Culotes Suedine", "group": "Bebê", "colors": [{"color": "Neutros", "skus": [{"productCode": 100033, "size": "P", "available": 18, "price": 39.9, "retailPrice": 66.58999999999999}, {"productCode": 100034, "size": "M", "available": 12, "price": 39.9, "retailPrice": 66.58999999999999}, {"productCode": 100035, "size": "G", "available": 8, "price": 39.9, "retailPrice": 66.58999999999999}], "swatch": null, "images": [], "thumbs": []}, {"color": "Coloridos", "skus": [{"productCode": 100036, "size": "P", "available": 3, "price": 39.9, "retailPrice": 66.58999999999999}, {"productCode": 100037, "size": "M", "available": 5, "price": 39.9, "retailPrice": 66.58999999999999}, {"productCode": 100038, "size": "G", "available": 12, "price": 39.9, "retailPrice": 66.58999999999999}], "swatch": null, "images": [], "thumbs": []}], "sizes": ["P", "M", "G"], "minPrice": 39.9, "maxPrice": 39.9, "totalAvailable": 58, "minRetailPrice": 66.58999999999999, "maxRetailPrice": 66.58999999999999, "image": null, "thumb": null}, {"reference": "10455", "name": "Macacão Plush com Pezinho", "group": "Bebê", "colors": [{"color": "Bege", "skus": [{"productCode": 100025, "size": "RN", "available": 36, "price": 54.9, "retailPrice": 91.69}, {"productCode": 100026, "size": "P", "available": 18, "price": 54.9, "retailPrice": 91.69}, {"productCode": 100027, "size": "M", "available": 5, "price": 54.9, "retailPrice": 91.69}, {"productCode": 100028, "size": "G", "available": 24, "price": 54.9, "retailPrice": 91.69}], "swatch": null, "images": [], "thumbs": []}, {"color": "Rosa Bebê", "skus": [{"productCode": 100029, "size": "RN", "available": 48, "price": 54.9, "retailPrice": 91.69}, {"productCode": 100030, "size": "P", "available": 8, "price": 54.9, "retailPrice": 91.69}, {"productCode": 100032, "size": "G", "available": 3, "price": 54.9, "retailPrice": 91.69}], "swatch": null, "images": [], "thumbs": []}], "sizes": ["RN", "P", "M", "G"], "minPrice": 54.9, "maxPrice": 54.9, "totalAvailable": 142, "minRetailPrice": 91.69, "maxRetailPrice": 91.69, "image": null, "thumb": null}, {"reference": "20171", "name": "Bermuda Moletom", "group": "Infantil", "colors": [{"color": "Marinho", "skus": [{"productCode": 100093, "size": "2", "available": 5, "price": 36.9, "retailPrice": 61.59}, {"productCode": 100094, "size": "4", "available": 60, "price": 36.9, "retailPrice": 61.59}, {"productCode": 100095, "size": "6", "available": 12, "price": 36.9, "retailPrice": 61.59}, {"productCode": 100097, "size": "10", "available": 5, "price": 36.9, "retailPrice": 61.59}], "swatch": null, "images": [], "thumbs": []}, {"color": "Mescla", "skus": [{"productCode": 100099, "size": "4", "available": 12, "price": 36.9, "retailPrice": 61.59}, {"productCode": 100100, "size": "6", "available": 18, "price": 36.9, "retailPrice": 61.59}, {"productCode": 100101, "size": "8", "available": 8, "price": 36.9, "retailPrice": 61.59}], "swatch": null, "images": [], "thumbs": []}, {"color": "Preto", "skus": [{"productCode": 100103, "size": "2", "available": 5, "price": 36.9, "retailPrice": 61.59}, {"productCode": 100104, "size": "4", "available": 48, "price": 36.9, "retailPrice": 61.59}, {"productCode": 100105, "size": "6", "available": 12, "price": 36.9, "retailPrice": 61.59}, {"productCode": 100106, "size": "8", "available": 5, "price": 36.9, "retailPrice": 61.59}, {"productCode": 100107, "size": "10", "available": 60, "price": 36.9, "retailPrice": 61.59}], "swatch": null, "images": [], "thumbs": []}], "sizes": ["2", "4", "6", "8", "10"], "minPrice": 36.9, "maxPrice": 36.9, "totalAvailable": 250, "minRetailPrice": 61.59, "maxRetailPrice": 61.59, "image": null, "thumb": null}, {"reference": "20166", "name": "Camiseta Estampada Dino", "group": "Infantil", "colors": [{"color": "Verde", "skus": [{"productCode": 100083, "size": "2", "available": 60, "price": 32.9, "retailPrice": 54.89}, {"productCode": 100084, "size": "4", "available": 3, "price": 32.9, "retailPrice": 54.89}, {"productCode": 100085, "size": "6", "available": 36, "price": 32.9, "retailPrice": 54.89}, {"productCode": 100086, "size": "8", "available": 5, "price": 32.9, "retailPrice": 54.89}, {"productCode": 100087, "size": "10", "available": 3, "price": 32.9, "retailPrice": 54.89}], "swatch": null, "images": [], "thumbs": []}, {"color": "Cinza Mescla", "skus": [{"productCode": 100088, "size": "2", "available": 24, "price": 32.9, "retailPrice": 54.89}, {"productCode": 100089, "size": "4", "available": 18, "price": 32.9, "retailPrice": 54.89}, {"productCode": 100090, "size": "6", "available": 8, "price": 32.9, "retailPrice": 54.89}, {"productCode": 100091, "size": "8", "available": 60, "price": 32.9, "retailPrice": 54.89}, {"productCode": 100092, "size": "10", "available": 36, "price": 32.9, "retailPrice": 54.89}], "swatch": null, "images": [], "thumbs": []}], "sizes": ["2", "4", "6", "8", "10"], "minPrice": 32.9, "maxPrice": 32.9, "totalAvailable": 253, "minRetailPrice": 54.89, "maxRetailPrice": 54.89, "image": null, "thumb": null}, {"reference": "20110", "name": "Conjunto Moletinho Urso", "group": "Infantil", "colors": [{"color": "Caramelo", "skus": [{"productCode": 100041, "size": "3", "available": 18, "price": 69.9, "retailPrice": 116.69}], "swatch": null, "images": [], "thumbs": []}, {"color": "Marinho", "skus": [{"productCode": 100043, "size": "1", "available": 12, "price": 69.9, "retailPrice": 116.69}, {"productCode": 100044, "size": "2", "available": 12, "price": 69.9, "retailPrice": 116.69}, {"productCode": 100045, "size": "3", "available": 48, "price": 69.9, "retailPrice": 116.69}, {"productCode": 100046, "size": "4", "available": 8, "price": 69.9, "retailPrice": 116.69}], "swatch": null, "images": [], "thumbs": []}], "sizes": ["1", "2", "3", "4"], "minPrice": 69.9, "maxPrice": 69.9, "totalAvailable": 98, "minRetailPrice": 116.69, "maxRetailPrice": 116.69, "image": null, "thumb": null}, {"reference": "20118", "name": "Conjunto Verão Linho", "group": "Infantil", "colors": [{"color": "Areia", "skus": [{"productCode": 100048, "size": "2", "available": 24, "price": 74.9, "retailPrice": 125.08999999999999}, {"productCode": 100049, "size": "3", "available": 36, "price": 74.9, "retailPrice": 125.08999999999999}, {"productCode": 100051, "size": "6", "available": 18, "price": 74.9, "retailPrice": 125.08999999999999}], "swatch": null, "images": [], "thumbs": []}, {"color": "Terracota", "skus": [{"productCode": 100053, "size": "2", "available": 36, "price": 74.9, "retailPrice": 125.08999999999999}, {"productCode": 100054, "size": "3", "available": 8, "price": 74.9, "retailPrice": 125.08999999999999}, {"productCode": 100055, "size": "4", "available": 60, "price": 74.9, "retailPrice": 125.08999999999999}, {"productCode": 100056, "size": "6", "available": 48, "price": 74.9, "retailPrice": 125.08999999999999}], "swatch": null, "images": [], "thumbs": []}], "sizes": ["2", "3", "4", "6"], "minPrice": 74.9, "maxPrice": 74.9, "totalAvailable": 230, "minRetailPrice": 125.08999999999999, "maxRetailPrice": 125.08999999999999, "image": null, "thumb": null}, {"reference": "20152", "name": "Jardineira Sarja", "group": "Infantil", "colors": [{"color": "Jeans Claro", "skus": [{"productCode": 100075, "size": "1", "available": 12, "price": 84.9, "retailPrice": 141.79000000000002}, {"productCode": 100076, "size": "2", "available": 5, "price": 84.9, "retailPrice": 141.79000000000002}, {"productCode": 100077, "size": "3", "available": 60, "price": 84.9, "retailPrice": 141.79000000000002}, {"productCode": 100078, "size": "4", "available": 8, "price": 84.9, "retailPrice": 141.79000000000002}], "swatch": null, "images": [], "thumbs": []}, {"color": "Caqui", "skus": [{"productCode": 100079, "size": "1", "available": 60, "price": 84.9, "retailPrice": 141.79000000000002}, {"productCode": 100080, "size": "2", "available": 60, "price": 84.9, "retailPrice": 141.79000000000002}, {"productCode": 100082, "size": "4", "available": 48, "price": 84.9, "retailPrice": 141.79000000000002}], "swatch": null, "images": [], "thumbs": []}], "sizes": ["1", "2", "3", "4"], "minPrice": 84.9, "maxPrice": 84.9, "totalAvailable": 253, "minRetailPrice": 141.79000000000002, "maxRetailPrice": 141.79000000000002, "image": null, "thumb": null}, {"reference": "20190", "name": "Pijama Malha Estrelinhas", "group": "Infantil", "colors": [{"color": "Azul", "skus": [{"productCode": 100108, "size": "1", "available": 24, "price": 49.9, "retailPrice": 83.28999999999999}, {"productCode": 100109, "size": "2", "available": 18, "price": 49.9, "retailPrice": 83.28999999999999}, {"productCode": 100110, "size": "4", "available": 60, "price": 49.9, "retailPrice": 83.28999999999999}, {"productCode": 100111, "size": "6", "available": 24, "price": 49.9, "retailPrice": 83.28999999999999}, {"productCode": 100112, "size": "8", "available": 3, "price": 49.9, "retailPrice": 83.28999999999999}], "swatch": null, "images": [], "thumbs": []}, {"color": "Rosa", "skus": [{"productCode": 100113, "size": "1", "available": 8, "price": 49.9, "retailPrice": 83.28999999999999}, {"productCode": 100114, "size": "2", "available": 3, "price": 49.9, "retailPrice": 83.28999999999999}, {"productCode": 100115, "size": "4", "available": 5, "price": 49.9, "retailPrice": 83.28999999999999}, {"productCode": 100116, "size": "6", "available": 36, "price": 49.9, "retailPrice": 83.28999999999999}, {"productCode": 100117, "size": "8", "available": 36, "price": 49.9, "retailPrice": 83.28999999999999}], "swatch": null, "images": [], "thumbs": []}], "sizes": ["1", "2", "4", "6", "8"], "minPrice": 49.9, "maxPrice": 49.9, "totalAvailable": 217, "minRetailPrice": 83.28999999999999, "maxRetailPrice": 83.28999999999999, "image": null, "thumb": null}, {"reference": "20140", "name": "Vestido Lese Babado", "group": "Infantil", "colors": [{"color": "Branco", "skus": [{"productCode": 100057, "size": "1", "available": 12, "price": 79.9, "retailPrice": 133.39000000000001}, {"productCode": 100058, "size": "2", "available": 48, "price": 79.9, "retailPrice": 133.39000000000001}, {"productCode": 100059, "size": "3", "available": 5, "price": 79.9, "retailPrice": 133.39000000000001}, {"productCode": 100062, "size": "8", "available": 60, "price": 79.9, "retailPrice": 133.39000000000001}], "swatch": null, "images": [], "thumbs": []}, {"color": "Lavanda", "skus": [{"productCode": 100063, "size": "1", "available": 5, "price": 79.9, "retailPrice": 133.39000000000001}, {"productCode": 100064, "size": "2", "available": 8, "price": 79.9, "retailPrice": 133.39000000000001}, {"productCode": 100066, "size": "4", "available": 5, "price": 79.9, "retailPrice": 133.39000000000001}, {"productCode": 100068, "size": "8", "available": 18, "price": 79.9, "retailPrice": 133.39000000000001}], "swatch": null, "images": [], "thumbs": []}, {"color": "Amarelo Manteiga", "skus": [{"productCode": 100069, "size": "1", "available": 8, "price": 79.9, "retailPrice": 133.39000000000001}, {"productCode": 100070, "size": "2", "available": 24, "price": 79.9, "retailPrice": 133.39000000000001}, {"productCode": 100071, "size": "3", "available": 60, "price": 79.9, "retailPrice": 133.39000000000001}, {"productCode": 100072, "size": "4", "available": 12, "price": 79.9, "retailPrice": 133.39000000000001}, {"productCode": 100073, "size": "6", "available": 3, "price": 79.9, "retailPrice": 133.39000000000001}, {"productCode": 100074, "size": "8", "available": 12, "price": 79.9, "retailPrice": 133.39000000000001}], "swatch": null, "images": [], "thumbs": []}], "sizes": ["1", "2", "3", "4", "6", "8"], "minPrice": 79.9, "maxPrice": 79.9, "totalAvailable": 280, "minRetailPrice": 133.39000000000001, "maxRetailPrice": 133.39000000000001, "image": null, "thumb": null}, {"reference": "30031", "name": "Kit Touca + Luva + Meia", "group": "Maternidade", "colors": [{"color": "Branco", "skus": [{"productCode": 100123, "size": "RN", "available": 12, "price": 27.9, "retailPrice": 46.59}, {"productCode": 100124, "size": "P", "available": 5, "price": 27.9, "retailPrice": 46.59}], "swatch": null, "images": [], "thumbs": []}, {"color": "Azul", "skus": [{"productCode": 100125, "size": "RN", "available": 3, "price": 27.9, "retailPrice": 46.59}, {"productCode": 100126, "size": "P", "available": 36, "price": 27.9, "retailPrice": 46.59}], "swatch": null, "images": [], "thumbs": []}, {"color": "Rosa", "skus": [{"productCode": 100127, "size": "RN", "available": 24, "price": 27.9, "retailPrice": 46.59}], "swatch": null, "images": [], "thumbs": []}], "sizes": ["RN", "P"], "minPrice": 27.9, "maxPrice": 27.9, "totalAvailable": 80, "minRetailPrice": 46.59, "maxRetailPrice": 46.59, "image": null, "thumb": null}, {"reference": "30020", "name": "Manta Soft Bordada", "group": "Maternidade", "colors": [{"color": "Cinza", "skus": [{"productCode": 100120, "size": "U", "available": 18, "price": 64.9, "retailPrice": 108.39}], "swatch": null, "images": [], "thumbs": []}, {"color": "Bege", "skus": [{"productCode": 100121, "size": "U", "available": 48, "price": 64.9, "retailPrice": 108.39}], "swatch": null, "images": [], "thumbs": []}, {"color": "Rosa", "skus": [{"productCode": 100122, "size": "U", "available": 18, "price": 64.9, "retailPrice": 108.39}], "swatch": null, "images": [], "thumbs": []}], "sizes": ["U"], "minPrice": 64.9, "maxPrice": 64.9, "totalAvailable": 84, "minRetailPrice": 108.39, "maxRetailPrice": 108.39, "image": null, "thumb": null}, {"reference": "30012", "name": "Saída de Maternidade Tricô", "group": "Maternidade", "colors": [{"color": "Off White", "skus": [{"productCode": 100118, "size": "RN", "available": 8, "price": 119.9, "retailPrice": 200.19}], "swatch": null, "images": [], "thumbs": []}, {"color": "Cru", "skus": [{"productCode": 100119, "size": "RN", "available": 48, "price": 119.9, "retailPrice": 200.19}], "swatch": null, "images": [], "thumbs": []}], "sizes": ["RN"], "minPrice": 119.9, "maxPrice": 119.9, "totalAvailable": 56, "minRetailPrice": 200.19, "maxRetailPrice": 200.19, "image": null, "thumb": null}]};</script>
 <script>
 /* Bebêtenkitê Atacado — front-end (vanilla JS).
  * Modo API: conversa com o backend FastAPI (/api/config, /api/catalogo, /api/pedido, cadastro e login).
@@ -550,10 +600,10 @@ pre.msg {
   const $ = (s, el = document) => el.querySelector(s);
 
   const S = {
-    config: { minOrderValue: 500, minQtyPerRef: 6, mock: true },
+    config: { mock: true },
     products: [], index: new Map(), updatedAt: null,
-    cart: new Map(), cat: "Todos", q: "", step: "cart",
-    view: "home", ref: null, color: null, draft: new Map(), homeScroll: 0, fromApp: false, routed: false,
+    cart: new Map(), cat: null, q: "", step: "cart", // cat null = início com os cartões das categorias
+    view: "home", ref: null, color: null, draft: new Map(), scrolls: {}, fromApp: false, routed: false,
     buyer: { name: "", company: "", document: "", phone: "", city: "", notes: "" },
     problems: [], result: null, sending: false,
     me: null, auth: "login", busy: false, myOrders: null, // myOrders: null = ainda não carregou // cliente logado (aprovado); aba do quadro de acesso: login | signup | sent
@@ -614,9 +664,11 @@ pre.msg {
     colorCache.set(name, found);
     return found;
   }
-  // fundo da bolinha: 1 cor, meio a meio se o nome tiver 2 (listras, "Vermelho Branco"), ou arco-íris
-  function swatchBg(name) {
-    const [a, b] = colorsIn(name);
+  // fundo da bolinha: a cor lida da foto (c.swatch, do cores_fotos.json) quando há; senão pelo nome:
+  // 1 cor, meio a meio se o nome tiver 2 (listras, "Vermelho Branco"), ou arco-íris
+  function swatchBg(c) {
+    if (c.swatch) return c.swatch;
+    const [a, b] = colorsIn(c.color);
     return !a ? MULTI : b ? `linear-gradient(135deg, ${a} 50%, ${b} 50%)` : a;
   }
   // fundo do ícone da peça: a primeira cor reconhecida misturada ao creme
@@ -727,16 +779,27 @@ pre.msg {
     return svg(ICONS[k]);
   }
   // fotos da cor (pasta imagens_ecommerce no backend); sem foto dessa cor, a capa da referência
+  // cada foto vem com a miniatura de 360 px (thumbs[i] de images[i]); sem miniatura, a própria foto
   function photosOf(p, color) {
     const c = p.colors.find(x => x.color === color);
-    return c && c.images && c.images.length ? c.images : p.image ? [p.image] : [];
+    if (c && c.images && c.images.length) return c.images.map((src, i) => ({ src, thumb: (c.thumbs && c.thumbs[i]) || src }));
+    return p.image ? [{ src: p.image, thumb: p.thumb || p.image }] : [];
   }
-  const photo = (src, alt = "", eager = false) =>
-    `<img src="${esc(API + src)}" alt="${esc(alt)}" loading="${eager ? "eager" : "lazy"}" decoding="async">`;
+  // sizes = largura em que a foto aparece: o navegador escolhe entre a miniatura e a foto inteira.
+  // Sem sizes (lugares pequenos: destaque, linhas do pedido), vai sempre a miniatura.
+  // width/height: as fotos são quadradas; reserva o espaço antes de a imagem chegar.
+  const photo = ({ src, thumb }, alt = "", eager = false, sizes = "") => {
+    const pick = sizes && thumb !== src
+      ? `src="${esc(API + src)}" srcset="${esc(API + thumb)} 360w, ${esc(API + src)} 720w" sizes="${sizes}"`
+      : `src="${esc(API + (sizes ? src : thumb))}"`;
+    return `<img ${pick} width="720" height="720" alt="${esc(alt)}" loading="${eager ? "eager" : "lazy"}" decoding="async">`;
+  };
+  const CARD_SIZES = "(max-width: 559px) 50vw, 280px";
+  const DETAIL_SIZES = "(min-width: 900px) 600px, 100vw";
   // foto quando houver, senão o ícone pelo nome
-  function artFor(p, color) {
-    const [src] = photosOf(p, color);
-    return src ? photo(src) : iconFor(p.name);
+  function artFor(p, color, sizes) {
+    const [pic] = photosOf(p, color);
+    return pic ? photo(pic, "", false, sizes) : iconFor(p.name);
   }
   const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
   const sum = (arr, f) => arr.reduce((a, x) => a + f(x), 0);
@@ -794,7 +857,7 @@ pre.msg {
     }
   }
 
-  // ---------- regras (espelho do backend, só para feedback imediato) ----------
+  // ---------- conferência de estoque (espelho do backend, só para feedback imediato) ----------
   function cartLines() {
     const lines = [];
     for (const [code, qty] of S.cart) {
@@ -805,16 +868,8 @@ pre.msg {
   }
   function cartProblems(lines) {
     const out = [];
-    const perRef = new Map();
-    for (const l of lines) {
+    for (const l of lines)
       if (l.quantity > l.available) out.push(`${l.name} ${l.color} ${l.size}: pediu ${l.quantity}, disponível ${l.available}.`);
-      perRef.set(l.reference, (perRef.get(l.reference) || { q: 0, name: l.name })); perRef.get(l.reference).q += l.quantity;
-    }
-    for (const [ref, v] of perRef) if (v.q < S.config.minQtyPerRef)
-      out.push(`${v.name} (ref. ${ref}): mínimo de ${S.config.minQtyPerRef} peças por referência.`);
-    const total = lines.reduce((a, l) => a + l.subtotal, 0);
-    if (lines.length && total < S.config.minOrderValue)
-      out.push(`Pedido mínimo de ${brl(S.config.minOrderValue)} (faltam ${brl(S.config.minOrderValue - total)}).`);
     return out;
   }
 
@@ -824,10 +879,8 @@ pre.msg {
     $("#hi").textContent = first ? `Olá, ${first}` : "Olá, lojista";
     $("#avatar").textContent = (first || S.buyer.company || "B")[0].toUpperCase();
   }
-  function renderRules() {
+  function renderDemoTag() {
     $("#demoTag").hidden = !(S.config.mock || DEMO);
-    $("#heroRules").textContent = `Pedido mínimo de ${brl(S.config.minOrderValue)} e ${S.config.minQtyPerRef} peças por referência. ` +
-      "Monte a grade de cada peça e envie pelo WhatsApp.";
   }
   // três peças do catálogo, inclinadas, como vitrine do destaque
   function renderHeroArt() {
@@ -855,14 +908,55 @@ pre.msg {
   function renderStamp() {
     if (!S.updatedAt) return;
     const d = new Date(S.updatedAt);
-    $("#stamp").innerHTML = `${S.products.length} referências · estoque das ${d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}` +
-      (DEMO ? "" : ` <button type="button" id="refresh">atualizar</button>`);
+    const html = `${S.products.length} referências · estoque das ${d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}` +
+      (DEMO ? "" : ` <button type="button" data-act="refresh">atualizar</button>`);
+    document.querySelectorAll(".stamp").forEach(el => (el.innerHTML = html));
+  }
+
+  // cartões do início: um por categoria com peça no estoque de hoje, na ordem da faixa; "Todos" por último
+  const CAT_TINTS = ["#c4dff5", "#fbd5ad", "#c3e6d4", "#f7c6bb", "#ddd2f3", "#f4e3a6", "#d2e8bb", "#f3c9dd", "#bfe3ea", "#ead8c2", "#d7dbf1", "#f0d0b8"];
+  const catHref = name => `#/c/${encodeURIComponent(name)}`;
+  const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+  function renderCatCards() {
+    const byCat = new Map();
+    for (const p of S.products) {
+      const k = categoryOf(p.name).name;
+      byCat.has(k) ? byCat.get(k).push(p) : byCat.set(k, [p]);
+    }
+    // duas peças com foto (as de mais estoque, que já vêm primeiro); sem foto, o ícone da categoria
+    const art = (list, icon) => {
+      const pics = list.filter(p => p.image).slice(0, 2);
+      // eager: são poucas miniaturas e ficam logo no topo do início
+      return pics.length ? pics.map(p => photo(photosOf(p, p.colors[0].color)[0], "", true)).join("") : icon;
+    };
+    const cats = [...CAT_ORDER, OTHER].filter(c => byCat.has(c.name));
+    // "Todos": uma foto de cada uma das duas primeiras categorias
+    const allPicks = cats.map(c => byCat.get(c.name).find(p => p.image)).filter(Boolean);
+    const card = (name, list, cls, style, artHtml, i) =>
+      `<a class="cat-card${cls}${S.catsPainted ? "" : " enter"}" href="${catHref(name)}" style="--i:${Math.min(i, 10)};${style}">
+        <span class="cat-text"><b>${esc(name)}</b><small>${plural(list.length, "referência", "referências")}</small></span>
+        <span class="cat-art" aria-hidden="true">${artHtml}</span></a>`;
+    $("#catGrid").innerHTML = cats.map((c, i) => card(c.name, byCat.get(c.name), "",
+      `--tint:${CAT_TINTS[i % CAT_TINTS.length]}`, art(byCat.get(c.name), svg(ICONS[c.icon])), i)).join("") +
+      card("Todos", S.products, " all", "", art(allPicks, ALL), cats.length);
+    if (S.products.length) S.catsPainted = true;
+  }
+  // início (cartões) ou lista: de uma categoria, de todas, ou o resultado da busca feita no início
+  function renderHome() {
+    const listing = Boolean(S.cat || S.q.trim());
+    $("#shopCats").hidden = listing;
+    $("#listArea").hidden = !listing;
+    $("#hero").hidden = Boolean(S.cat);
+    $("#backCats").hidden = $("#groups").hidden = !S.cat;
+    $("#listTitle").textContent = !S.cat ? "Resultado da busca" : S.cat === "Todos" ? "Todas as referências" : S.cat;
+    document.querySelectorAll("#groups button").forEach(b => b.setAttribute("aria-pressed", b.dataset.group === (S.cat || "Todos")));
+    if (listing) renderList(); else renderCatCards();
   }
 
   function visibleProducts() {
     const q = S.q.trim().toLowerCase();
     return S.products.filter(p =>
-      (S.cat === "Todos" || categoryOf(p.name).name === S.cat) &&
+      (!S.cat || S.cat === "Todos" || categoryOf(p.name).name === S.cat) &&
       (!q || p.name.toLowerCase().includes(q) || p.reference.toLowerCase().includes(q)));
   }
   const range = (a, b) => a === b ? brl(a) : `${brl(a)} – ${brl(b)}`;
@@ -875,13 +969,13 @@ pre.msg {
   function productCard(p, i) {
     const q = refPieces(p.reference);
     return `<a class="card${S.firstPaint ? " enter" : ""}" style="--i:${Math.min(i, 10)}" href="#/p/${encodeURIComponent(p.reference)}" data-ref="${esc(p.reference)}">
-      <span class="card-art" style="background:${tintFor(p.colors[0].color)}">${artFor(p, p.colors[0].color)}
+      <span class="card-art" style="background:${tintFor(p.colors[0].color)}">${artFor(p, p.colors[0].color, CARD_SIZES)}
         <span class="in-cart">${q ? `${q} no pedido` : ""}</span></span>
       <span class="card-body">
         <span class="card-name">${esc(p.name)}</span>
         <span class="card-price"><small class="tag">Atacado</small> ${priceOf(p)} <small>/ peça</small></span>
         ${retailOf(p, "card-retail")}
-        <span class="card-meta"><span class="dots">${p.colors.slice(0, 5).map(c => `<span class="sw" title="${esc(c.color)}" style="background:${swatchBg(c.color)}"></span>`).join("")}${p.colors.length > 5 ? `<span class="more">+${p.colors.length - 5}</span>` : ""}</span>
+        <span class="card-meta"><span class="dots">${p.colors.slice(0, 5).map(c => `<span class="sw" title="${esc(c.color)}" style="background:${swatchBg(c)}"></span>`).join("")}${p.colors.length > 5 ? `<span class="more">+${p.colors.length - 5}</span>` : ""}</span>
           <span class="${p.totalAvailable < 40 ? "low" : ""}">${p.totalAvailable} em estoque</span></span>
       </span></a>`;
   }
@@ -928,7 +1022,7 @@ pre.msg {
         <span class="pd-price"><small class="tag">Atacado</small> ${priceOf(p)} <small>/ peça</small></span>
         ${retailOf(p, "pd-retail")}
         <p class="pd-desc">${esc(p.group || "Linha")} em ${p.colors.length} ${p.colors.length > 1 ? "cores" : "cor"}, tamanhos ${esc(sizes)}.
-          Escolha a cor e preencha quantas peças quer de cada tamanho; o mínimo é de ${S.config.minQtyPerRef} peças nesta referência.</p>
+          Escolha a cor e preencha quantas peças quer de cada tamanho.</p>
       </div>
       <div>
         <h3 class="sec-title">Cor <span id="colorName">${esc(c.color)}</span></h3>
@@ -949,7 +1043,7 @@ pre.msg {
     el.style.background = tintFor(S.color);
     el.classList.toggle("photo", pics.length > 0);
     el.innerHTML = (pics.length
-      ? `<div class="pd-photos">${pics.map((src, i) => photo(src, `${p.name}, ${S.color}`, i === 0)).join("")}</div>` +
+      ? `<div class="pd-photos">${pics.map((pic, i) => photo(pic, `${p.name}, ${S.color}`, i === 0, DETAIL_SIZES)).join("")}</div>` +
         (pics.length > 1 ? `<span class="pd-dots" aria-hidden="true">${pics.map((_, i) => `<i${i ? "" : ' class="on"'}></i>`).join("")}</span>` : "")
       : iconFor(p.name)) +
       `<span class="stock ${p.totalAvailable < 40 ? "low" : ""}">${p.totalAvailable} em estoque</span>
@@ -960,7 +1054,7 @@ pre.msg {
     $("#colors").innerHTML = p.colors.map(c => {
       const q = sum(c.skus, s => S.draft.get(s.productCode) || 0);
       return `<button type="button" aria-pressed="${c.color === S.color}" data-color="${esc(c.color)}" title="${esc(c.color)}" aria-label="${esc(c.color)}${q ? `, ${q} peças` : ""}">
-        <span class="dot" style="background:${swatchBg(c.color)}">${q ? `<span class="count">${q}</span>` : ""}</span>
+        <span class="dot" style="background:${swatchBg(c)}">${q ? `<span class="count">${q}</span>` : ""}</span>
         <span class="lbl">${esc(c.color)}</span></button>`;
     }).join("");
   }
@@ -992,10 +1086,9 @@ pre.msg {
   function renderCommit() {
     const p = productBy(S.ref); if (!p) return;
     const t = draftTotals(p), inCart = refPieces(p.reference) > 0, dirty = draftDirty(p);
-    const min = S.config.minQtyPerRef;
     $("#pdSum").innerHTML = t.q
       ? `<span><b>${t.q}</b> ${t.q === 1 ? "peça" : "peças"} · <b>${brl(t.v)}</b></span>` +
-        (t.over ? `<span class="warnline">Há tamanhos acima do estoque</span>` : t.q < min ? `<span class="warnline">Faltam ${min - t.q} para o mínimo de ${min}</span>` : "")
+        (t.over ? `<span class="warnline">Há tamanhos acima do estoque</span>` : "")
       : "";
     const btn = $("#commit");
     btn.disabled = t.over || (!t.q && !inCart);
@@ -1086,10 +1179,8 @@ pre.msg {
           <span class="acts"><a href="#/p/${encodeURIComponent(g.reference)}">editar</a>
             <button class="rm" type="button" data-remove="${esc(g.reference)}|${esc(g.color)}">remover</button></span></div>`;
       }).join("") + (probs.length ? `<div class="problems"><b>Antes de continuar:</b><ul>${probs.map(p => `<li>${esc(p)}</li>`).join("")}</ul></div>` : "");
-      const pct = Math.min(100, (total / S.config.minOrderValue) * 100);
-      foot.innerHTML = `<div class="totals"><div><span>${pieces} peças · ${lines.length} SKUs</span><span>mínimo ${brl(S.config.minOrderValue)}</span></div>
+      foot.innerHTML = `<div class="totals"><div><span>${pieces} peças · ${lines.length} SKUs</span></div>
         <div class="big"><span>Total</span><span>${brl(total)}</span></div></div>
-        <div class="meter" role="progressbar" aria-label="Progresso até o pedido mínimo" aria-valuenow="${Math.round(pct)}" aria-valuemin="0" aria-valuemax="100"><i class="${pct >= 100 ? "full" : ""}" style="width:${pct}%"></i></div>
         <button class="primary" type="button" id="toBuyer" ${probs.length ? "disabled" : ""}>Continuar para seus dados</button>`;
       return;
     }
@@ -1247,8 +1338,6 @@ pre.msg {
         <button class="ghost" type="button" id="logout">Sair</button>`
       : authPanel()) + `
       <div class="facts">
-        <div><span>Pedido mínimo</span><b>${brl(S.config.minOrderValue)}</b></div>
-        <div><span>Mínimo por referência</span><b>${S.config.minQtyPerRef} peças</b></div>
         <div><span>Atendimento</span><b>WhatsApp</b></div>
       </div>`;
   }
@@ -1295,26 +1384,35 @@ pre.msg {
     if (h.startsWith("/p/")) return { view: "product", ref: decodeURIComponent(h.slice(3)) };
     if (h === "/pedido") return { view: "cart" };
     if (h === "/perfil") return { view: "profile" };
-    return { view: "home" };
+    if (h.startsWith("/c/")) return { view: "home", cat: decodeURIComponent(h.slice(3)) };
+    return { view: "home", cat: null };
   }
+  const isCat = name => name === "Todos" || name === OTHER.name || CAT_ORDER.some(c => c.name === name);
+  const homeKey = () => `home:${S.cat || ""}`; // cada lista guarda a própria rolagem
   function route() {
     if (!S.products.length) return;
-    const r = parseHash(), prev = S.view;
+    const r = parseHash(), prev = S.view, prevKey = homeKey();
     if (r.view === "product" && !productBy(r.ref)) { location.replace("#/"); return; }
-    if (prev === "home") S.homeScroll = scrollY;
+    if (r.view === "home" && r.cat && !isCat(r.cat)) { location.replace("#/"); return; }
+    if (prev === "home") S.scrolls[prevKey] = scrollY;
     if (prev === "cart" && S.step === "done" && r.view !== "cart") { S.step = "cart"; S.result = null; }
     if (r.view === "product") S.fromApp = S.routed; // aberto por link direto: voltar leva ao início
     S.routed = true;
     if (prev === "product" && r.view !== "product") S.draft = new Map();
 
     const swap = () => {
+      if (r.view === "home" && r.cat !== S.cat) {
+        S.cat = r.cat;
+        if (S.cat) { S.q = ""; $("#search").value = ""; } // a busca do início não continua dentro da categoria
+        renderHome();
+      }
       if (r.view === "product") openProduct(productBy(r.ref));
       if (r.view === "cart") renderCart();
       if (r.view === "profile") renderProfile();
       document.querySelectorAll(".view").forEach(v => (v.hidden = v.dataset.view !== r.view));
       document.body.dataset.view = S.view = r.view;
       renderTabs();
-      scrollTo(0, r.view === "home" ? S.homeScroll : 0);
+      scrollTo(0, r.view === "home" ? S.scrolls[homeKey()] || 0 : 0);
     };
     // cartão ↔ produto: o quadro da peça cresce até a tela do produto e volta ao lugar
     const pair = (prev === "home" && r.view === "product") || (prev === "product" && r.view === "home");
@@ -1326,9 +1424,11 @@ pre.msg {
       return;
     }
     swap();
-    if (prev !== r.view && !reduced()) {
+    // cartões ↔ lista da categoria também desliza, como uma tela nova
+    const intoList = prev === "home" && r.view === "home" && prevKey !== homeKey();
+    if ((prev !== r.view || intoList) && !reduced()) {
       const v = document.querySelector(`.view[data-view="${r.view}"]`);
-      v.classList.remove("in", "in-r"); void v.offsetWidth; v.classList.add(r.view === "product" ? "in-r" : "in");
+      v.classList.remove("in", "in-r"); void v.offsetWidth; v.classList.add(r.view === "product" || (intoList && S.cat) ? "in-r" : "in");
     }
   }
 
@@ -1393,13 +1493,13 @@ pre.msg {
       b.totalAvailable - a.totalAvailable || a.name.localeCompare(b.name, "pt-BR"));
     S.updatedAt = data.updatedAt; indexProducts(S.products);
     for (const code of [...S.cart.keys()]) if (!S.index.has(code)) S.cart.delete(code);
-    renderGroups(); renderStamp(); renderHeroArt(); renderList(); renderTabs();
+    renderGroups(); renderStamp(); renderHeroArt(); renderHome(); renderTabs();
   }
 
   // ---------- eventos ----------
   document.addEventListener("input", e => {
     if (e.target.matches(".qty")) setDraft(Number(e.target.dataset.code), e.target.value);
-    if (e.target.id === "search") { S.q = e.target.value; renderList(); }
+    if (e.target.id === "search") { S.q = e.target.value; renderHome(); }
   });
   // bolinhas da galeria do produto acompanham a foto visível
   document.addEventListener("scroll", e => {
@@ -1437,11 +1537,8 @@ pre.msg {
   document.addEventListener("pointercancel", endDrag);
   document.addEventListener("click", e => {
     const t = e.target.closest("button"); if (!t) return;
-    if (t.dataset.group) {
-      S.cat = t.dataset.group;
-      document.querySelectorAll("#groups button").forEach(b => b.setAttribute("aria-pressed", b === t));
-      renderList();
-    }
+    // faixa de categorias dentro da lista: troca de categoria sem empilhar histórico (voltar leva aos cartões)
+    if (t.dataset.group) location.replace(catHref(t.dataset.group));
     else if (t.dataset.color) {
       S.color = t.dataset.color;
       $("#colorName").textContent = S.color;
@@ -1461,10 +1558,10 @@ pre.msg {
       if (p && draftDirty(p) && !confirm("Sair sem adicionar a grade ao pedido?")) return;
       leaveProduct();
     }
-    else if (t.id === "toList") $("#listHead").scrollIntoView({ behavior: reduced() ? "auto" : "smooth" });
+    else if (t.id === "toList") $(S.cat || S.q.trim() ? "#listHead" : "#shopCats").scrollIntoView({ behavior: reduced() ? "auto" : "smooth" });
     else if (t.id === "toBuyer") { S.problems = []; goCart("buyer"); }
     else if (t.id === "backCart") goCart("cart");
-    else if (t.id === "refresh") reloadCatalog(true).then(() => toast("Estoque atualizado"));
+    else if (t.dataset.act === "refresh") reloadCatalog(true).then(() => toast("Estoque atualizado"));
     else if (t.dataset.remove) {
       const [ref, color] = t.dataset.remove.split("|");
       t.closest(".line").classList.add("leaving");
@@ -1511,12 +1608,12 @@ pre.msg {
       S.config = { ...S.config, ...cfg };
       S.me = me;
       if (me) { S.buyer = { ...S.buyer, ...me }; renderHello(); }
-      renderRules();
+      renderDemoTag();
       await reloadCatalog();
       route();
     } catch (e) {
-      $("#stamp").textContent = "";
-      $("#list").innerHTML = `<div class="empty">Não foi possível carregar o estoque agora. ${esc(e.message || "")}<br>Recarregue a página em alguns minutos.</div>`;
+      document.querySelectorAll(".stamp").forEach(el => (el.textContent = ""));
+      $("#catGrid").innerHTML = `<div class="empty">Não foi possível carregar o estoque agora. ${esc(e.message || "")}<br>Recarregue a página em alguns minutos.</div>`;
     }
   })();
 })();

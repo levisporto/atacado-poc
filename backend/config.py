@@ -35,10 +35,6 @@ MOCK_MODE = os.getenv("MOCK_MODE", "").lower() == "true" or not (
     TOTVS_CLIENT_ID and TOTVS_USERNAME and TOTVS_PASSWORD
 )
 
-# --- Regras comerciais do atacado ---
-MIN_ORDER_VALUE = float(os.getenv("MIN_ORDER_VALUE", "500"))    # pedido mínimo em R$
-MIN_QTY_PER_REF = int(os.getenv("MIN_QTY_PER_REF", "6"))        # peças mínimas por referência
-
 # --- Envio do pedido para a equipe do atacado ---
 GLEICE_WHATSAPP = os.getenv("GLEICE_WHATSAPP", "5585999999999")  # DDI+DDD+número, só dígitos
 

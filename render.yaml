@@ -50,10 +50,6 @@ services:
         value: "60"
       - key: CATALOG_FULL_REFRESH_HOURS
         value: "6"
-      - key: MIN_ORDER_VALUE
-        value: "500"
-      - key: MIN_QTY_PER_REF
-        value: "6"
       - key: GLEICE_WHATSAPP
         sync: false
       - key: EVOLUTION_URL

@@ -23,7 +23,7 @@ fonts = re.search(r'<link rel="stylesheet" href="(https://fonts[^"]+)">', html).
 
 demo = {
     "config": {
-        "mock": True, "minOrderValue": config.MIN_ORDER_VALUE, "minQtyPerRef": config.MIN_QTY_PER_REF,
+        "mock": True,
         "sellerPhone": config.GLEICE_WHATSAPP,
     },
     "updatedAt": datetime.now(ZoneInfo("America/Fortaleza")).isoformat(),
